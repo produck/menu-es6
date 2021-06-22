@@ -1,0 +1,28 @@
+{
+  "name": "@produck/menu",
+  "version": "0.1.0",
+  "description": "A menu ui module in html",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/produck/menu-es6.git"
+  },
+  "author": "ChaosLee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/produck/menu-es6/issues"
+  },
+  "homepage": "https://github.com/produck/menu-es6#readme",
+	"devDependencies": {
+		"@rollup/plugin-html": "^0.2.3",
+		"eslint": "^7.29.0",
+		"rollup": "^2.52.2",
+		"rollup-plugin-eslint": "^7.0.0",
+		"rollup-plugin-livereload": "^2.0.0",
+		"rollup-plugin-serve": "^1.1.0",
+		"rollup-plugin-terser": "^7.0.2"
+	}
+}
