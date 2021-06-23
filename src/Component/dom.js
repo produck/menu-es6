@@ -1,4 +1,4 @@
-import { DOCUMENT } from '../symbol';
+export const DOCUMENT = document, WINDOW = window;
 
 export function addEventListener(element, eventType, listener) {
 	element.addEventListener(eventType, listener);
@@ -46,4 +46,20 @@ export function setStyle(element, ruleObject) {
  */
 export function setClassName(element, name) {
 	element.className = name;
+}
+
+/**
+ * @param {HTMLElement} parentElement
+ * @param {HTMLElement} element
+ */
+export function appendChild(parentElement, element) {
+	parentElement.appendChild(element);
+}
+
+/**
+ * @param {HTMLElement} parentElement
+ * @param {HTMLElement} element
+ */
+export function removeChild(parentElement, element) {
+	parentElement.removeChild(element);
 }
