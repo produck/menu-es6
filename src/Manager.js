@@ -1,32 +1,26 @@
-import { WINDOW, MENU_GROUP_LIST } from './symbol';
-import { addEventListener } from './utils';
-
-const
-	KEY_CONTROL = 0x010000,
-	KEY_SHFIFT = 0x020000,
-	KEY_ALT = 0x030000;
+import { WINDOW, MENU_ENABLED, ITEM_CLICKABLE } from './symbol';
+import { addEventListener } from './Element/dom';
 
 const menuStore = {};
 
 let downing = 0x000000;
 
-addEventListener(WINDOW, 'keydown', function findAndClick() {
-	for (const menuName in menuStore) {
-		const menu = menuStore[menuName];
-		const groupList = menu[MENU_GROUP_LIST];
-
-		groupList.forEach(group => {
-			group.forEach(item => {
-				item
-			});
-		});
-	}
-});
-
-export function put() {
-
+function filterClickableItem(item) {
+	return item[ITEM_CLICKABLE] = true;
 }
 
-export function get() {
+export function put(name, menu) {
+	if (name in menuStore) {
+		throw new Error(`Repeat menu name "${name}".`);
+	}
+
+	menuStore[name] = menu;
+}
+
+export function get(name) {
+	return menuStore[name] || null;
+}
+
+export function popup(with) {
 
 }
