@@ -7,11 +7,13 @@ window.addEventListener('load', function () {
 
 	const click = new ClickableMenuItem();
 	const sub = new SubmenuMenuItem();
+	const sub2 = new SubmenuMenuItem();
 	const split = new SpearatorMenuItem();
 
 	menu[APPEND](click);
 	menu[APPEND](sub);
 	menu[APPEND](split);
+	menu[APPEND](sub2);
 
 	menu[MENU_ELEMENT].style.minWidth = '200px';
 

@@ -1,8 +1,8 @@
 import * as Dom from 'dom';
-import { FunctionMenuItem, MENU_ITEM_LABEL_SPAN_STYLE } from './FunctionMenuItem';
-import { ROW_ELEMENT, TEXT_ELEMENT } from './MenuItem';
-import { MENU_ITEM_ICON_BOX_STYLE, Var } from './utils';
-import * as VAR from './vars';
+import { FunctionMenuItem, MENU_ITEM_LABEL_SPAN_STYLE } from './Function';
+import { ROW_ELEMENT, TEXT_ELEMENT } from './Base';
+import { MENU_ITEM_ICON_BOX_STYLE, Var } from '../utils';
+import * as VAR from '../vars';
 
 export const CLICK = 0x02;
 

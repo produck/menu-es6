@@ -1,15 +1,15 @@
 import * as Dom from 'dom';
 import * as VAR from './vars';
 import { Var } from './utils';
-import { ROW_ELEMENT } from './MenuItem';
-import { FOCUS, RESET } from './FunctionMenuItem';
-import { SpearatorMenuItem } from './SpearatorMenuItem';
+import { ROW_ELEMENT } from './MenuItem/Base';
+import { FOCUS, RESET } from './MenuItem/Function';
+import { SpearatorMenuItem } from './MenuItem/Spearator';
 
 const MENU_STYLE = {
 	display: 'block',
 	position: 'fixed',
 	margin: '0',
-	padding: `${Var(VAR.MENU_WHITESPACE)} 0`,
+	padding: `${Var(VAR.WHITESPACE_Y)} 0`,
 	'font-size': '12px',
 	'white-space': 'nowrap',
 	'border-width': '1px',

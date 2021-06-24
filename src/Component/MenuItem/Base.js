@@ -7,8 +7,7 @@ const MENU_ITEM_ROW_STYLE = {
 	position: 'static',
 	'box-sizing': 'border-box',
 	'border-width': '1px',
-	'border-color': 'transparent',
-	'cursor': 'pointer'
+	'border-color': 'transparent'
 };
 
 const MENU_ITEM_TEXT_STYLE = {

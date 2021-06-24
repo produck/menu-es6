@@ -1,11 +1,12 @@
 import * as Dom from 'dom';
-import { MenuItem, ROW_ELEMENT, TEXT_ELEMENT } from './MenuItem';
-import * as VAR from './vars';
-import { MENU_ITEM_ICON_BOX_STYLE, Var } from './utils';
+import { MenuItem, ROW_ELEMENT, TEXT_ELEMENT } from './Base';
+import * as VAR from '../vars';
+import { Var } from '../utils';
 
 export const FOCUS = 0x04, RESET = 0x05, DISABLE = 0x06, LABEL_SPAN = 0x03;
 
 const MENU_ITEM_ROW_STYLE_DEFAULT = {
+	'cursor': 'pointer',
 	color: Var(VAR.FRONTGROUND_COLOR),
 	'background-color': 'transparent'
 };
@@ -56,7 +57,7 @@ export class FunctionMenuItem extends MenuItem {
 		const rowElement = this[ROW_ELEMENT];
 
 		Dom.addEventListener(rowElement, 'mouseover', () => {
-			rowElement.dispatchEvent(Dom.createEvent('-focus', this));
+			Dom.dispatchEvent(rowElement, Dom.createEvent('-focus', this));
 		});
 
 		this[RESET]();
