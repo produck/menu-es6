@@ -18,51 +18,72 @@ const MENU_STYLE = {
 	'border-color': 'transparent',
 	'background-color': Var(VAR.BACKGROUND_COLOR),
 	'color': Var(VAR.FRONTGROUND_COLOR),
-	'user-select': 'none'
+	'user-select': 'none',
+	'opacity': 0,
+	'transition-property': 'opacity',
+	'transition-duration': '0.3s'
 };
 
 export const
 	MENU_ELEMENT = 'e',
 	ITEM_COMPONENT_LIST = 'l',
-	SHOW = 's',
+	OPEN = 's',
 	CLOSE = 'c',
+	CLOSING_LISTENER = 'C',
 	APPEND = 'a',
 	FOCUS_NEXT = 'n',
-	FOCUS_PREVIOUS = 'p';
+	FOCUS_PREVIOUS = 'p',
+	KEEPING = 'k',
+	CLEAR_FOCUS = 'cF';
 
 export class Menu {
 	constructor() {
+		const menu = this;
 		const menuElement = Dom.createElement('ul');
 		const itemComponentList = [];
 
 		Dom.setStyle(menuElement, MENU_STYLE);
-		Dom.setClassName(menuElement, 'menu');
+		Dom.addClass(menuElement, 'menu');
 
 		this[ITEM_COMPONENT_LIST] = itemComponentList;
 		this[MENU_ELEMENT] = menuElement;
-
-		function clearFocus() {
-			itemComponentList
-				.filter(itemComponent => !(itemComponent instanceof SpearatorMenuItem))
-				.forEach(itemComponent => itemComponent[RESET]());
-		}
+		this[KEEPING] = false;
+		this[CLOSING_LISTENER] = () => this[CLOSE]();
 
 		Dom.addEventListener(menuElement, '-focus', event => {
 			event.stopPropagation();
-			clearFocus();
+			menu[KEEPING] = false;
+			this[CLEAR_FOCUS](event.data);
 			event.data[FOCUS]();
 		});
 
-		Dom.addEventListener(menuElement, 'mouseleave', clearFocus);
-		Dom.addEventListener(menuElement, '-clear-focus', clearFocus);
+		Dom.addEventListener(menuElement, 'mouseleave', () => this[CLEAR_FOCUS]());
+		Dom.addEventListener(menuElement, '-clear-focus', () => this[CLEAR_FOCUS]());
+		Dom.addEventListener(menuElement, '-keeping', () => this[KEEPING] = true);
 	}
 
-	[SHOW]() {
+	[CLEAR_FOCUS](exclude = null) {
+		if (this[KEEPING]) {
+			return;
+		}
+
+		this[ITEM_COMPONENT_LIST]
+			.filter(item => !SpearatorMenuItem.is(item) && item !== exclude)
+			.forEach(itemComponent => itemComponent[RESET]());
+	}
+
+	[OPEN]() {
 		Dom.appendChild(Dom.DOCUMENT.body, this[MENU_ELEMENT]);
+		requestAnimationFrame(() => Dom.setStyle(this[MENU_ELEMENT], { opacity: 1 }));
+		Dom.addEventListener(Dom.WINDOW, 'menu::-close', this[CLOSING_LISTENER]);
 	}
 
 	[CLOSE]() {
+		this[KEEPING] = false;
 		Dom.removeChild(Dom.DOCUMENT.body, this[MENU_ELEMENT]);
+		Dom.setStyle(this[MENU_ELEMENT], { opacity: 0 });
+		Dom.removeEventListener(Dom.WINDOW, 'menu::-close', this[CLOSING_LISTENER]);
+		this[CLEAR_FOCUS]();
 	}
 
 	/**

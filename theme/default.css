@@ -16,3 +16,6 @@
 	--menu-whitespace-y: 5px;
 }
 
+span.menu-item-expanding::before {
+	content: '>';
+}

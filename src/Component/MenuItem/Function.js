@@ -1,9 +1,14 @@
 import * as Dom from 'dom';
-import { MenuItem, ROW_ELEMENT, TEXT_ELEMENT } from './Base';
+import { BaseMenuItem, ROW_ELEMENT, TEXT_ELEMENT } from './Base';
 import * as VAR from '../vars';
 import { Var } from '../utils';
 
-export const FOCUS = 0x04, RESET = 0x05, DISABLE = 0x06, LABEL_SPAN = 0x03;
+export const
+	FOCUS = 'f',
+	RESET = 'r',
+	DISABLE = 'd',
+	LABEL_SPAN = 'l',
+	FOCUSING = 'F';
 
 const MENU_ITEM_ROW_STYLE_DEFAULT = {
 	'cursor': 'pointer',
@@ -34,16 +39,16 @@ export const MENU_ITEM_LABEL_SPAN_STYLE = {
 	'padding': `0 ${Var(VAR.FUNCTION_ITEM_WHITESPACE)}`,
 };
 
-export class FunctionMenuItem extends MenuItem {
-	constructor() {
+export class FunctionMenuItem extends BaseMenuItem {
+	constructor(label, icon) {
 		super();
 
 		const textElement = this[TEXT_ELEMENT];
 		const labelSpan = Dom.createElement('span');
 		const iconSpan = Dom.createElement('span');
 
-		Dom.setClassName(labelSpan, 'menu-item-label');
-		Dom.setClassName(iconSpan, 'menu-item-icon');
+		Dom.addClass(labelSpan, 'menu-item-label');
+		Dom.addClass(iconSpan, 'menu-item-icon');
 		Dom.setStyle(labelSpan, MENU_ITEM_LABEL_SPAN_STYLE);
 		Dom.setStyle(textElement, MENU_ITEM_TEXT_STYLE);
 		Dom.setStyle(iconSpan, ICON_SPAN_STYLE);
@@ -52,25 +57,34 @@ export class FunctionMenuItem extends MenuItem {
 		Dom.appendChild(textElement, labelSpan);
 
 		this[LABEL_SPAN] = labelSpan;
+		this[FOCUSING] = false;
+
 		labelSpan.innerText = 'Text 4 test';
 
 		const rowElement = this[ROW_ELEMENT];
 
+		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE_DEFAULT);
 		Dom.addEventListener(rowElement, 'mouseover', () => {
 			Dom.dispatchEvent(rowElement, Dom.createEvent('-focus', this));
 		});
-
-		this[RESET]();
 	}
 
 	[RESET]() {
 		Dom.setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
 		Dom.removeClass(this[ROW_ELEMENT], 'focus');
+		this[FOCUSING] = false;
 	}
 
 	[FOCUS]() {
+		console.log('focusing', this[FOCUSING]);
+
+		if (this[FOCUSING]) {
+			return;
+		}
+
 		Dom.setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_ON_FOCUS);
 		Dom.addClass(this[ROW_ELEMENT], 'focus');
+		this[FOCUSING] = true;
 	}
 
 	[DISABLE]() {

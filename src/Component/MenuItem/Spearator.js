@@ -1,5 +1,5 @@
 import * as Dom from 'dom';
-import { MenuItem, TEXT_ELEMENT, ROW_ELEMENT } from './Base';
+import { BaseMenuItem, TEXT_ELEMENT, ROW_ELEMENT } from './Base';
 import { Var } from '../utils';
 import * as VAR from '../vars';
 
@@ -11,7 +11,7 @@ const SPEARATOR_MENU_ITEM_STYLE = {
 	'margin': `${Var(VAR.WHITESPACE_Y)} ${Var(VAR.SPEARATOR_WHITESPACE_X)}`,
 };
 
-export class SpearatorMenuItem extends MenuItem {
+export class SpearatorMenuItem extends BaseMenuItem {
 	constructor() {
 		super();
 
@@ -21,5 +21,9 @@ export class SpearatorMenuItem extends MenuItem {
 		Dom.addEventListener(rowElement, 'mouseover', () => {
 			Dom.dispatchEvent(rowElement, Dom.createEvent('-clear-focus', this));
 		});
+	}
+
+	static is(any) {
+		return any instanceof this;
 	}
 }
