@@ -1,7 +1,7 @@
-import { createElement, setClassName, setStyle } from './dom';
-import { MenuItem, ROW_ELEMENT } from './MenuItem';
+import * as Dom from 'dom';
+import { MenuItem, ROW_ELEMENT, TEXT_ELEMENT } from './MenuItem';
 import * as VAR from './vars';
-import { Var } from './utils';
+import { MENU_ITEM_ICON_BOX_STYLE, Var } from './utils';
 
 export const FOCUS = 0x04, RESET = 0x05, DISABLE = 0x06, LABEL_SPAN = 0x03;
 
@@ -20,37 +20,59 @@ const MENU_ITEM_ROW_STYLE_ON_DISABLED = {
 	'background-color': 'transparent'
 };
 
+const MENU_ITEM_TEXT_STYLE = {
+	'height': Var(VAR.FUNCTION_ITEM_HEIGHT)
+};
+
+const ICON_SPAN_STYLE = {
+	display: 'none'
+};
+
 export const MENU_ITEM_LABEL_SPAN_STYLE = {
-	'padding-left': Var(VAR.FUNCTION_ITEM_WHITESPACE),
-	'padding-right': Var(VAR.FUNCTION_ITEM_WHITESPACE)
+	'flex-grow': '1',
+	'padding': `0 ${Var(VAR.FUNCTION_ITEM_WHITESPACE)}`,
 };
 
 export class FunctionMenuItem extends MenuItem {
 	constructor() {
 		super();
 
-		const labelSpan = createElement('span');
+		const textElement = this[TEXT_ELEMENT];
+		const labelSpan = Dom.createElement('span');
+		const iconSpan = Dom.createElement('span');
 
-		setClassName(labelSpan, 'menu-item-label');
-		setStyle(labelSpan, MENU_ITEM_LABEL_SPAN_STYLE);
+		Dom.setClassName(labelSpan, 'menu-item-label');
+		Dom.setClassName(iconSpan, 'menu-item-icon');
+		Dom.setStyle(labelSpan, MENU_ITEM_LABEL_SPAN_STYLE);
+		Dom.setStyle(textElement, MENU_ITEM_TEXT_STYLE);
+		Dom.setStyle(iconSpan, ICON_SPAN_STYLE);
+
+		Dom.appendChild(textElement, iconSpan);
+		Dom.appendChild(textElement, labelSpan);
 
 		this[LABEL_SPAN] = labelSpan;
+		labelSpan.innerText = 'Text 4 test';
 
-		addEventListener(this[ROW_ELEMENT], 'mouseover', () => this[FOCUS]());
-		addEventListener(this[ROW_ELEMENT], 'mouseout', () => this[RESET]());
+		const rowElement = this[ROW_ELEMENT];
+
+		Dom.addEventListener(rowElement, 'mouseover', () => {
+			rowElement.dispatchEvent(Dom.createEvent('-focus', this));
+		});
 
 		this[RESET]();
 	}
 
 	[RESET]() {
-		setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
+		Dom.setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
+		Dom.removeClass(this[ROW_ELEMENT], 'focus');
 	}
 
 	[FOCUS]() {
-		setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_ON_FOCUS);
+		Dom.setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_ON_FOCUS);
+		Dom.addClass(this[ROW_ELEMENT], 'focus');
 	}
 
 	[DISABLE]() {
-		setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_ON_DISABLED);
+		Dom.setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_ON_DISABLED);
 	}
 }

@@ -1,5 +1,6 @@
 import path from 'path';
 import { defineConfig } from 'rollup';
+import alias from '@rollup/plugin-alias';
 import { terser } from 'rollup-plugin-terser';
 import { eslint } from 'rollup-plugin-eslint';
 
@@ -39,18 +40,24 @@ const moduleList = [
 ];
 
 export default moduleList.map(config => {
-	const pluginList = [];
+	const pluginList = [
+		alias({
+			entries: [
+				{ find: 'dom', replacement: path.join(__dirname, '../lib/dom.js') }
+			]
+		}),
+	];
 
 	if (config.isUglify) {
 		pluginList.push(terser());
 	}
 
-	pluginList.push(eslint({
-		throwOnError: true,
-		throwOnWarning: true,
-		include: ['src/**'],
-		exclude: ['node_modules/**']
-	}));
+	// pluginList.push(eslint({
+	// 	throwOnError: true,
+	// 	throwOnWarning: true,
+	// 	include: ['src/**'],
+	// 	exclude: ['node_modules/**']
+	// }));
 
 	return defineConfig({
 		input: path.resolve('index.js'),

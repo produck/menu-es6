@@ -69,7 +69,7 @@ declare namespace Menu {
 		}
 
 		interface SubmenuMenuItem extends BaseMenuItem {
-			name: string;
+			submenu: Menu;
 		}
 
 	}

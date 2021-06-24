@@ -1,4 +1,4 @@
-import { createElement, setClassName, setStyle } from './dom';
+import * as Dom from 'dom';
 
 export const ROW_ELEMENT = 0x00, TEXT_ELEMENT = 0x01;
 
@@ -6,9 +6,9 @@ const MENU_ITEM_ROW_STYLE = {
 	display: 'block',
 	position: 'static',
 	'box-sizing': 'border-box',
-	// 'height': Var(VAR.FUNCTION_ITEM_HEIGHT),
-	// 'padding-left': Var(VAR.FUNCTION_ITEM_WHITESPACE),
-	// 'padding-right': Var(VAR.FUNCTION_ITEM_WHITESPACE)
+	'border-width': '1px',
+	'border-color': 'transparent',
+	'cursor': 'pointer'
 };
 
 const MENU_ITEM_TEXT_STYLE = {
@@ -18,13 +18,13 @@ const MENU_ITEM_TEXT_STYLE = {
 
 export class MenuItem {
 	constructor() {
-		const rowElement = createElement('li');
-		const textElement = createElement('a');
+		const rowElement = Dom.createElement('li');
+		const textElement = Dom.createElement('a');
 
-		rowElement.appendChild(textElement);
-		setStyle(rowElement, MENU_ITEM_ROW_STYLE);
-		setStyle(textElement, MENU_ITEM_TEXT_STYLE);
-		setClassName(rowElement, 'menu-item');
+		Dom.appendChild(rowElement, textElement);
+		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE);
+		Dom.setStyle(textElement, MENU_ITEM_TEXT_STYLE);
+		Dom.setClassName(rowElement, 'menu-item');
 
 		this[ROW_ELEMENT] = rowElement;
 		this[TEXT_ELEMENT] = textElement;

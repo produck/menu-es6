@@ -1,17 +1,18 @@
 :root {
-	--menu-function-item-height: 24px;
+	--menu-function-item-height: 26px;
 	--menu-function-item-whitespace: 26px;
 
-	--menu-background-color: #666;
-	--menu-frontgournd-color: #DDD;
-	--menu-active-background-color: #99F;
-	--menu-active-frontgournd-color: #fff;
+	--menu-background-color: #999;
+	--menu-frontground-color: #DDD;
+	--menu-active-background-color: #66F;
+	--menu-active-frontground-color: #fff;
 	--menu-disabled-background-color: 'transparent';
-	--menu-disabled-frontgournd-color: #999;
+	--menu-disabled-frontground-color: #999;
 
 	--menu-outline-color: #000;
 
 	--menu-spearator-color: #ccc;
 	--menu-spearator-whitespace-x: 13px;
 	--menu-spearator-whitespace-y: 5px;
+	--menu-whitespace: 8px;
 }

@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"dom": ["./lib/dom.js"]
+		}
+	}
+}
