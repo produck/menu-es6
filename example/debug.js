@@ -1,6 +1,6 @@
 import '../theme/default.css';
 
-import { Menu, ClickableMenuItem, SubmenuMenuItem, SpearatorMenuItem, SHOW, APPEND, MENU_ELEMENT } from '../src/Component/index';
+import { Menu, ClickableMenuItem, SubmenuMenuItem, SpearatorMenuItem, OPEN, APPEND, MENU_ELEMENT } from '../src/Component/index';
 
 window.addEventListener('load', function () {
 	const menu = window.m = new Menu();
@@ -34,7 +34,7 @@ window.addEventListener('load', function () {
 
 	window.addEventListener('contextmenu', event => {
 		event.preventDefault();
-		menu[SHOW]();
+		menu[OPEN]();
 		console.log(menu);
 	});
 });

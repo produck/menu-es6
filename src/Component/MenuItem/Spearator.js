@@ -5,7 +5,7 @@ import * as VAR from '../vars';
 
 const SPEARATOR_MENU_ITEM_STYLE = {
 	display: 'block',
-	'border': `1px solid ${Var(VAR.SPEARATOR_COLOR)}`,
+	'border-bottom': `1px solid ${Var(VAR.SPEARATOR_COLOR)}`,
 	'margin': `${Var(VAR.WHITESPACE_Y)} ${Var(VAR.SPEARATOR_WHITESPACE_X)}`,
 };
 
@@ -19,9 +19,5 @@ export class SpearatorMenuItem extends BaseMenuItem {
 		Dom.addEventListener(rowElement, 'mouseover', () => {
 			Dom.dispatchEvent(rowElement, Dom.createEvent('-clear-all', this));
 		});
-	}
-
-	static is(any) {
-		return any instanceof this;
 	}
 }

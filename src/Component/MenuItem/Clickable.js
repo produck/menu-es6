@@ -25,9 +25,10 @@ export class ClickableMenuItem extends FunctionMenuItem {
 		Dom.setStyle(checkboxSpan, MENU_ITEM_ICON_BOX_STYLE, CHECKING_POSITION_STYLE);
 		Dom.appendChild(textElement, acceleratorSpan);
 		Dom.appendChild(textElement, checkboxSpan);
-
-		Dom.addEventListener(this[ROW_ELEMENT], 'click', () => {
-			Dom.dispatchEvent(Dom.WINDOW, Dom.createEvent('menu::-close'));
-		});
+		Dom.addEventListener(this[ROW_ELEMENT], 'click', closeAllMenu);
 	}
+}
+
+export function closeAllMenu() {
+	Dom.dispatchEvent(Dom.WINDOW, Dom.createEvent('menu::-close'));
 }

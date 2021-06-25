@@ -8,7 +8,8 @@ export const
 	RESET = 'r',
 	DISABLE = 'd',
 	LABEL_SPAN = 'l',
-	FOCUSING = 'F';
+	FOCUSING = 'F',
+	LISTEN_ENTER = 'L';
 
 const MENU_ITEM_ROW_STYLE_DEFAULT = {
 	'cursor': 'pointer',
@@ -64,9 +65,14 @@ export class FunctionMenuItem extends BaseMenuItem {
 		const rowElement = this[ROW_ELEMENT];
 
 		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE_DEFAULT);
-		Dom.addEventListener(rowElement, 'mouseenter', () => {
+
+		this[LISTEN_ENTER](() => {
 			Dom.dispatchEvent(rowElement, Dom.createEvent('-focus', this));
 		});
+	}
+
+	[LISTEN_ENTER](listener) {
+		Dom.addEventListener(this[ROW_ELEMENT], 'mouseenter', listener);
 	}
 
 	[RESET]() {

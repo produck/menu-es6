@@ -1,5 +1,5 @@
 import * as Dom from 'dom';
-import { FunctionMenuItem, FOCUS, RESET } from './Function';
+import { FunctionMenuItem, FOCUS, RESET, LISTEN_ENTER } from './Function';
 import { ROW_ELEMENT, TEXT_ELEMENT } from './Base';
 import { MENU_ITEM_ICON_BOX_STYLE } from '../utils';
 import { CLOSE, OPEN } from '../Menu';
@@ -9,7 +9,13 @@ const ICON_POSITION_STYLE = {
 	top: 0
 };
 
-export const SUB_MENU = 'sm', IS_EXPANDING = 'p';
+export const
+	SUB_MENU = 'sm',
+	IS_EXPANDING = 'p',
+	EXPAND = 'E',
+	COLLAPSE = 'C',
+
+	KEY_LISTENER = 'kL';
 
 export class SubmenuMenuItem extends FunctionMenuItem {
 	constructor(menu) {
@@ -23,11 +29,19 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 
 		this[SUB_MENU] = menu;
 		this[IS_EXPANDING] = false;
+
+		this[KEY_LISTENER] = event => {
+			if (event.key === 'ArrowRight') {
+				this[EXPAND]();
+			} else if (event.key === 'ArrowLeft') {
+				this[COLLAPSE]();
+			}
+		};
+
+		this[LISTEN_ENTER](() => this[EXPAND]());
 	}
 
-	[FOCUS]() {
-		super[FOCUS]();
-
+	[EXPAND]() {
 		if (this[IS_EXPANDING]) {
 			return;
 		}
@@ -37,13 +51,25 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		Dom.dispatchEvent(this[ROW_ELEMENT], Dom.createEvent('-keeping', this));
 	}
 
+	[COLLAPSE]() {
+		if (!this[IS_EXPANDING]) {
+			return;
+		}
+
+		this[SUB_MENU][CLOSE]();
+		this[IS_EXPANDING] = false;
+		Dom.dispatchEvent(this[ROW_ELEMENT], Dom.createEvent('-resume', this));
+	}
+
+	[FOCUS]() {
+		super[FOCUS]();
+		Dom.addEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
+	}
+
 	[RESET]() {
 		super[RESET]();
-
-		if (this[IS_EXPANDING]) {
-			this[SUB_MENU][CLOSE]();
-			this[IS_EXPANDING] = false;
-		}
+		this[COLLAPSE]();
+		Dom.removeEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
 	}
 }
 
