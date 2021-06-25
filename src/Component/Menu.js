@@ -2,8 +2,7 @@ import * as Dom from 'dom';
 import * as VAR from './vars';
 import { Var } from './utils';
 import { ROW_ELEMENT } from './MenuItem/Base';
-import { FOCUS, RESET } from './MenuItem/Function';
-import { SpearatorMenuItem } from './MenuItem/Spearator';
+import { FOCUS, FOCUSING, FunctionMenuItem, RESET } from './MenuItem/Function';
 
 const MENU_STYLE = {
 	display: 'block',
@@ -25,16 +24,19 @@ const MENU_STYLE = {
 };
 
 export const
-	MENU_ELEMENT = 'e',
-	ITEM_COMPONENT_LIST = 'l',
-	OPEN = 's',
-	CLOSE = 'c',
-	CLOSING_LISTENER = 'C',
-	APPEND = 'a',
-	FOCUS_NEXT = 'n',
-	FOCUS_PREVIOUS = 'p',
+	MENU_ELEMENT = 'm',
+	ITEM_COMPONENT_LIST = 'i',
+	CLOSING_LISTENER = 'c',
 	KEEPING = 'k',
-	CLEAR_FOCUS = 'cF';
+	FOCUSING_ITEM = 'f',
+	SHOWING = 's',
+
+	OPEN = 'O',
+	CLOSE = 'C',
+	APPEND = 'A',
+	NEXT = 'N',
+	CLEAR_FOCUS = 'Cf',
+	FOCUS_ITEM = 'F';
 
 export class Menu {
 	constructor() {
@@ -48,27 +50,35 @@ export class Menu {
 		this[ITEM_COMPONENT_LIST] = itemComponentList;
 		this[MENU_ELEMENT] = menuElement;
 		this[KEEPING] = false;
+		this[FOCUSING_ITEM] = null;
 		this[CLOSING_LISTENER] = () => this[CLOSE]();
 
-		Dom.addEventListener(menuElement, '-focus', event => {
-			event.stopPropagation();
-			menu[KEEPING] = false;
-			this[CLEAR_FOCUS](event.data);
-			event.data[FOCUS]();
-		});
+		const clearAll = () => {
+			this[FOCUSING_ITEM] = null;
+			this[CLEAR_FOCUS]();
+		};
 
-		Dom.addEventListener(menuElement, 'mouseleave', () => this[CLEAR_FOCUS]());
-		Dom.addEventListener(menuElement, '-clear-focus', () => this[CLEAR_FOCUS]());
+		Dom.addEventListener(menuElement, '-focus', event => menu[FOCUS_ITEM](event.data));
 		Dom.addEventListener(menuElement, '-keeping', () => this[KEEPING] = true);
+		Dom.addEventListener(menuElement, '-clear-all', clearAll);
+		Dom.addEventListener(menuElement, 'mouseleave', clearAll);
 	}
 
-	[CLEAR_FOCUS](exclude = null) {
+	[FOCUS_ITEM](item) {
+		this[KEEPING] = false;
+		this[FOCUSING_ITEM] = item;
+		this[CLEAR_FOCUS]();
+		item[FOCUS]();
+	}
+
+	[CLEAR_FOCUS]() {
 		if (this[KEEPING]) {
 			return;
 		}
 
 		this[ITEM_COMPONENT_LIST]
-			.filter(item => !SpearatorMenuItem.is(item) && item !== exclude)
+			.filter(IS_FUNCTION_ITEM)
+			.filter(item => item !== this[FOCUSING_ITEM])
 			.forEach(itemComponent => itemComponent[RESET]());
 	}
 
@@ -80,10 +90,11 @@ export class Menu {
 
 	[CLOSE]() {
 		this[KEEPING] = false;
+		this[FOCUSING_ITEM] = null;
+		this[CLEAR_FOCUS]();
+		Dom.removeEventListener(Dom.WINDOW, 'menu::-close', this[CLOSING_LISTENER]);
 		Dom.removeChild(Dom.DOCUMENT.body, this[MENU_ELEMENT]);
 		Dom.setStyle(this[MENU_ELEMENT], { opacity: 0 });
-		Dom.removeEventListener(Dom.WINDOW, 'menu::-close', this[CLOSING_LISTENER]);
-		this[CLEAR_FOCUS]();
 	}
 
 	/**
@@ -94,11 +105,25 @@ export class Menu {
 		Dom.appendChild(this[MENU_ELEMENT], itemComponent[ROW_ELEMENT]);
 	}
 
-	[FOCUS_NEXT](flag = null) {
+	[NEXT](flag = null, reversed = false) {
+		const sequence = this[ITEM_COMPONENT_LIST].filter(IS_FUNCTION_ITEM);
 
-	}
+		if (reversed) {
+			sequence.reverse();
+		}
 
-	[FOCUS_PREVIOUS](flag = null) {
+		const focusingIndex = sequence.findIndex(IS_FOCUSING);
+		const length = sequence.length;
 
+		for (let index = 1; index < length - 1; index++) {
+			const current = sequence[(focusingIndex + index) % length];
+
+			if (flag === null || current.symbol === flag) {
+				return this[FOCUS_ITEM](current);
+			}
+		}
 	}
 }
+
+const IS_FOCUSING = item => item[FOCUSING];
+const IS_FUNCTION_ITEM = item => item instanceof FunctionMenuItem;

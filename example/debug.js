@@ -3,7 +3,7 @@ import '../theme/default.css';
 import { Menu, ClickableMenuItem, SubmenuMenuItem, SpearatorMenuItem, SHOW, APPEND, MENU_ELEMENT } from '../src/Component/index';
 
 window.addEventListener('load', function () {
-	const menu = new Menu();
+	const menu = window.m = new Menu();
 	const menu2 = new Menu();
 
 	/**

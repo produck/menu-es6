@@ -64,7 +64,7 @@ export class FunctionMenuItem extends BaseMenuItem {
 		const rowElement = this[ROW_ELEMENT];
 
 		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE_DEFAULT);
-		Dom.addEventListener(rowElement, 'mouseover', () => {
+		Dom.addEventListener(rowElement, 'mouseenter', () => {
 			Dom.dispatchEvent(rowElement, Dom.createEvent('-focus', this));
 		});
 	}
@@ -76,8 +76,6 @@ export class FunctionMenuItem extends BaseMenuItem {
 	}
 
 	[FOCUS]() {
-		console.log('focusing', this[FOCUSING]);
-
 		if (this[FOCUSING]) {
 			return;
 		}

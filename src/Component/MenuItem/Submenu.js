@@ -14,7 +14,6 @@ export const SUB_MENU = 'sm', IS_EXPANDING = 'p';
 export class SubmenuMenuItem extends FunctionMenuItem {
 	constructor(menu) {
 		super();
-		console.log(this);
 
 		const expandingSpan = Dom.createElement('span');
 
@@ -29,8 +28,6 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 	[FOCUS]() {
 		super[FOCUS]();
 
-		console.log(this[IS_EXPANDING]);
-
 		if (this[IS_EXPANDING]) {
 			return;
 		}
@@ -42,8 +39,6 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 
 	[RESET]() {
 		super[RESET]();
-
-		console.log(this[IS_EXPANDING]);
 
 		if (this[IS_EXPANDING]) {
 			this[SUB_MENU][CLOSE]();
