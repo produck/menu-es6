@@ -4,13 +4,15 @@ import { ROW_ELEMENT, TEXT_ELEMENT } from './Base';
 import { MENU_ITEM_ICON_BOX_STYLE } from '../utils';
 import { CLOSE, OPEN } from '../Menu';
 
+import '@/MenuScope';
+
 const ICON_POSITION_STYLE = {
 	right: 0,
 	top: 0
 };
 
 export const
-	SUB_MENU = 'sm',
+	SUB_MENU_OPITONS = 'sm',
 	IS_EXPANDING = 'p',
 	EXPAND = 'E',
 	COLLAPSE = 'C',
@@ -18,7 +20,7 @@ export const
 	KEY_LISTENER = 'kL';
 
 export class SubmenuMenuItem extends FunctionMenuItem {
-	constructor(menu) {
+	constructor(options) {
 		super();
 
 		const expandingSpan = Dom.createElement('span');
@@ -27,17 +29,8 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		Dom.addClass(expandingSpan, 'menu-item-expanding');
 		Dom.appendChild(this[TEXT_ELEMENT], expandingSpan);
 
-		this[SUB_MENU] = menu;
+		this[SUB_MENU_OPITONS] = options;
 		this[IS_EXPANDING] = false;
-
-		this[KEY_LISTENER] = event => {
-			if (event.key === 'ArrowRight') {
-				this[EXPAND]();
-			} else if (event.key === 'ArrowLeft') {
-				this[COLLAPSE]();
-			}
-		};
-
 		this[LISTEN_ENTER](() => this[EXPAND]());
 	}
 
@@ -47,7 +40,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		}
 
 		this[IS_EXPANDING] = true;
-		this[SUB_MENU][OPEN]();
+		this[SUB_MENU_OPITONS][OPEN]();
 		Dom.dispatchEvent(this[ROW_ELEMENT], Dom.createEvent('-keeping', this));
 	}
 
@@ -56,7 +49,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 			return;
 		}
 
-		this[SUB_MENU][CLOSE]();
+		this[SUB_MENU_OPITONS][CLOSE]();
 		this[IS_EXPANDING] = false;
 		Dom.dispatchEvent(this[ROW_ELEMENT], Dom.createEvent('-resume', this));
 	}

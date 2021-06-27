@@ -21,10 +21,11 @@ export default defineConfig({
 	plugins: [
 		alias({
 			entries: [
-				{ find: 'dom', replacement: path.join(__dirname, '../lib/dom.js') }
+				{ find: 'dom', replacement: path.join(__dirname, '../lib/dom.js') },
+				{ find: '@', replacement: path.join(__dirname, '../src') }
 			]
 		}),
-		terser(),
+		// terser(),
 		eslint(),
 		serve({ host: '0.0.0.0', port: 3000, contentBase: DIST_DIR }),
 		livereload({ watch: DIST_DIR }),

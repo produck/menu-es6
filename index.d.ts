@@ -53,6 +53,9 @@ declare namespace Menu {
 
 		interface BaseMenuItem {
 			id: number;
+		}
+
+		interface FunctionMenuItem extends BaseMenuItem {
 			label: ItemLabel;
 			icon?: ImageSrc | HTMLElement;
 		}
@@ -61,14 +64,14 @@ declare namespace Menu {
 		type CheckedGetter = () => boolean;
 		type DisabledGetter = () => boolean;
 
-		interface ClickableMenuItem extends BaseMenuItem {
-			click: ClickListener;
-			isChecked?: CheckedGetter;
-			isDisabled?: DisabledGetter;
-			accelerator: Key[];
+		interface ClickableMenuItem extends FunctionMenuItem {
+			click?: ClickListener;
+			isChecked?: CheckedGetter | boolean;
+			isDisabled?: DisabledGetter | boolean;
+			accelerator?: Key[];
 		}
 
-		interface SubmenuMenuItem extends BaseMenuItem {
+		interface SubmenuMenuItem extends FunctionMenuItem {
 			submenu: Menu;
 		}
 
