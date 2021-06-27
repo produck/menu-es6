@@ -2,7 +2,8 @@ import * as Dom from 'dom';
 import * as VAR from './vars';
 import { Var } from './utils';
 import { ROW_ELEMENT } from './MenuItem/Base';
-import { FOCUS, FOCUSING, FunctionMenuItem, RESET } from './MenuItem/Function';
+import { FOCUS, FunctionMenuItem, BLUR } from './MenuItem/Function';
+import { isMenuTop } from '@/Scope';
 
 const MENU_STYLE = {
 	display: 'block',
@@ -24,23 +25,18 @@ const MENU_STYLE = {
 export const
 	MENU_ELEMENT = 'm',
 	ITEM_LIST = 'l',
-	KEEPING = 'k',
 	FOCUSING_ITEM = 'f',
-	SHOWING = 's',
-
-	CLOSING_LISTENER = 'lC',
-	KEY_LISTENER = 'lK',
+	TOP = 't',
 
 	OPEN = 'O',
-	CLOSE = 'C',
+	CLOSE = 'X',
 	APPEND = 'A',
 	NEXT = 'N',
-	CLEAR_FOCUS = 'R',
+	CLEAR_FOCUS = 'Cf',
 	FOCUS_ITEM = 'F';
 
 export class Menu {
 	constructor() {
-		const menu = this;
 		const menuElement = Dom.createElement('ul');
 		const itemComponentList = [];
 
@@ -49,96 +45,54 @@ export class Menu {
 
 		this[ITEM_LIST] = itemComponentList;
 		this[MENU_ELEMENT] = menuElement;
-		this[KEEPING] = false;
 		this[FOCUSING_ITEM] = null;
 
-		this[CLOSING_LISTENER] = () => this[CLOSE]();
+		Dom.addEventListener(menuElement, 'mouseleave', () => this[CLEAR_FOCUS]());
+		Dom.addEventListener(menuElement, 'mousedown', Dom.STOP_PROPAGATION);
+	}
 
-		this[KEY_LISTENER] = event => {
-			if (!this[KEEPING]) {
-				if (event.key === 'ArrowUp') {
-					this[NEXT](null, true);
-				} else if (event.key === 'ArrowDown') {
-					this[NEXT]();
-				}
-			}
-		};
-
-		const clearAll = () => {
-			this[FOCUSING_ITEM] = null;
-			this[CLEAR_FOCUS]();
-		};
-
-		Dom.addEventListener(menuElement, '-focus', event => menu[FOCUS_ITEM](event.data));
-		Dom.addEventListener(menuElement, '-keeping', () => this[KEEPING] = true);
-		Dom.addEventListener(menuElement, '-resume', () => this[KEEPING] = false);
-		Dom.addEventListener(menuElement, '-clear-all', clearAll);
-		Dom.addEventListener(menuElement, 'mouseleave', clearAll);
-		Dom.addEventListener(menuElement, 'mousedown', STOP_MOUSEDOWN);
+	get [TOP]() {
+		return isMenuTop(this);
 	}
 
 	[FOCUS_ITEM](item) {
-		this[KEEPING] = false;
-		this[FOCUSING_ITEM] = item;
 		this[CLEAR_FOCUS]();
-		item[FOCUS]();
+		this[FOCUSING_ITEM] = item[FOCUS]();
 	}
 
 	[CLEAR_FOCUS]() {
-		if (this[KEEPING]) {
-			return;
-		}
+		if (this[TOP]) {
+			const focused = this[FOCUSING_ITEM];
 
-		this[ITEM_LIST]
-			.filter(IS_FUNCTION_ITEM)
-			.filter(item => item !== this[FOCUSING_ITEM])
-			.forEach(itemComponent => itemComponent[RESET]());
+			focused && focused[BLUR]();
+			this[FOCUSING_ITEM] = null;
+		}
 	}
 
 	[OPEN]() {
-		Dom.addEventListener(Dom.WINDOW, 'menu::-close', this[CLOSING_LISTENER]);
-		Dom.addEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
 		requestAnimationFrame(() => Dom.setStyle(this[MENU_ELEMENT], { opacity: 1 }));
-		Dom.appendChild(Dom.DOCUMENT.body, this[MENU_ELEMENT]);
 	}
 
 	[CLOSE]() {
-		Dom.removeChild(Dom.DOCUMENT.body, this[MENU_ELEMENT]);
-		this[KEEPING] = false;
-		this[FOCUSING_ITEM] = null;
-		this[CLEAR_FOCUS]();
-		Dom.removeEventListener(Dom.WINDOW, 'menu::-close', this[CLOSING_LISTENER]);
-		Dom.removeEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
-		Dom.setStyle(this[MENU_ELEMENT], { opacity: 0 });
+		Dom.removeChild(this[MENU_ELEMENT].parentElement, this[MENU_ELEMENT]);
 	}
 
-	/**
-	 * @param {import('./MenuItem').MenuItem} itemComponent
-	 */
-	[APPEND](itemComponent) {
-		this[ITEM_LIST].push(itemComponent);
-		Dom.appendChild(this[MENU_ELEMENT], itemComponent[ROW_ELEMENT]);
-	}
-
-	get [SHOWING]() {
-		return this[MENU_ELEMENT].parentElement !== null;
+	[APPEND](item) {
+		this[ITEM_LIST].push(item);
+		Dom.appendChild(this[MENU_ELEMENT], item[ROW_ELEMENT]);
 	}
 
 	[NEXT](flag = null, reversed = false) {
-		if (!this[SHOWING]) {
-			return;
-		}
-
 		const sequence = this[ITEM_LIST].filter(IS_FUNCTION_ITEM);
 
 		if (reversed) {
 			sequence.reverse();
 		}
 
-		const focusingIndex = sequence.findIndex(IS_FOCUSING);
+		const focusingIndex = sequence.findIndex(item => item === this[FOCUSING_ITEM]);
 		const length = sequence.length;
 
-		for (let index = 0; index < length - 1; index++) {
+		for (let index = 0; index < length; index++) {
 			const current = sequence[(focusingIndex + index + 1) % length];
 
 			if (flag === null || current.symbol === flag) {
@@ -148,6 +102,4 @@ export class Menu {
 	}
 }
 
-const IS_FOCUSING = item => item[FOCUSING];
 const IS_FUNCTION_ITEM = item => item instanceof FunctionMenuItem;
-const STOP_MOUSEDOWN = event => event.stopPropagation();

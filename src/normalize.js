@@ -138,7 +138,16 @@ export function normalizeMenuOptions(_options) {
 			throw new Error('Menu item group options MUST be an array.');
 		}
 
-		return _groupOptions
-			.map(itemOptions => getNormalizer(itemOptions.type)(itemOptions));
+		const NORMALIZE_ITEM_OPTIONS = itemOptions => getNormalizer(itemOptions.type)(itemOptions);
+
+		return _groupOptions.reduce((itemOptionsList, itemOptions) => {
+			const finalItemOptionsList = typeof itemOptions === 'function'
+				? itemOptions().map(NORMALIZE_ITEM_OPTIONS)
+				: [NORMALIZE_ITEM_OPTIONS(itemOptions)];
+
+			itemOptionsList.push(...finalItemOptionsList);
+
+			return itemOptionsList;
+		}, []);
 	});
 }

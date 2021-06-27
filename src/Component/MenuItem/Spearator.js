@@ -1,7 +1,8 @@
 import * as Dom from 'dom';
-import { BaseMenuItem, TEXT_ELEMENT, ROW_ELEMENT } from './Base';
+import { BaseMenuItem, TEXT_ELEMENT, LISTEN_ENTER } from './Base';
 import { Var } from '../utils';
 import * as VAR from '../vars';
+import { CLEAR_FOCUS } from '../Menu';
 
 const SPEARATOR_MENU_ITEM_STYLE = {
 	display: 'block',
@@ -10,14 +11,10 @@ const SPEARATOR_MENU_ITEM_STYLE = {
 };
 
 export class SpearatorMenuItem extends BaseMenuItem {
-	constructor() {
-		super();
-
-		const rowElement = this[ROW_ELEMENT];
+	constructor(menu) {
+		super(menu);
 
 		Dom.setStyle(this[TEXT_ELEMENT], SPEARATOR_MENU_ITEM_STYLE);
-		Dom.addEventListener(rowElement, 'mouseover', () => {
-			Dom.dispatchEvent(rowElement, Dom.createEvent('-clear-all', this));
-		});
+		this[LISTEN_ENTER](() => menu[CLEAR_FOCUS]());
 	}
 }

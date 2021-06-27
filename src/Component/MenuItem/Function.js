@@ -1,15 +1,14 @@
 import * as Dom from 'dom';
-import { BaseMenuItem, ROW_ELEMENT, TEXT_ELEMENT } from './Base';
+import { BaseMenuItem, ROW_ELEMENT, TEXT_ELEMENT, LISTEN_ENTER } from './Base';
 import * as VAR from '../vars';
 import { Var } from '../utils';
+import { FOCUS_ITEM } from '../Menu';
 
 export const
 	FOCUS = 'f',
-	RESET = 'r',
+	BLUR = 'r',
 	DISABLE = 'd',
-	LABEL_SPAN = 'l',
-	FOCUSING = 'F',
-	LISTEN_ENTER = 'L';
+	LABEL_SPAN = 'l';
 
 const MENU_ITEM_ROW_STYLE_DEFAULT = {
 	'cursor': 'pointer',
@@ -32,7 +31,8 @@ const MENU_ITEM_TEXT_STYLE = {
 };
 
 const ICON_SPAN_STYLE = {
-	display: 'none'
+	display: 'none',
+	'margin-right': '0.5em'
 };
 
 export const MENU_ITEM_LABEL_SPAN_STYLE = {
@@ -41,8 +41,8 @@ export const MENU_ITEM_LABEL_SPAN_STYLE = {
 };
 
 export class FunctionMenuItem extends BaseMenuItem {
-	constructor(label, icon) {
-		super();
+	constructor(menu, options) {
+		super(menu);
 
 		const textElement = this[TEXT_ELEMENT];
 		const labelSpan = Dom.createElement('span');
@@ -53,42 +53,28 @@ export class FunctionMenuItem extends BaseMenuItem {
 		Dom.setStyle(labelSpan, MENU_ITEM_LABEL_SPAN_STYLE);
 		Dom.setStyle(textElement, MENU_ITEM_TEXT_STYLE);
 		Dom.setStyle(iconSpan, ICON_SPAN_STYLE);
-
 		Dom.appendChild(textElement, iconSpan);
 		Dom.appendChild(textElement, labelSpan);
 
-		this[LABEL_SPAN] = labelSpan;
-		this[FOCUSING] = false;
-
-		labelSpan.innerText = 'Text 4 test';
-
-		const rowElement = this[ROW_ELEMENT];
-
-		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE_DEFAULT);
-
-		this[LISTEN_ENTER](() => {
-			Dom.dispatchEvent(rowElement, Dom.createEvent('-focus', this));
-		});
-	}
-
-	[LISTEN_ENTER](listener) {
-		Dom.addEventListener(this[ROW_ELEMENT], 'mouseenter', listener);
-	}
-
-	[RESET]() {
+		labelSpan.innerText = options.label;
 		Dom.setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
-		Dom.removeClass(this[ROW_ELEMENT], 'focus');
-		this[FOCUSING] = false;
+
+		this[LABEL_SPAN] = labelSpan;
+		this[LISTEN_ENTER](() => menu[FOCUS_ITEM](this));
 	}
 
 	[FOCUS]() {
-		if (this[FOCUSING]) {
-			return;
-		}
-
 		Dom.setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_ON_FOCUS);
 		Dom.addClass(this[ROW_ELEMENT], 'focus');
-		this[FOCUSING] = true;
+
+		return this;
+	}
+
+	[BLUR]() {
+		Dom.setStyle(this[ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
+		Dom.removeClass(this[ROW_ELEMENT], 'focus');
+
+		return this;
 	}
 
 	[DISABLE]() {

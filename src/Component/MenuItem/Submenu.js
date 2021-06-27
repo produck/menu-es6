@@ -1,10 +1,10 @@
 import * as Dom from 'dom';
-import { FunctionMenuItem, FOCUS, RESET, LISTEN_ENTER } from './Function';
-import { ROW_ELEMENT, TEXT_ELEMENT } from './Base';
+import { FunctionMenuItem, FOCUS, BLUR } from './Function';
+import { TEXT_ELEMENT, LISTEN_ENTER } from './Base';
 import { MENU_ITEM_ICON_BOX_STYLE } from '../utils';
-import { CLOSE, OPEN } from '../Menu';
+import { CLOSE } from '../Menu';
 
-import '@/MenuScope';
+import { popup } from '@/Scope';
 
 const ICON_POSITION_STYLE = {
 	right: 0,
@@ -20,8 +20,8 @@ export const
 	KEY_LISTENER = 'kL';
 
 export class SubmenuMenuItem extends FunctionMenuItem {
-	constructor(options) {
-		super();
+	constructor(menu, options) {
+		super(menu, options);
 
 		const expandingSpan = Dom.createElement('span');
 
@@ -29,19 +29,20 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		Dom.addClass(expandingSpan, 'menu-item-expanding');
 		Dom.appendChild(this[TEXT_ELEMENT], expandingSpan);
 
-		this[SUB_MENU_OPITONS] = options;
+		this[SUB_MENU_OPITONS] = options.submenu;
 		this[IS_EXPANDING] = false;
 		this[LISTEN_ENTER](() => this[EXPAND]());
 	}
 
 	[EXPAND]() {
-		if (this[IS_EXPANDING]) {
-			return;
-		}
+		// if (this[IS_EXPANDING]) {
+		// 	return;
+		// }
 
-		this[IS_EXPANDING] = true;
-		this[SUB_MENU_OPITONS][OPEN]();
-		Dom.dispatchEvent(this[ROW_ELEMENT], Dom.createEvent('-keeping', this));
+		// this[IS_EXPANDING] = true;
+		// this[SUB_MENU_OPITONS][OPEN]();
+		// Dom.dispatchEvent(this[ROW_ELEMENT], Dom.createEvent('-keeping', this));
+		popup(this[SUB_MENU_OPITONS]);
 	}
 
 	[COLLAPSE]() {
@@ -51,7 +52,6 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 
 		this[SUB_MENU_OPITONS][CLOSE]();
 		this[IS_EXPANDING] = false;
-		Dom.dispatchEvent(this[ROW_ELEMENT], Dom.createEvent('-resume', this));
 	}
 
 	[FOCUS]() {
@@ -59,8 +59,8 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		Dom.addEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
 	}
 
-	[RESET]() {
-		super[RESET]();
+	[BLUR]() {
+		super[BLUR]();
 		this[COLLAPSE]();
 		Dom.removeEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
 	}
