@@ -1,8 +1,7 @@
 import * as Dom from 'dom';
 import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
-import * as VAR from '../vars';
-import { Var } from '../utils';
-import { setTop } from '@/Menu/Scope';
+import { Var, VAR } from '../utils';
+import { setTop } from '../Scope';
 
 import * as _ from '@/symbol/item/function';
 import * as _MENU from '@/symbol/menu';
@@ -92,7 +91,7 @@ export class FunctionMenuItem extends BaseMenuItem {
 }
 
 export function normalize(_options) {
-	const options = Object.assign({
+	const options = Dom.ASSIGN({
 		label: '<NO_LABEL>',
 		icon: null
 	}, normalizeBaseMenuItemOptions(_options));

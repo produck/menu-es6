@@ -2,7 +2,7 @@ import * as Dom from 'dom';
 import { FunctionMenuItem, MENU_ITEM_LABEL_SPAN_STYLE, normalize as normalizeFunctionMenuItemOptions } from './Function';
 import { MENU_ITEM_ICON_BOX_STYLE } from '../utils';
 
-import { closeAllMenu } from '@/Menu/Scope';
+import { closeAllMenu } from '../Scope';
 import * as _BASE from '@/symbol/item/base';
 import * as _ from '@/symbol/item/clickable';
 
@@ -26,7 +26,7 @@ export class ClickableMenuItem extends FunctionMenuItem {
 
 		Dom.addEventListener(rowElement, 'mouseup', event => {
 			Dom.STOP_AND_PREVENT(event);
-			requestAnimationFrame(closeAllMenu);
+			Dom.REQUEST_ANIMATION_FRAME(closeAllMenu);
 			options.click();
 		});
 
@@ -47,7 +47,7 @@ const isBoolean = any => typeof any === 'boolean';
 const isArray = any => Array.isArray(any);
 
 export function normalize(_options) {
-	const options = Object.assign({
+	const options = Dom.ASSIGN({
 		click: DEFAULT_CLICK_FN,
 		isChecked: FALSE_GETTER,
 		isDisabled: FALSE_GETTER,

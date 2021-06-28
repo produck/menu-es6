@@ -1,7 +1,6 @@
 import * as Dom from 'dom';
 import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
-import { Var } from '../utils';
-import * as VAR from '../vars';
+import { Var, VAR } from '../utils';
 
 import * as _MENU from '@/symbol/menu';
 import * as _BASE from '@/symbol/item/base';

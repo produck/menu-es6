@@ -43,7 +43,8 @@ export default moduleList.map(config => {
 	const pluginList = [
 		alias({
 			entries: [
-				{ find: 'dom', replacement: path.join(__dirname, '../lib/dom.js') }
+				{ find: 'dom', replacement: path.join(__dirname, '../lib/dom.js') },
+				{ find: '@', replacement: path.join(__dirname, '../src') }
 			]
 		}),
 	];
@@ -60,7 +61,7 @@ export default moduleList.map(config => {
 	// }));
 
 	return defineConfig({
-		input: path.resolve('index.js'),
+		input: path.resolve('src/Menu/index.js'),
 		output: {
 			file: config.output,
 			format: config.format,

@@ -13,3 +13,5 @@ export const MENU_ITEM_ICON_BOX_STYLE = {
 	height: '100%',
 	width: Var(VAR.FUNCTION_ITEM_WHITESPACE)
 };
+
+export { VAR };

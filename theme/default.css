@@ -19,3 +19,7 @@
 span.menu-item-expanding::before {
 	content: '>';
 }
+
+.menu {
+	border: 1px solid #000 !important;
+}

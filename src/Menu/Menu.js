@@ -1,6 +1,5 @@
 import * as Dom from 'dom';
-import * as VAR from './vars';
-import { Var } from './utils';
+import { Var, VAR } from './utils';
 
 import { isMenuTop } from './Scope';
 import { AbstractMenu } from './Abstract';
@@ -75,7 +74,7 @@ export class Menu extends AbstractMenu {
 	}
 
 	[_.OPEN]() {
-		requestAnimationFrame(() => Dom.setStyle(this[_.MENU_ELEMENT], { opacity: 1 }));
+		Dom.REQUEST_ANIMATION_FRAME(() => Dom.setStyle(this[_.MENU_ELEMENT], { opacity: 1 }));
 	}
 
 	[_.CLOSE]() {

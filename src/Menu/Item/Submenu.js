@@ -47,7 +47,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 }
 
 export function normalize(_options) {
-	const options = Object.assign({
+	const options = Dom.ASSIGN({
 		submenu: []
 	}, normalizeFunctionMenuItemOptions(_options));
 

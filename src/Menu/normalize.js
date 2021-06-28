@@ -1,5 +1,4 @@
 const NORMALIZER = 'n', TYPE = 't';
-
 const TYPE_NORMALIZER_MAP = [];
 
 function getNormalizer(type) {
