@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"baseUrl": ".",
 		"paths": {
-			"dom": ["./lib/dom.js"],
+			"dom": ["./src/dom.js"],
 			"@/*": ["./src/*"],
 			"@/": ["./src/"],
 		}

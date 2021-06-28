@@ -79,6 +79,7 @@ export class Menu extends AbstractMenu {
 
 	[_.CLOSE]() {
 		Dom.removeChild(this[_.MENU_ELEMENT].parentElement, this[_.MENU_ELEMENT]);
+		this[_.CLEAR_FOCUS]();
 	}
 
 	[_.APPEND](item) {

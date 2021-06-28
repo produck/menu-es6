@@ -21,7 +21,7 @@ export default defineConfig({
 	plugins: [
 		alias({
 			entries: [
-				{ find: 'dom', replacement: path.join(__dirname, '../lib/dom.js') },
+				{ find: 'dom', replacement: path.join(__dirname, '../src/dom.js') },
 				{ find: '@', replacement: path.join(__dirname, '../src') }
 			]
 		}),

@@ -4,7 +4,7 @@ import { normalizeMenuOptions } from '../normalize';
 import { MENU_ITEM_ICON_BOX_STYLE } from '../utils';
 
 import { Menu } from '../Menu';
-import { openMenu } from '../Scope';
+import { openMenu, closeMenu } from '../Scope';
 import * as _ from '@/symbol/item/submenu';
 import * as _BASE from '@/symbol/item/base';
 import * as _FUNCTION from '@/symbol/item/function';
@@ -15,6 +15,8 @@ const ICON_POSITION_STYLE = { right: 0, top: 0 };
 export function popup(options, position) {
 	openMenu(Menu[_MENU.CREATE](options));
 }
+
+const EXPANDING_STACK = [];
 
 export class SubmenuMenuItem extends FunctionMenuItem {
 	constructor(menu, options) {
@@ -27,22 +29,39 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		Dom.appendChild(this[_BASE.TEXT_ELEMENT], expandingSpan);
 
 		this[_.SUB_MENU_OPITONS] = options.submenu;
-		this[_BASE.LISTEN_ENTER](() => this[_.EXPAND]());
-	}
+		this[_.KEY_LISTENER] = event => event.key in KEY_MAP && KEY_MAP[event.key]();
 
-	[_.EXPAND]() {
-		popup(this[_.SUB_MENU_OPITONS]);
+		const expand = () => {
+			if (EXPANDING_STACK[0] !== this) {
+				popup(this[_.SUB_MENU_OPITONS]);
+				EXPANDING_STACK.unshift(this);
+			}
+		};
+
+		const collapse = () => {
+			if (EXPANDING_STACK[0] === this) {
+				closeMenu();
+				EXPANDING_STACK.shift();
+			}
+		};
+
+		this[_BASE.LISTEN_ENTER](expand);
+
+		const KEY_MAP = {
+			ArrowLeft: collapse,
+			ArrowRight: expand,
+			Enter: expand
+		};
 	}
 
 	[_FUNCTION.FOCUS]() {
 		super[_FUNCTION.FOCUS]();
-		// Dom.addEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
+		Dom.addEventListener(Dom.WINDOW, 'keydown', this[_.KEY_LISTENER]);
 	}
 
 	[_FUNCTION.BLUR]() {
 		super[_FUNCTION.BLUR]();
-		// this[COLLAPSE]();
-		// Dom.removeEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
+		Dom.removeEventListener(Dom.WINDOW, 'keydown', this[_.KEY_LISTENER]);
 	}
 }
 

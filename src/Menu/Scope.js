@@ -7,7 +7,7 @@ Dom.setStyle(container, { width: 0, height: 0, display: 'block', position: 'fixe
 Dom.addClass(container, 'menu-scope');
 Dom.appendChild(Dom.BODY, container);
 
-const menuStack = window.s = [];
+const menuStack = [];
 
 export function openMenu(menu) {
 	menuStack.unshift(menu);
@@ -17,7 +17,8 @@ export function openMenu(menu) {
 
 export function closeMenu(menu = menuStack[1]) {
 	while (menuStack[0] !== menu && menuStack.length > 0) {
-		menuStack.shift()[_MENU.CLOSE]();
+		menuStack[0][_MENU.CLOSE]();
+		menuStack.shift();
 	}
 }
 
