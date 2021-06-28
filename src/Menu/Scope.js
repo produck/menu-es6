@@ -1,6 +1,5 @@
 import * as Dom from 'dom';
-import { normalizeMenuOptions } from './normalize';
-import { Menu, SpearatorMenuItem, APPEND, ClickableMenuItem, SubmenuMenuItem, OPEN, NEXT, MENU_ELEMENT, CLOSE } from './Component/index';
+import * as _MENU from '@/symbol/menu';
 
 const container = Dom.createElement('div');
 
@@ -10,42 +9,24 @@ Dom.appendChild(Dom.BODY, container);
 
 const menuStack = window.s = [];
 
-/**
- * @param {Array} options
- * @returns
- */
-function createMenu(options) {
-	const finalOptions = normalizeMenuOptions(options);
-	const menu = new Menu();
-
-	finalOptions.forEach((groupOptions, index) => {
-		groupOptions.forEach(options => menu[APPEND](new options.type(menu, options)));
-		index !== options.length - 1 && menu[APPEND](new SpearatorMenuItem(menu));
-	});
-
-	return menu;
-}
-
-function openMenu(options) {
-	const menu = createMenu(options);
-
+export function openMenu(menu) {
 	menuStack.unshift(menu);
-	menu[OPEN]();
-	Dom.appendChild(container, menu[MENU_ELEMENT]);
+	menu[_MENU.OPEN]();
+	Dom.appendChild(container, menu[_MENU.MENU_ELEMENT]);
 }
 
 export function closeMenu(menu = menuStack[1]) {
 	while (menuStack[0] !== menu && menuStack.length > 0) {
-		menuStack.shift()[CLOSE]();
+		menuStack.shift()[_MENU.CLOSE]();
 	}
 }
 
 function selectUp() {
-	menuStack[0][NEXT](null, true);
+	menuStack[0][_MENU.NEXT](null, true);
 }
 
 function selectDown() {
-	menuStack[0][NEXT]();
+	menuStack[0][_MENU.NEXT]();
 }
 
 const KEY_MAP_OPERATION = {
@@ -75,11 +56,3 @@ export function isMenuTop(menu) {
 export function closeAllMenu() {
 	closeMenu(null);
 }
-
-export { openMenu as popup };
-
-export const MenuItem = {
-	Clickable: ClickableMenuItem,
-	Submenu: SubmenuMenuItem,
-	Spearator: SpearatorMenuItem
-};

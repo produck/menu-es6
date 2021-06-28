@@ -1,11 +1,7 @@
 import * as Dom from 'dom';
-import { Menu } from '../Menu';
+import { AbstractMenu } from '../Abstract';
 
-export const
-	ROW_ELEMENT = 'e',
-	TEXT_ELEMENT = 't',
-	MENU = '$',
-	LISTEN_ENTER = 'L';
+import * as _ from '@/symbol/item/base';
 
 const MENU_ITEM_ROW_STYLE = {
 	display: 'block',
@@ -20,7 +16,7 @@ const MENU_ITEM_TEXT_STYLE = {
 
 export class BaseMenuItem {
 	constructor(menu) {
-		if (!(menu instanceof Menu)) {
+		if (!(menu instanceof AbstractMenu)) {
 			throw new Error('A menu required.');
 		}
 
@@ -32,12 +28,28 @@ export class BaseMenuItem {
 		Dom.setStyle(textElement, MENU_ITEM_TEXT_STYLE);
 		Dom.addClass(rowElement, 'menu-item');
 
-		this[ROW_ELEMENT] = rowElement;
-		this[TEXT_ELEMENT] = textElement;
-		this[MENU] = menu;
+		this[_.ROW_ELEMENT] = rowElement;
+		this[_.TEXT_ELEMENT] = textElement;
+		this[_.MENU] = menu;
 	}
 
-	[LISTEN_ENTER](listener) {
-		Dom.addEventListener(this[ROW_ELEMENT], 'mouseenter', listener);
+	[_.LISTEN_ENTER](listener) {
+		Dom.addEventListener(this[_.ROW_ELEMENT], 'mouseenter', listener);
 	}
+}
+
+export function normalize(_options) {
+	const options = {
+		id: null
+	};
+
+	const {
+		id: _id = options.id,
+		type: _type
+	} = _options;
+
+	options.id = _id;
+	options.type = _type;
+
+	return options;
 }

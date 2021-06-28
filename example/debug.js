@@ -1,5 +1,5 @@
 import '../theme/default.css';
-import { popup, MenuItem } from '@/Scope';
+import { popup, MenuItem } from '@/Menu/index';
 
 window.addEventListener('load', function () {
 	window.addEventListener('contextmenu', event => {
