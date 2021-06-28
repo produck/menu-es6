@@ -1,10 +1,10 @@
 import * as Dom from 'dom';
 import { FunctionMenuItem, FOCUS, BLUR } from './Function';
-import { TEXT_ELEMENT, LISTEN_ENTER } from './Base';
+import { TEXT_ELEMENT, LISTEN_ENTER, MENU } from './Base';
 import { MENU_ITEM_ICON_BOX_STYLE } from '../utils';
-import { CLOSE } from '../Menu';
+import { FOCUSING_ITEM } from '../Menu';
 
-import { popup } from '@/Scope';
+import { closeMenu, popup } from '@/Scope';
 
 const ICON_POSITION_STYLE = {
 	right: 0,
@@ -13,7 +13,7 @@ const ICON_POSITION_STYLE = {
 
 export const
 	SUB_MENU_OPITONS = 'sm',
-	IS_EXPANDING = 'p',
+	EXPANDING = 'p',
 	EXPAND = 'E',
 	COLLAPSE = 'C',
 
@@ -30,39 +30,31 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		Dom.appendChild(this[TEXT_ELEMENT], expandingSpan);
 
 		this[SUB_MENU_OPITONS] = options.submenu;
-		this[IS_EXPANDING] = false;
+		this[EXPANDING] = false;
 		this[LISTEN_ENTER](() => this[EXPAND]());
 	}
 
 	[EXPAND]() {
-		// if (this[IS_EXPANDING]) {
-		// 	return;
-		// }
-
-		// this[IS_EXPANDING] = true;
-		// this[SUB_MENU_OPITONS][OPEN]();
-		// Dom.dispatchEvent(this[ROW_ELEMENT], Dom.createEvent('-keeping', this));
 		popup(this[SUB_MENU_OPITONS]);
 	}
 
-	[COLLAPSE]() {
-		if (!this[IS_EXPANDING]) {
-			return;
-		}
-
-		this[SUB_MENU_OPITONS][CLOSE]();
-		this[IS_EXPANDING] = false;
-	}
+	// [COLLAPSE]() {
+	// 	if (this[EXPANDING]) {
+	// 		console.log(1112);
+	// 		closeMenu();
+	// 		this[EXPANDING] = false;
+	// 	}
+	// }
 
 	[FOCUS]() {
 		super[FOCUS]();
-		Dom.addEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
+		// Dom.addEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
 	}
 
 	[BLUR]() {
 		super[BLUR]();
-		this[COLLAPSE]();
-		Dom.removeEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
+		// this[COLLAPSE]();
+		// Dom.removeEventListener(Dom.WINDOW, 'keydown', this[KEY_LISTENER]);
 	}
 }
 

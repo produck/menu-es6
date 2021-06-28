@@ -34,8 +34,10 @@ function openMenu(options) {
 	Dom.appendChild(container, menu[MENU_ELEMENT]);
 }
 
-function closeMenu() {
-	menuStack.shift()[CLOSE]();
+export function closeMenu(menu = menuStack[1]) {
+	while (menuStack[0] !== menu && menuStack.length > 0) {
+		menuStack.shift()[CLOSE]();
+	}
 }
 
 function selectUp() {
@@ -60,19 +62,21 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 	}
 });
 
+export function setTop(menu) {
+	while (menuStack[0] !== menu) {
+		closeMenu();
+	}
+}
+
 export function isMenuTop(menu) {
 	return menuStack[0] === menu;
 }
 
 export function closeAllMenu() {
-	while (menuStack.length > 0) {
-		closeMenu();
-	}
+	closeMenu(null);
 }
 
-export function popup(options) {
-	openMenu(options);
-}
+export { openMenu as popup };
 
 export const MenuItem = {
 	Clickable: ClickableMenuItem,

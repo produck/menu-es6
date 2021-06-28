@@ -18,6 +18,24 @@ window.addEventListener('load', function () {
 								type: MenuItem.Clickable,
 								label: 'l2'
 							}
+						],
+						[
+							{
+								type: MenuItem.Submenu,
+								label: 'open l3',
+								submenu: [
+									[
+										{
+											type: MenuItem.Clickable,
+											label: 'l3-0'
+										},
+									]
+								]
+							},
+							{
+								type: MenuItem.Clickable,
+								label: 'l2-1'
+							}
 						]
 					]
 				}

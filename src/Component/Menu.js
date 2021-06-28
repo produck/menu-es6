@@ -56,17 +56,24 @@ export class Menu {
 	}
 
 	[FOCUS_ITEM](item) {
+		if (!this[TOP] || item === this[FOCUSING_ITEM]) {
+			return;
+		}
+
 		this[CLEAR_FOCUS]();
-		this[FOCUSING_ITEM] = item[FOCUS]();
+		item[FOCUS]();
+		this[FOCUSING_ITEM] = item;
 	}
 
 	[CLEAR_FOCUS]() {
-		if (this[TOP]) {
-			const focused = this[FOCUSING_ITEM];
-
-			focused && focused[BLUR]();
-			this[FOCUSING_ITEM] = null;
+		if (!this[TOP]) {
+			return;
 		}
+
+		const focused = this[FOCUSING_ITEM];
+
+		focused && focused[BLUR]();
+		this[FOCUSING_ITEM] = null;
 	}
 
 	[OPEN]() {
