@@ -1,15 +1,16 @@
 export const
 	MENU_ELEMENT = 'm',
 	ITEM_LIST = 'l',
-	FOCUSING_ITEM = 'f',
 	OPENER = 'o',
+	FOCUSING_ITEM = 'f',
 	EXPANDING_ITEM = 'e',
-	ACTIVE = 'a',
 
-	CREATE = 'C',
+	COLLAPSE_ITEM = 'C',
+	EXPAND_ITEM = 'E',
+	CANCEL_COLLAPSE = 'xC',
+	S_CREATE = 'S',
 	OPEN = 'O',
 	CLOSE = 'X',
 	APPEND = 'A',
 	NEXT = 'N',
-	CLEAR_FOCUS = 'Cf',
 	FOCUS_ITEM = 'F';

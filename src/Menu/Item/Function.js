@@ -1,7 +1,6 @@
 import * as Dom from 'dom';
 import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
 import { Var, VAR } from '../utils';
-import { setTop } from '../Scope';
 
 import * as _ from '@/symbol/item/function';
 import * as _MENU from '@/symbol/menu';

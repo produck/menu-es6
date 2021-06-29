@@ -1,5 +1,6 @@
 import * as Dom from 'dom';
 import * as _MENU from '@/symbol/menu';
+import { COLLAPSE, EXPAND, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/item/submenu';
 
 const container = Dom.createElement('div');
 
@@ -7,53 +8,79 @@ Dom.setStyle(container, { width: 0, height: 0, display: 'block', position: 'fixe
 Dom.addClass(container, 'menu-scope');
 Dom.appendChild(Dom.BODY, container);
 
-const menuStack = [];
+let currentMenu = null;
 
-export function openMenu(menu) {
-	menuStack.unshift(menu);
-	menu[_MENU.OPEN]();
-	Dom.appendChild(container, menu[_MENU.MENU_ELEMENT]);
+export function setCurrentMenu(menu) {
+	closeAllMenu();
+	currentMenu = menu;
 }
 
-export function closeMenu(menu = menuStack[1]) {
-	while (menuStack[0] !== menu && menuStack.length > 0) {
-		menuStack[0][_MENU.CLOSE]();
-		menuStack.shift();
+export function appendMenu(menu) {
+	Dom.appendChild(container, menu[_MENU.MENU_ELEMENT]);
+	menu[_MENU.OPEN]();
+}
+
+export function closeAllMenu() {
+	if (currentMenu !== null) {
+		currentMenu[_MENU.CLOSE]();
+		currentMenu = null;
 	}
 }
 
 function selectUp() {
-	menuStack[0][_MENU.NEXT](null, true);
+	getTopMenu()[_MENU.NEXT](null, true);
 }
 
 function selectDown() {
-	menuStack[0][_MENU.NEXT]();
+	getTopMenu()[_MENU.NEXT]();
 }
+
+function getTopMenu() {
+	let menu = currentMenu;
+
+	while (menu[_MENU.EXPANDING_ITEM] !== null) {
+		menu = menu[_MENU.EXPANDING_ITEM][EXPANDED_MENU];
+	}
+
+	return menu;
+}
+
+const tryCollapse = () => {
+	const topMenu = getTopMenu();
+
+	if (topMenu[_MENU.OPENER] !== null) {
+		topMenu[_MENU.OPENER][COLLAPSE]();
+
+		return true;
+	}
+
+	return false;
+};
+
+const tryExpand = () => {
+	const topMenu = getTopMenu();
+	const focusingItem = topMenu[_MENU.FOCUSING_ITEM];
+
+	if (focusingItem && focusingItem[SUB_MENU_OPITONS]) {
+		topMenu[_MENU.EXPAND_ITEM]();
+
+		console.log(focusingItem[EXPAND]);
+		selectDown();
+	}
+};
 
 const KEY_MAP_OPERATION = {
 	ArrowUp: selectUp,
 	ArrowDown: selectDown,
-	Escape: () => menuStack.length === 1 && closeMenu()
+	ArrowLeft: tryCollapse,
+	ArrowRight: tryExpand,
+	Escape: () => tryCollapse() || closeAllMenu(),
 };
 
-// Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
-// Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
+Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
+Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
 Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
-	if (menuStack.length > 0 && event.key in KEY_MAP_OPERATION) {
+	if (currentMenu && event.key in KEY_MAP_OPERATION) {
 		KEY_MAP_OPERATION[event.key]();
 	}
 });
-
-export function setTop(menu) {
-	while (menuStack[0] !== menu) {
-		closeMenu();
-	}
-}
-
-export function isMenuTop(menu) {
-	return menuStack[0] === menu;
-}
-
-export function closeAllMenu() {
-	closeMenu(null);
-}

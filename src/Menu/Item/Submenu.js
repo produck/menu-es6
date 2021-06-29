@@ -5,7 +5,7 @@ import { AbstractMenu } from '../Abstract';
 import { FunctionMenuItem, normalize as normalizeFunctionMenuItemOptions } from './Function';
 import { SpearatorMenuItem } from './Spearator';
 import { normalizeMenuOptions } from '../normalize';
-import { openMenu, closeMenu } from '../Scope';
+import { appendMenu, setCurrentMenu } from '../Scope';
 
 import * as _SUBMENU from '@/symbol/item/submenu';
 import * as _BASE from '@/symbol/item/base';
@@ -46,19 +46,19 @@ export class Menu extends AbstractMenu {
 		this[_MENU.FOCUSING_ITEM] = null;
 		this[_MENU.OPENER] = null;
 
-		Dom.addEventListener(menuElement, 'mouseleave', () => this[_MENU.FOCUS_ITEM]());
-		Dom.addEventListener(menuElement, 'mousedown', Dom.STOP_PROPAGATION);
-
-		Dom.addEventListener(menuElement, 'mouseenter', () => {
+		const cancelOpenerCollapse = () => {
 			let opener = this[_MENU.OPENER];
 
 			while (opener !== null) {
 				opener[_BASE.MENU][_MENU.FOCUS_ITEM](opener);
-				opener[_BASE.MENU].cancelCollapse();
-
+				opener[_BASE.MENU][_MENU.CANCEL_COLLAPSE]();
 				opener = opener[_BASE.MENU][_MENU.OPENER];
 			}
-		});
+		};
+
+		Dom.addEventListener(menuElement, 'mouseleave', () => this[_MENU.FOCUS_ITEM]());
+		Dom.addEventListener(menuElement, 'mousedown', Dom.STOP_PROPAGATION);
+		Dom.addEventListener(menuElement, 'mouseenter', cancelOpenerCollapse);
 
 	}
 
@@ -82,25 +82,31 @@ export class Menu extends AbstractMenu {
 		const expandingItem = this[_MENU.EXPANDING_ITEM];
 
 		if (expandingItem !== item) {
-			this.collapseItem();
+			this[_MENU.COLLAPSE_ITEM]();
 		} else {
-			this.cancelCollapse();
+			this[_MENU.CANCEL_COLLAPSE]();
 		}
 
 		this[_MENU.FOCUSING_ITEM] = item;
 	}
 
-	collapseItem(delay = 500) {
-		this.cancelCollapse();
+	[_MENU.EXPAND_ITEM]() {
+		if (this[_MENU.FOCUSING_ITEM] instanceof SubmenuMenuItem) {
+			this[_MENU.FOCUSING_ITEM][_SUBMENU.EXPAND]();
+		}
+	}
+
+	[_MENU.COLLAPSE_ITEM](delay = 500) {
+		this[_MENU.CANCEL_COLLAPSE]();
 
 		const expandingItem = this[_MENU.EXPANDING_ITEM];
 
-		if (expandingItem) {
+		if (expandingItem && expandingItem instanceof SubmenuMenuItem) {
 			this.delay = setTimeout(() => expandingItem[_SUBMENU.COLLAPSE](), delay);
 		}
 	}
 
-	cancelCollapse() {
+	[_MENU.CANCEL_COLLAPSE]() {
 		clearTimeout(this.delay);
 	}
 
@@ -110,7 +116,7 @@ export class Menu extends AbstractMenu {
 
 	[_MENU.CLOSE]() {
 		Dom.removeChild(this[_MENU.MENU_ELEMENT].parentElement, this[_MENU.MENU_ELEMENT]);
-		this.collapseItem(0);
+		this[_MENU.COLLAPSE_ITEM](0);
 	}
 
 	[_MENU.APPEND](item) {
@@ -137,7 +143,7 @@ export class Menu extends AbstractMenu {
 		}
 	}
 
-	static [_MENU.CREATE](options) {
+	static [_MENU.S_CREATE](options) {
 		const finalOptions = normalizeMenuOptions(options);
 		const menu = new this();
 
@@ -153,9 +159,10 @@ export class Menu extends AbstractMenu {
 const ICON_POSITION_STYLE = { right: 0, top: 0 };
 
 export function popup(options, position) {
-	const menu = Menu[_MENU.CREATE](options);
+	const menu = Menu[_MENU.S_CREATE](options);
 
-	openMenu(menu);
+	setCurrentMenu(menu);
+	appendMenu(menu);
 
 	return menu;
 }
@@ -171,29 +178,17 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		Dom.appendChild(this[_BASE.TEXT_ELEMENT], expandingSpan);
 
 		this[_SUBMENU.SUB_MENU_OPITONS] = options.submenu;
-		this[_SUBMENU.KEY_LISTENER] = event => event.key in KEY_MAP && KEY_MAP[event.key]();
 		this[_SUBMENU.EXPANDED_MENU] = null;
-
-		const expand = () => this[_SUBMENU.EXPAND]();
-		const collapse = () => this[_SUBMENU.COLLAPSE]();
-
-		this[_BASE.LISTEN_ENTER](expand);
-
-		const KEY_MAP = {
-			ArrowLeft: collapse,
-			Escape: collapse,
-			ArrowRight: expand,
-			Enter: expand
-		};
+		this[_BASE.LISTEN_ENTER](() => this[_BASE.MENU][_MENU.EXPAND_ITEM]());
 	}
 
 	[_SUBMENU.EXPAND]() {
 		if (this[_SUBMENU.EXPANDED_MENU] === null) {
-			const menu = Menu[_MENU.CREATE](this[_SUBMENU.SUB_MENU_OPITONS]);
+			const menu = Menu[_MENU.S_CREATE](this[_SUBMENU.SUB_MENU_OPITONS]);
 
 			menu[_MENU.OPENER] = this;
 			this[_SUBMENU.EXPANDED_MENU] = menu;
-			openMenu(menu);
+			appendMenu(menu);
 		}
 	}
 
@@ -205,19 +200,6 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 			this[_SUBMENU.EXPANDED_MENU] = null;
 		}
 	}
-
-
-
-	// [_FUNCTION.FOCUS]() {
-	// 	super[_FUNCTION.FOCUS]();
-	// 	Dom.addEventListener(Dom.WINDOW, 'keydown', this[_SUBMENU.KEY_LISTENER]);
-	// }
-
-	// [_FUNCTION.BLUR]() {
-	// 	Dom.removeEventListener(Dom.WINDOW, 'keydown', this[_SUBMENU.KEY_LISTENER]);
-	// 	super[_FUNCTION.BLUR]();
-	// 	this[_SUBMENU.COLLAPSE]();
-	// }
 }
 
 export function normalize(_options) {
