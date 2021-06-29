@@ -36,7 +36,7 @@ const KEY_MAP_OPERATION = {
 	Escape: () => menuStack.length === 1 && closeMenu()
 };
 
-Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
+// Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
 // Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
 Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 	if (menuStack.length > 0 && event.key in KEY_MAP_OPERATION) {

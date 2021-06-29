@@ -1,14 +1,122 @@
 import * as Dom from 'dom';
-import { FunctionMenuItem, normalize as normalizeFunctionMenuItemOptions } from './Function';
-import { normalizeMenuOptions } from '../normalize';
-import { MENU_ITEM_ICON_BOX_STYLE } from '../utils';
+import { Var, VAR, MENU_ITEM_ICON_BOX_STYLE } from '../utils';
 
-import { Menu } from '../Menu';
+import { AbstractMenu } from '../Abstract';
+import { FunctionMenuItem, normalize as normalizeFunctionMenuItemOptions } from './Function';
+import { SpearatorMenuItem } from './Spearator';
+import { normalizeMenuOptions } from '../normalize';
 import { openMenu, closeMenu } from '../Scope';
-import * as _ from '@/symbol/item/submenu';
+
+import * as _SUBMENU from '@/symbol/item/submenu';
 import * as _BASE from '@/symbol/item/base';
 import * as _FUNCTION from '@/symbol/item/function';
 import * as _MENU from '@/symbol/menu';
+
+const MENU_STYLE = {
+	display: 'block',
+	position: 'fixed',
+	margin: '0',
+	padding: `${Var(VAR.WHITESPACE_Y)} 0`,
+	'font-size': '12px',
+	'white-space': 'nowrap',
+	'border': '1px solid transparent',
+	'line-height': Var(VAR.FUNCTION_ITEM_HEIGHT),
+	'background-color': Var(VAR.BACKGROUND_COLOR),
+	'color': Var(VAR.FRONTGROUND_COLOR),
+	'user-select': 'none',
+	'opacity': 0,
+	'transition-property': 'opacity',
+	'transition-duration': '0.3s'
+};
+
+const IS_FUNCTION_ITEM = item => item instanceof FunctionMenuItem;
+
+export class Menu extends AbstractMenu {
+	constructor() {
+		super();
+
+		const menuElement = Dom.createElement('ul');
+		const itemComponentList = [];
+
+		Dom.setStyle(menuElement, MENU_STYLE);
+		Dom.addClass(menuElement, 'menu');
+
+		this[_MENU.ITEM_LIST] = itemComponentList;
+		this[_MENU.MENU_ELEMENT] = menuElement;
+		this[_MENU.FOCUSING_ITEM] = null;
+		this[_MENU.OPENER] = null;
+
+		Dom.addEventListener(menuElement, 'mouseleave', () => this[_MENU.CLEAR_FOCUS]());
+		Dom.addEventListener(menuElement, 'mousedown', Dom.STOP_PROPAGATION);
+	}
+
+	get [_MENU.EXPANDING_ITEM]() {
+		return this[_MENU.ITEM_LIST]
+			.filter(item => item instanceof SubmenuMenuItem)
+			.find(submenuItem => submenuItem[_SUBMENU.EXPANDED_MENU] !== null) || null;
+	}
+
+	[_MENU.FOCUS_ITEM](item) {
+		if (this[_MENU.FOCUSING_ITEM] === item) {
+			return;
+		}
+
+		this[_MENU.CLEAR_FOCUS]();
+		item[_FUNCTION.FOCUS]();
+		this[_MENU.FOCUSING_ITEM] = item;
+	}
+
+	[_MENU.CLEAR_FOCUS]() {
+		this[_MENU.FOCUSING_ITEM] && this[_MENU.FOCUSING_ITEM][_FUNCTION.BLUR]();
+		this[_MENU.FOCUSING_ITEM] = null;
+		this[_MENU.EXPANDING_ITEM] && this[_MENU.EXPANDING_ITEM][_SUBMENU.COLLAPSE]();
+	}
+
+	[_MENU.OPEN]() {
+		Dom.REQUEST_ANIMATION_FRAME(() => Dom.setStyle(this[_MENU.MENU_ELEMENT], { opacity: 1 }));
+	}
+
+	[_MENU.CLOSE]() {
+		this[_MENU.CLEAR_FOCUS]();
+		Dom.removeChild(this[_MENU.MENU_ELEMENT].parentElement, this[_MENU.MENU_ELEMENT]);
+	}
+
+	[_MENU.APPEND](item) {
+		this[_MENU.ITEM_LIST].push(item);
+		Dom.appendChild(this[_MENU.MENU_ELEMENT], item[_BASE.ROW_ELEMENT]);
+	}
+
+	[_MENU.NEXT](flag = null, reversed = false) {
+		const sequence = this[_MENU.ITEM_LIST].filter(IS_FUNCTION_ITEM);
+
+		if (reversed) {
+			sequence.reverse();
+		}
+
+		const focusingIndex = sequence.findIndex(item => item === this[_MENU.FOCUSING_ITEM]);
+		const length = sequence.length;
+
+		for (let index = 0; index < length; index++) {
+			const current = sequence[(focusingIndex + index + 1) % length];
+
+			if (flag === null || current.symbol === flag) {
+				return this[_MENU.FOCUS_ITEM](current);
+			}
+		}
+	}
+
+	static [_MENU.CREATE](options) {
+		const finalOptions = normalizeMenuOptions(options);
+		const menu = new this();
+
+		finalOptions.forEach((groupOptions, index) => {
+			groupOptions.forEach(options => menu[_MENU.APPEND](new options.type(menu, options)));
+			index !== options.length - 1 && menu[_MENU.APPEND](new SpearatorMenuItem(menu));
+		});
+
+		return menu;
+	}
+}
 
 const ICON_POSITION_STYLE = { right: 0, top: 0 };
 
@@ -20,9 +128,6 @@ export function popup(options, position) {
 	return menu;
 }
 
-const EXPANDING_STACK = window.s = [];
-const hasSubmenuMenuItem = item => EXPANDING_STACK.indexOf(item) !== -1;
-
 export class SubmenuMenuItem extends FunctionMenuItem {
 	constructor(menu, options) {
 		super(menu, options);
@@ -33,22 +138,12 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		Dom.addClass(expandingSpan, 'menu-item-expanding');
 		Dom.appendChild(this[_BASE.TEXT_ELEMENT], expandingSpan);
 
-		this[_.SUB_MENU_OPITONS] = options.submenu;
-		this[_.KEY_LISTENER] = event => event.key in KEY_MAP && KEY_MAP[event.key]();
+		this[_SUBMENU.SUB_MENU_OPITONS] = options.submenu;
+		this[_SUBMENU.KEY_LISTENER] = event => event.key in KEY_MAP && KEY_MAP[event.key]();
+		this[_SUBMENU.EXPANDED_MENU] = null;
 
-		const expand = () => {
-			if (!hasSubmenuMenuItem(this)) {
-				popup(this[_.SUB_MENU_OPITONS]);
-				EXPANDING_STACK.unshift(this);
-			}
-		};
-
-		const collapse = () => {
-			if (EXPANDING_STACK[0] === this) {
-				closeMenu();
-				EXPANDING_STACK.shift();
-			}
-		};
+		const expand = () => this[_SUBMENU.EXPAND]();
+		const collapse = () => this[_SUBMENU.COLLAPSE]();
 
 		this[_BASE.LISTEN_ENTER](expand);
 
@@ -60,16 +155,37 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		};
 	}
 
-	[_FUNCTION.FOCUS]() {
-		super[_FUNCTION.FOCUS]();
-		Dom.addEventListener(Dom.WINDOW, 'keydown', this[_.KEY_LISTENER]);
+	[_SUBMENU.EXPAND]() {
+		if (this[_SUBMENU.EXPANDED_MENU] === null) {
+			const menu = Menu[_MENU.CREATE](this[_SUBMENU.SUB_MENU_OPITONS]);
+
+			menu[_MENU.OPENER] = this;
+			this[_SUBMENU.EXPANDED_MENU] = menu;
+			openMenu(menu);
+		}
 	}
 
-	[_FUNCTION.BLUR]() {
-		super[_FUNCTION.BLUR]();
-		Dom.removeEventListener(Dom.WINDOW, 'keydown', this[_.KEY_LISTENER]);
-		while (EXPANDING_STACK.shift() !== this && EXPANDING_STACK.length > 0);
+	[_SUBMENU.COLLAPSE]() {
+		const expandedMenu = this[_SUBMENU.EXPANDED_MENU];
+
+		if (expandedMenu !== null) {
+			expandedMenu[_MENU.CLOSE]();
+			this[_SUBMENU.EXPANDED_MENU] = null;
+		}
 	}
+
+
+
+	// [_FUNCTION.FOCUS]() {
+	// 	super[_FUNCTION.FOCUS]();
+	// 	Dom.addEventListener(Dom.WINDOW, 'keydown', this[_SUBMENU.KEY_LISTENER]);
+	// }
+
+	// [_FUNCTION.BLUR]() {
+	// 	Dom.removeEventListener(Dom.WINDOW, 'keydown', this[_SUBMENU.KEY_LISTENER]);
+	// 	super[_FUNCTION.BLUR]();
+	// 	this[_SUBMENU.COLLAPSE]();
+	// }
 }
 
 export function normalize(_options) {

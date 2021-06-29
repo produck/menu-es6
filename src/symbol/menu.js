@@ -2,8 +2,9 @@ export const
 	MENU_ELEMENT = 'm',
 	ITEM_LIST = 'l',
 	FOCUSING_ITEM = 'f',
-	TOP = 't',
 	OPENER = 'o',
+	EXPANDING_ITEM = 'e',
+	ACTIVE = 'a',
 
 	CREATE = 'C',
 	OPEN = 'O',

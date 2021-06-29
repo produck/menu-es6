@@ -57,32 +57,21 @@ export class FunctionMenuItem extends BaseMenuItem {
 		Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
 
 		this[_.LABEL_SPAN] = labelSpan;
-		this[_BASE.LISTEN_ENTER](() => {
-			if (!this[_.FOCUSING]) {
-				setTop(this[_BASE.MENU]);
-				menu[_MENU.FOCUS_ITEM](this);
-			}
-		});
-	}
-
-	get [_.FOCUSING]() {
-		return this[_BASE.MENU][_MENU.FOCUSING_ITEM] === this;
+		this[_BASE.LISTEN_ENTER](() => menu[_MENU.FOCUS_ITEM](this));
 	}
 
 	[_.FOCUS]() {
-		if (this[_.FOCUSING]) {
-			return;
-		}
-
 		const rowElement = this[_BASE.ROW_ELEMENT];
 
 		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE_ON_FOCUS);
-		Dom.addClass(this[_BASE.ROW_ELEMENT], 'focus');
+		Dom.addClass(rowElement, 'focus');
 	}
 
 	[_.BLUR]() {
-		Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
-		Dom.removeClass(this[_BASE.ROW_ELEMENT], 'focus');
+		const rowElement = this[_BASE.ROW_ELEMENT];
+
+		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE_DEFAULT);
+		Dom.removeClass(rowElement, 'focus');
 	}
 
 	[_.DISABLE]() {
