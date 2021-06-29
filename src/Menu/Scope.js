@@ -77,10 +77,18 @@ const KEY_MAP_OPERATION = {
 	Escape: () => tryCollapse() || closeAllMenu(),
 };
 
+const KEY_REG = /^[a-z]$/;
+
 Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
 Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
 Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
-	if (currentMenu && event.key in KEY_MAP_OPERATION) {
-		KEY_MAP_OPERATION[event.key]();
+	const { key } = event;
+
+	if (currentMenu) {
+		if (key in KEY_MAP_OPERATION) {
+			KEY_MAP_OPERATION[event.key]();
+		} else if (KEY_REG.test(key)) {
+			getTopMenu()[_MENU.NEXT](key);
+		}
 	}
 });

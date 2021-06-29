@@ -40,6 +40,10 @@ export function createElement(tagName) {
 	return DOCUMENT.createElement(tagName);
 }
 
+export function createTextNode(data) {
+	return DOCUMENT.createTextNode(data);
+}
+
 /**
  * @param {HTMLElement} element
  * @param {object} ruleObject

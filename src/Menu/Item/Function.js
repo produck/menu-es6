@@ -36,6 +36,27 @@ export const MENU_ITEM_LABEL_SPAN_STYLE = {
 	'padding': `0 ${Var(VAR.FUNCTION_ITEM_WHITESPACE)}`,
 };
 
+const LABEL_REG = /^([^&]*)(&[a-z]|&&)?([^&]*)$/i;
+const NODE_LIST = 'n', FLAG = 'f';
+
+function resolveLabelText(text) {
+	const result = { [NODE_LIST]: [], [FLAG]: null };
+	const [, left, flag, right] = text.match(LABEL_REG);
+
+	if (flag === undefined) {
+		result[NODE_LIST] = [Dom.createTextNode(left)];
+	} else if (flag === '&&') {
+		result[NODE_LIST] = [Dom.createTextNode([left, '&', right].join(''))];
+	} else {
+		const u = Dom.createElement('u');
+
+		u.textContent = result[FLAG] = flag[1].toLowerCase();
+		result[NODE_LIST] = [Dom.createTextNode(left), u, Dom.createTextNode(right)];
+	}
+
+	return result;
+}
+
 export class FunctionMenuItem extends BaseMenuItem {
 	constructor(menu, options) {
 		super(menu);
@@ -52,11 +73,14 @@ export class FunctionMenuItem extends BaseMenuItem {
 		Dom.appendChild(textElement, iconSpan);
 		Dom.appendChild(textElement, labelSpan);
 
-		labelSpan.innerText = options.label;
+		const result = resolveLabelText(options.label);
+
+		result[NODE_LIST].forEach(node => Dom.appendChild(labelSpan, node));
 		Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
 
 		this[_.LABEL_SPAN] = labelSpan;
 		this[_BASE.LISTEN_ENTER](() => menu[_MENU.FOCUS_ITEM](this));
+		this[_.FLAG] = result[FLAG];
 	}
 
 	[_.FOCUS]() {

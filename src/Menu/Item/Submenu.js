@@ -45,6 +45,7 @@ export class Menu extends AbstractMenu {
 		this[_MENU.MENU_ELEMENT] = menuElement;
 		this[_MENU.FOCUSING_ITEM] = null;
 		this[_MENU.OPENER] = null;
+		this[_MENU.COLLAPSING_DELAY] = null;
 
 		const cancelOpenerCollapse = () => {
 			let opener = this[_MENU.OPENER];
@@ -102,12 +103,12 @@ export class Menu extends AbstractMenu {
 		const expandingItem = this[_MENU.EXPANDING_ITEM];
 
 		if (expandingItem && expandingItem instanceof SubmenuMenuItem) {
-			this.delay = setTimeout(() => expandingItem[_SUBMENU.COLLAPSE](), delay);
+			this[_MENU.COLLAPSING_DELAY] = setTimeout(() => expandingItem[_SUBMENU.COLLAPSE](), delay);
 		}
 	}
 
 	[_MENU.CANCEL_COLLAPSE]() {
-		clearTimeout(this.delay);
+		clearTimeout(this[_MENU.COLLAPSING_DELAY]);
 	}
 
 	[_MENU.OPEN]() {
@@ -137,7 +138,7 @@ export class Menu extends AbstractMenu {
 		for (let index = 0; index < length; index++) {
 			const current = sequence[(focusingIndex + index + 1) % length];
 
-			if (flag === null || current.symbol === flag) {
+			if (current[_FUNCTION.FLAG] === flag) {
 				return this[_MENU.FOCUS_ITEM](current);
 			}
 		}

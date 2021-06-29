@@ -4,6 +4,7 @@ export const
 	OPENER = 'o',
 	FOCUSING_ITEM = 'f',
 	EXPANDING_ITEM = 'e',
+	COLLAPSING_DELAY = 'd',
 
 	COLLAPSE_ITEM = 'C',
 	EXPAND_ITEM = 'E',

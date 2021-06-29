@@ -3,4 +3,5 @@ export const
 	BLUR = 'r',
 	DISABLE = 'd',
 	LABEL_SPAN = 'l',
-	FOCUSING = 'f';
+	FOCUSING = 'f',
+	FLAG = 'g';

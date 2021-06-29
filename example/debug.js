@@ -22,7 +22,7 @@ window.addEventListener('load', function () {
 						[
 							{
 								type: MenuItem.Submenu,
-								label: 'open l3',
+								label: 'open &l3',
 								submenu: [
 									[
 										{
