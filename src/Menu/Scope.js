@@ -33,7 +33,7 @@ function selectDown() {
 const KEY_MAP_OPERATION = {
 	ArrowUp: selectUp,
 	ArrowDown: selectDown,
-	Escape: closeMenu
+	Escape: () => menuStack.length === 1 && closeMenu()
 };
 
 Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);

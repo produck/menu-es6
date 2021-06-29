@@ -5,6 +5,7 @@ import { MENU_ITEM_ICON_BOX_STYLE } from '../utils';
 import { closeAllMenu } from '../Scope';
 import * as _BASE from '@/symbol/item/base';
 import * as _ from '@/symbol/item/clickable';
+import * as _FUNCTION from '@/symbol/item/function';
 
 const CHECKING_POSITION_STYLE = { top: 0, left: 0 };
 
@@ -26,15 +27,28 @@ export class ClickableMenuItem extends FunctionMenuItem {
 
 		Dom.addEventListener(rowElement, 'mouseup', event => {
 			Dom.STOP_AND_PREVENT(event);
-			Dom.REQUEST_ANIMATION_FRAME(closeAllMenu);
-			options.click();
+			this[_.CLICK]();
 		});
 
 		Dom.addEventListener(rowElement, 'contextmenu', Dom.STOP_AND_PREVENT);
+
+		this[_.CLICK_LISTENER] = options.click;
+		this[_.KEY_ENTER] = event => event.key === 'Enter' && this[_.CLICK]();
 	}
 
 	[_.CLICK]() {
+		Dom.REQUEST_ANIMATION_FRAME(closeAllMenu);
+		this[_.CLICK_LISTENER]();
+	}
 
+	[_FUNCTION.FOCUS]() {
+		super[_FUNCTION.FOCUS]();
+		Dom.addEventListener(Dom.WINDOW, 'keydown', this[_.KEY_ENTER]);
+	}
+
+	[_FUNCTION.BLUR]() {
+		super[_FUNCTION.BLUR]();
+		Dom.removeEventListener(Dom.WINDOW, 'keydown', this[_.KEY_ENTER]);
 	}
 }
 

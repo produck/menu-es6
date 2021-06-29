@@ -3,6 +3,7 @@ export const
 	ITEM_LIST = 'l',
 	FOCUSING_ITEM = 'f',
 	TOP = 't',
+	OPENER = 'o',
 
 	CREATE = 'C',
 	OPEN = 'O',

@@ -43,6 +43,7 @@ export class Menu extends AbstractMenu {
 		this[_.ITEM_LIST] = itemComponentList;
 		this[_.MENU_ELEMENT] = menuElement;
 		this[_.FOCUSING_ITEM] = null;
+		this[_.OPENER] = null;
 
 		Dom.addEventListener(menuElement, 'mouseleave', () => this[_.CLEAR_FOCUS]());
 		Dom.addEventListener(menuElement, 'mousedown', Dom.STOP_PROPAGATION);

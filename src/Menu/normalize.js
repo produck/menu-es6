@@ -1,14 +1,14 @@
 const NORMALIZER = 'n', TYPE = 't';
 const TYPE_NORMALIZER_MAP = [];
 
-function getNormalizer(type) {
-	const pair = TYPE_NORMALIZER_MAP.find(pair => pair[TYPE] === type);
+function normalize(options) {
+	const pair = TYPE_NORMALIZER_MAP.find(pair => pair[TYPE] === options.type);
 
 	if (pair === undefined) {
 		throw new Error('Invalid menu item type.');
 	}
 
-	return pair[NORMALIZER];
+	return pair[NORMALIZER](options);
 }
 
 const isArray = any => Array.isArray(any);
@@ -23,7 +23,7 @@ export function normalizeMenuOptions(_options) {
 			throw new Error('Menu item group options MUST be an array.');
 		}
 
-		const NORMALIZE_ITEM_OPTIONS = itemOptions => getNormalizer(itemOptions.type)(itemOptions);
+		const NORMALIZE_ITEM_OPTIONS = options => normalize(options);
 
 		return _groupOptions.reduce((itemOptionsList, itemOptions) => {
 			const finalItemOptionsList = typeof itemOptions === 'function'

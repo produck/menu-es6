@@ -13,10 +13,15 @@ import * as _MENU from '@/symbol/menu';
 const ICON_POSITION_STYLE = { right: 0, top: 0 };
 
 export function popup(options, position) {
-	openMenu(Menu[_MENU.CREATE](options));
+	const menu = Menu[_MENU.CREATE](options);
+
+	openMenu(menu);
+
+	return menu;
 }
 
-const EXPANDING_STACK = [];
+const EXPANDING_STACK = window.s = [];
+const hasSubmenuMenuItem = item => EXPANDING_STACK.indexOf(item) !== -1;
 
 export class SubmenuMenuItem extends FunctionMenuItem {
 	constructor(menu, options) {
@@ -32,7 +37,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		this[_.KEY_LISTENER] = event => event.key in KEY_MAP && KEY_MAP[event.key]();
 
 		const expand = () => {
-			if (EXPANDING_STACK[0] !== this) {
+			if (!hasSubmenuMenuItem(this)) {
 				popup(this[_.SUB_MENU_OPITONS]);
 				EXPANDING_STACK.unshift(this);
 			}
@@ -49,6 +54,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 
 		const KEY_MAP = {
 			ArrowLeft: collapse,
+			Escape: collapse,
 			ArrowRight: expand,
 			Enter: expand
 		};
@@ -62,6 +68,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 	[_FUNCTION.BLUR]() {
 		super[_FUNCTION.BLUR]();
 		Dom.removeEventListener(Dom.WINDOW, 'keydown', this[_.KEY_LISTENER]);
+		while (EXPANDING_STACK.shift() !== this && EXPANDING_STACK.length > 0);
 	}
 }
 
