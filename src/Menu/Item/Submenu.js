@@ -46,8 +46,20 @@ export class Menu extends AbstractMenu {
 		this[_MENU.FOCUSING_ITEM] = null;
 		this[_MENU.OPENER] = null;
 
-		Dom.addEventListener(menuElement, 'mouseleave', () => this[_MENU.CLEAR_FOCUS]());
+		Dom.addEventListener(menuElement, 'mouseleave', () => this[_MENU.FOCUS_ITEM]());
 		Dom.addEventListener(menuElement, 'mousedown', Dom.STOP_PROPAGATION);
+
+		Dom.addEventListener(menuElement, 'mouseenter', () => {
+			let opener = this[_MENU.OPENER];
+
+			while (opener !== null) {
+				opener[_BASE.MENU][_MENU.FOCUS_ITEM](opener);
+				opener[_BASE.MENU].cancelCollapse();
+
+				opener = opener[_BASE.MENU][_MENU.OPENER];
+			}
+		});
+
 	}
 
 	get [_MENU.EXPANDING_ITEM]() {
@@ -56,20 +68,40 @@ export class Menu extends AbstractMenu {
 			.find(submenuItem => submenuItem[_SUBMENU.EXPANDED_MENU] !== null) || null;
 	}
 
-	[_MENU.FOCUS_ITEM](item) {
-		if (this[_MENU.FOCUSING_ITEM] === item) {
-			return;
+	[_MENU.FOCUS_ITEM](item = null) {
+		const focusingItem = this[_MENU.FOCUSING_ITEM];
+
+		if (focusingItem) {
+			focusingItem && focusingItem[_FUNCTION.BLUR]();
 		}
 
-		this[_MENU.CLEAR_FOCUS]();
-		item[_FUNCTION.FOCUS]();
+		if (item !== null) {
+			item[_FUNCTION.FOCUS]();
+		}
+
+		const expandingItem = this[_MENU.EXPANDING_ITEM];
+
+		if (expandingItem !== item) {
+			this.collapseItem();
+		} else {
+			this.cancelCollapse();
+		}
+
 		this[_MENU.FOCUSING_ITEM] = item;
 	}
 
-	[_MENU.CLEAR_FOCUS]() {
-		this[_MENU.FOCUSING_ITEM] && this[_MENU.FOCUSING_ITEM][_FUNCTION.BLUR]();
-		this[_MENU.FOCUSING_ITEM] = null;
-		this[_MENU.EXPANDING_ITEM] && this[_MENU.EXPANDING_ITEM][_SUBMENU.COLLAPSE]();
+	collapseItem(delay = 500) {
+		this.cancelCollapse();
+
+		const expandingItem = this[_MENU.EXPANDING_ITEM];
+
+		if (expandingItem) {
+			this.delay = setTimeout(() => expandingItem[_SUBMENU.COLLAPSE](), delay);
+		}
+	}
+
+	cancelCollapse() {
+		clearTimeout(this.delay);
 	}
 
 	[_MENU.OPEN]() {
@@ -77,8 +109,8 @@ export class Menu extends AbstractMenu {
 	}
 
 	[_MENU.CLOSE]() {
-		this[_MENU.CLEAR_FOCUS]();
 		Dom.removeChild(this[_MENU.MENU_ELEMENT].parentElement, this[_MENU.MENU_ELEMENT]);
+		this.collapseItem(0);
 	}
 
 	[_MENU.APPEND](item) {

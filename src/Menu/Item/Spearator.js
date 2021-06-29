@@ -16,7 +16,7 @@ export class SpearatorMenuItem extends BaseMenuItem {
 		super(menu);
 
 		Dom.setStyle(this[_BASE.TEXT_ELEMENT], SPEARATOR_MENU_ITEM_STYLE);
-		this[_BASE.LISTEN_ENTER](() => menu[_MENU.CLEAR_FOCUS]());
+		this[_BASE.LISTEN_ENTER](() => menu[_MENU.FOCUS_ITEM](null));
 	}
 }
 
