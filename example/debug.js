@@ -70,6 +70,6 @@ window.addEventListener('load', function () {
 					};
 				})
 			]
-		], getPositionFromEvent(event));
+		], getPositionFromEvent(event), true);
 	});
 });

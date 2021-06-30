@@ -46,6 +46,7 @@ export class Menu extends AbstractMenu {
 		this[_M.FOCUSING_ITEM] = null;
 		this[_M.OPENER] = null;
 		this[_M.COLLAPSING_DELAY] = null;
+		this[_M.HAS_FLAG] = false;
 
 		const cancelOpenerCollapse = () => {
 			let opener = this[_M.OPENER];
@@ -156,10 +157,12 @@ export class Menu extends AbstractMenu {
 		});
 	}
 
-	static [_M.S_CREATE](options) {
+	static [_M.S_CREATE](options, hasFlag) {
 		const finalOptions = normalizeMenuOptions(options);
 		const menu = new this();
 		const fragement = Dom.createFragement();
+
+		menu[_M.HAS_FLAG] = hasFlag;
 
 		finalOptions.forEach((groupOptions, index) => {
 			groupOptions.forEach(options => {
@@ -199,8 +202,8 @@ function reOffsetCurrentMenu(element) {
 	//TODO resize
 }
 
-export function popup(options, position = DEFAULT_POSITION) {
-	const menu = Menu[_M.S_CREATE](options);
+export function popup(options, position = DEFAULT_POSITION, hasFlag = false) {
+	const menu = Menu[_M.S_CREATE](options, hasFlag);
 
 	setCurrentMenu(menu);
 	appendMenu(menu);
@@ -249,7 +252,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 
 	[_S.EXPAND]() {
 		if (this[_S.EXPANDED_MENU] === null) {
-			const menu = Menu[_M.S_CREATE](this[_S.SUB_MENU_OPITONS]);
+			const menu = Menu[_M.S_CREATE](this[_S.SUB_MENU_OPITONS], this[_B.MENU][_M.HAS_FLAG]);
 			const rect = Dom.getRect(this[_B.ROW_ELEMENT]);
 
 			menu[_M.OPENER] = this;

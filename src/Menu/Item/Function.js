@@ -79,7 +79,7 @@ export class FunctionMenuItem extends BaseMenuItem {
 		Dom.setStyle(textElement, MENU_ITEM_TEXT_STYLE);
 		Dom.appendChild(textElement, labelSpan);
 
-		const result = resolveLabelText(options.label);
+		const result = resolveLabelText(options.label, !menu[_MENU.HAS_FLAG]);
 
 		Dom.appendChild(labelSpan, result[FRAGEMENT]);
 		Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
