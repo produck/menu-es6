@@ -23,7 +23,6 @@ const MENU_ITEM_TEXT_STYLE = {
 };
 
 const ICON_SPAN_STYLE = {
-	display: 'none',
 	'margin-right': '0.5em'
 };
 
@@ -35,7 +34,7 @@ export const MENU_ITEM_LABEL_SPAN_STYLE = {
 const LABEL_REG = /^([^&]*)(&[a-z]|&&)?([^&]*)$/i;
 const FRAGEMENT = 'n', FLAG = 'f';
 
-function resolveLabelText(text) {
+function resolveLabelText(text, noFlag = false) {
 	const fragement = Dom.createFragement();
 	const result = { [FRAGEMENT]: fragement, [FLAG]: null };
 	const [, left, flag, right] = text.match(LABEL_REG);
@@ -44,7 +43,9 @@ function resolveLabelText(text) {
 		Dom.appendChild(fragement, Dom.createTextNode(left));
 	} else if (flag === '&&') {
 		Dom.appendChild(fragement, Dom.createTextNode([left, '&', right].join('')));
-	} else {
+	} else if (noFlag) {
+		Dom.appendChild(fragement, Dom.createTextNode([left, flag[1], right].join('')));
+	} else  {
 		const u = Dom.createElement('u');
 
 		u.textContent = flag[1];
@@ -63,14 +64,19 @@ export class FunctionMenuItem extends BaseMenuItem {
 
 		const textElement = this[_BASE.TEXT_ELEMENT];
 		const labelSpan = Dom.createElement('span');
-		const iconSpan = Dom.createElement('span');
+
+		if (options.icon !== null) {
+			const iconSpan = Dom.createElement('span');
+
+			Dom.addClass(iconSpan, 'menu-item-icon');
+			Dom.setStyle(iconSpan, ICON_SPAN_STYLE);
+			Dom.appendChild(labelSpan, iconSpan);
+			Dom.appendChild(iconSpan, options.icon);
+		}
 
 		Dom.addClass(labelSpan, 'menu-item-label');
-		Dom.addClass(iconSpan, 'menu-item-icon');
 		Dom.setStyle(labelSpan, MENU_ITEM_LABEL_SPAN_STYLE);
 		Dom.setStyle(textElement, MENU_ITEM_TEXT_STYLE);
-		Dom.setStyle(iconSpan, ICON_SPAN_STYLE);
-		Dom.appendChild(textElement, iconSpan);
 		Dom.appendChild(textElement, labelSpan);
 
 		const result = resolveLabelText(options.label);
@@ -115,6 +121,10 @@ export function normalize(_options) {
 
 	if (typeof _label !== 'string') {
 		throw new Error('A menu item label MUST be a string.');
+	}
+
+	if (_icon !== null && !Dom.instanceOf(_icon, DocumentFragment)) {
+		throw new Error('A menu item icon MUST be a DocumentFragment.');
 	}
 
 	options.label = _label;

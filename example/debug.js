@@ -5,11 +5,13 @@ import { popup, MenuItem, getPositionFromEvent } from '@/Menu/index';
 
 window.addEventListener('load', function () {
 	window.addEventListener('contextmenu', event => {
+		const icon = document.createDocumentFragment();
 		const acc0 = document.createDocumentFragment();
 		const acc1 = document.createDocumentFragment();
 
 		acc0.appendChild(new Text('Ctrl+A'));
 		acc1.appendChild(new Text('B'));
+		icon.appendChild(new Text('😘'));
 
 		event.preventDefault();
 		popup([
@@ -17,7 +19,8 @@ window.addEventListener('load', function () {
 				{
 					type: MenuItem.Clickable,
 					label: '&Testing for common...',
-					accelerator: [acc0, acc1]
+					accelerator: [acc0, acc1],
+					icon: icon
 				},
 				{
 					type: MenuItem.Submenu,
