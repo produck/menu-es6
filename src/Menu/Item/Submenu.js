@@ -29,7 +29,7 @@ const MENU_STYLE = {
 	'transition-duration': '0.3s'
 };
 
-const IS_FUNCTION_ITEM = item => item instanceof FunctionMenuItem;
+const IS_FOCUSABLE_ITEM = item => item[_BASE.FOCUSABLE];
 
 export class Menu extends AbstractMenu {
 	constructor() {
@@ -120,13 +120,25 @@ export class Menu extends AbstractMenu {
 		this[_MENU.COLLAPSE_ITEM](0);
 	}
 
+	/**
+	 * Use to add item to this menu.
+	 *
+	 * @param {import('./Base').BaseMenuItem} item A menu item being appended
+	 */
 	[_MENU.APPEND](item) {
 		this[_MENU.ITEM_LIST].push(item);
 		Dom.appendChild(this[_MENU.MENU_ELEMENT], item[_BASE.ROW_ELEMENT]);
 	}
 
+	/**
+	 * Try to find a `next` item then focusing.
+	 *
+	 * @param {string|null} flag Filtering item by a-z
+	 * @param {boolean} reversed Searching direction
+	 * @returns The target item found or not.
+	 */
 	[_MENU.NEXT](flag = null, reversed = false) {
-		const sequence = this[_MENU.ITEM_LIST].filter(IS_FUNCTION_ITEM);
+		const sequence = this[_MENU.ITEM_LIST].filter(IS_FOCUSABLE_ITEM);
 
 		if (reversed) {
 			sequence.reverse();
@@ -138,10 +150,14 @@ export class Menu extends AbstractMenu {
 		for (let index = 0; index < length; index++) {
 			const current = sequence[(focusingIndex + index + 1) % length];
 
-			if (current[_FUNCTION.FLAG] === flag) {
-				return this[_MENU.FOCUS_ITEM](current);
+			if (flag === null || current[_FUNCTION.FLAG] === flag) {
+				this[_MENU.FOCUS_ITEM](current);
+
+				return true;
 			}
 		}
+
+		return false;
 	}
 
 	static [_MENU.S_CREATE](options) {
@@ -200,6 +216,11 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 			expandedMenu[_MENU.CLOSE]();
 			this[_SUBMENU.EXPANDED_MENU] = null;
 		}
+	}
+
+	[_BASE.ACTIVE]() {
+		this[_SUBMENU.EXPAND]();
+		this[_SUBMENU.EXPANDED_MENU][_MENU.NEXT]();
 	}
 }
 

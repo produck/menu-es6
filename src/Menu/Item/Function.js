@@ -17,10 +17,6 @@ const MENU_ITEM_ROW_STYLE_ON_FOCUS = {
 	'background-color': Var(VAR.ACTIVE_BACKGROUND_COLOR)
 };
 
-const MENU_ITEM_ROW_STYLE_ON_DISABLED = {
-	color: Var(VAR.DISABLED_FRONTGROUND_COLOR),
-	'background-color': 'transparent'
-};
 
 const MENU_ITEM_TEXT_STYLE = {
 	'height': Var(VAR.FUNCTION_ITEM_HEIGHT)
@@ -95,10 +91,6 @@ export class FunctionMenuItem extends BaseMenuItem {
 
 		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE_DEFAULT);
 		Dom.removeClass(rowElement, 'focus');
-	}
-
-	[_.DISABLE]() {
-		Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_ON_DISABLED);
 	}
 }
 

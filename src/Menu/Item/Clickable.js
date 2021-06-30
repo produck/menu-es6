@@ -1,6 +1,6 @@
 import * as Dom from 'dom';
 import { FunctionMenuItem, MENU_ITEM_LABEL_SPAN_STYLE, normalize as normalizeFunctionMenuItemOptions } from './Function';
-import { MENU_ITEM_ICON_BOX_STYLE } from '../utils';
+import { MENU_ITEM_ICON_BOX_STYLE, VAR, Var } from '../utils';
 
 import { closeAllMenu } from '../Scope';
 import * as _BASE from '@/symbol/item/base';
@@ -8,6 +8,11 @@ import * as _ from '@/symbol/item/clickable';
 import * as _FUNCTION from '@/symbol/item/function';
 
 const CHECKING_POSITION_STYLE = { top: 0, left: 0 };
+
+const MENU_ITEM_ROW_STYLE_ON_DISABLED = {
+	color: Var(VAR.DISABLED_FRONTGROUND_COLOR),
+	'background-color': 'transparent'
+};
 
 export class ClickableMenuItem extends FunctionMenuItem {
 	constructor(menu, options) {
@@ -19,7 +24,7 @@ export class ClickableMenuItem extends FunctionMenuItem {
 		const checkboxSpan = Dom.createElement('span');
 
 		Dom.addClass(acceleratorSpan, 'menu-item-accelerator');
-		Dom.addClass(checkboxSpan, 'menu-item-checkbox');
+
 		Dom.setStyle(acceleratorSpan, MENU_ITEM_LABEL_SPAN_STYLE);
 		Dom.setStyle(checkboxSpan, MENU_ITEM_ICON_BOX_STYLE, CHECKING_POSITION_STYLE);
 		Dom.appendChild(textElement, acceleratorSpan);
@@ -34,6 +39,28 @@ export class ClickableMenuItem extends FunctionMenuItem {
 
 		this[_.CLICK_LISTENER] = options.click;
 		this[_.KEY_ENTER] = event => event.key === 'Enter' && this[_.CLICK]();
+		const disabled = this[_.DISABLED] = options.isDisabled();
+
+		if (disabled) {
+			Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_ON_DISABLED);
+			Dom.addClass(rowElement, 'disabled');
+		}
+	}
+
+	get [_BASE.FOCUSABLE]() {
+		return !this[_.DISABLED];
+	}
+
+	[_FUNCTION.FOCUS]() {
+		if (!this[_.DISABLED]) {
+			super[_FUNCTION.FOCUS]();
+		}
+	}
+
+	[_FUNCTION.BLUR]() {
+		if (!this[_.DISABLED]) {
+			super[_FUNCTION.BLUR]();
+		}
 	}
 
 	[_.CLICK]() {
@@ -41,14 +68,8 @@ export class ClickableMenuItem extends FunctionMenuItem {
 		this[_.CLICK_LISTENER]();
 	}
 
-	[_FUNCTION.FOCUS]() {
-		super[_FUNCTION.FOCUS]();
-		Dom.addEventListener(Dom.WINDOW, 'keydown', this[_.KEY_ENTER]);
-	}
-
-	[_FUNCTION.BLUR]() {
-		super[_FUNCTION.BLUR]();
-		Dom.removeEventListener(Dom.WINDOW, 'keydown', this[_.KEY_ENTER]);
+	[_BASE.ACTIVE]() {
+		this[_.CLICK]();
 	}
 }
 

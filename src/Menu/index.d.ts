@@ -1,14 +1,19 @@
 
-export namespace MenuItem {
-	class BaseMenuItem {}
 
-	class FunctionMenuItem {}
+class BaseMenuItem {}
 
-	export class ClickableMenuItem extends FunctionMenuItem {}
+class FunctionMenuItem {}
 
-	export class SubmenuMenuItem extends FunctionMenuItem {}
+class ClickableMenuItem extends FunctionMenuItem {}
 
-	export class SpearatorMenuItem extends BaseMenuItem {}
+class SubmenuMenuItem extends FunctionMenuItem {}
+
+class SpearatorMenuItem extends BaseMenuItem {}
+
+declare namespace MenuItem {
+	export const Clickable = ClickableMenuItem;
+	export const Submenu = SubmenuMenuItem;
+	export const Spearator = SpearatorMenuItem;
 }
 
 namespace Options {
@@ -41,4 +46,9 @@ namespace Options {
 	interface SpearatorMenuItem extends BaseMenuItem {}
 }
 
-export function popup(options: Options.Menu, position?): void;
+interface Position {
+	x: number;
+	y: number;
+}
+
+export function popup(options: Options.Menu, position?: Position): void;

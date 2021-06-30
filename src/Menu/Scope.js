@@ -1,6 +1,7 @@
 import * as Dom from 'dom';
 import * as _MENU from '@/symbol/menu';
-import { COLLAPSE, EXPAND, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/item/submenu';
+import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/item/submenu';
+import { ACTIVE } from '@/symbol/item/base';
 
 const container = Dom.createElement('div');
 
@@ -63,10 +64,15 @@ const tryExpand = () => {
 
 	if (focusingItem && focusingItem[SUB_MENU_OPITONS]) {
 		topMenu[_MENU.EXPAND_ITEM]();
-
-		console.log(focusingItem[EXPAND]);
 		selectDown();
 	}
+};
+
+const tryActive = () => {
+	const topMenu = getTopMenu();
+	const focusingItem = topMenu[_MENU.FOCUSING_ITEM];
+
+	focusingItem && focusingItem[ACTIVE]();
 };
 
 const KEY_MAP_OPERATION = {
@@ -75,12 +81,13 @@ const KEY_MAP_OPERATION = {
 	ArrowLeft: tryCollapse,
 	ArrowRight: tryExpand,
 	Escape: () => tryCollapse() || closeAllMenu(),
+	Enter: tryActive
 };
 
 const KEY_REG = /^[a-z]$/;
 
 Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
-Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
+// Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
 Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 	const { key } = event;
 
@@ -88,7 +95,9 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 		if (key in KEY_MAP_OPERATION) {
 			KEY_MAP_OPERATION[event.key]();
 		} else if (KEY_REG.test(key)) {
-			getTopMenu()[_MENU.NEXT](key);
+			const topMenu = getTopMenu();
+
+			topMenu[_MENU.NEXT](key) && topMenu[_MENU.FOCUSING_ITEM][ACTIVE]();
 		}
 	}
 });

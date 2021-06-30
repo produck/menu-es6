@@ -35,6 +35,12 @@ export class BaseMenuItem {
 	[_.LISTEN_ENTER](listener) {
 		Dom.addEventListener(this[_.ROW_ELEMENT], 'mouseenter', listener);
 	}
+
+	[_.ACTIVE]() {}
+
+	get [_.FOCUSABLE]() {
+		return false;
+	}
 }
 
 export function normalize(_options) {

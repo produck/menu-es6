@@ -44,6 +44,11 @@ window.addEventListener('load', function () {
 				{
 					type: MenuItem.Clickable
 				},
+				{
+					type: MenuItem.Clickable,
+					label: 'disable one',
+					isDisabled: true
+				},
 				{ type: MenuItem.Spearator },
 				() => new Array(2).fill(1).map((_, index) => {
 					return {
