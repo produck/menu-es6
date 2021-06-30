@@ -120,3 +120,11 @@ export function STOP_AND_PREVENT(event) {
 	PREVENT_DEFAULT(event);
 	STOP_PROPAGATION(event);
 }
+
+/**
+ *
+ * @param {HTMLElement} element
+ */
+export function getRect(element) {
+	return element.getBoundingClientRect();
+}

@@ -36,7 +36,7 @@ namespace Options {
 		click?: () => void;
 		isChecked?: () => boolean;
 		isDisabled?: () => boolean;
-		accelerator: string[];
+		accelerator: Text[][];
 	}
 
 	interface SubmenuMenuItem extends FunctionMenuItem {
@@ -52,3 +52,5 @@ interface Position {
 }
 
 export function popup(options: Options.Menu, position?: Position): void;
+
+export function getPositionFromMouseEvent(event: MouseEvent): Position;

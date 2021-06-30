@@ -9,3 +9,7 @@ registerMenuItem(SubmenuMenuItem, normalizeSubmenuMenuItemOptions);
 registerMenuItem(SpearatorMenuItem, normalizeSpearatorMenuItemOptions);
 
 export { popup, MenuItem };
+
+export function getPositionFromMouseEvent(event) {
+	return { x: event.clientX, y: event.clientY };
+}

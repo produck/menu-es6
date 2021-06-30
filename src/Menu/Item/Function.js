@@ -92,6 +92,10 @@ export class FunctionMenuItem extends BaseMenuItem {
 		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE_DEFAULT);
 		Dom.removeClass(rowElement, 'focus');
 	}
+
+	get [_BASE.FOCUSABLE]() {
+		return true;
+	}
 }
 
 export function normalize(_options) {

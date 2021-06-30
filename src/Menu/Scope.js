@@ -4,8 +4,16 @@ import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/item/submenu
 import { ACTIVE } from '@/symbol/item/base';
 
 const container = Dom.createElement('div');
+const CONTAINER_STYLE = {
+	width: 0,
+	height: 0,
+	display: 'block',
+	position: 'fixed',
+	top: 0,
+	left: 0
+};
 
-Dom.setStyle(container, { width: 0, height: 0, display: 'block', position: 'fixed' });
+Dom.setStyle(container, CONTAINER_STYLE);
 Dom.addClass(container, 'menu-scope');
 Dom.appendChild(Dom.BODY, container);
 

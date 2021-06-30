@@ -7,10 +7,10 @@ import { SpearatorMenuItem } from './Spearator';
 import { normalizeMenuOptions } from '../normalize';
 import { appendMenu, setCurrentMenu } from '../Scope';
 
-import * as _SUBMENU from '@/symbol/item/submenu';
-import * as _BASE from '@/symbol/item/base';
-import * as _FUNCTION from '@/symbol/item/function';
-import * as _MENU from '@/symbol/menu';
+import * as _S from '@/symbol/item/submenu';
+import * as _B from '@/symbol/item/base';
+import * as _F from '@/symbol/item/function';
+import * as _M from '@/symbol/menu';
 
 const MENU_STYLE = {
 	display: 'block',
@@ -29,7 +29,7 @@ const MENU_STYLE = {
 	'transition-duration': '0.3s'
 };
 
-const IS_FOCUSABLE_ITEM = item => item[_BASE.FOCUSABLE];
+const IS_FOCUSABLE_ITEM = item => item[_B.FOCUSABLE];
 
 export class Menu extends AbstractMenu {
 	constructor() {
@@ -41,83 +41,66 @@ export class Menu extends AbstractMenu {
 		Dom.setStyle(menuElement, MENU_STYLE);
 		Dom.addClass(menuElement, 'menu');
 
-		this[_MENU.ITEM_LIST] = itemComponentList;
-		this[_MENU.MENU_ELEMENT] = menuElement;
-		this[_MENU.FOCUSING_ITEM] = null;
-		this[_MENU.OPENER] = null;
-		this[_MENU.COLLAPSING_DELAY] = null;
+		this[_M.ITEM_LIST] = itemComponentList;
+		this[_M.MENU_ELEMENT] = menuElement;
+		this[_M.FOCUSING_ITEM] = null;
+		this[_M.OPENER] = null;
+		this[_M.COLLAPSING_DELAY] = null;
 
 		const cancelOpenerCollapse = () => {
-			let opener = this[_MENU.OPENER];
+			let opener = this[_M.OPENER];
 
 			while (opener !== null) {
-				opener[_BASE.MENU][_MENU.FOCUS_ITEM](opener);
-				opener[_BASE.MENU][_MENU.CANCEL_COLLAPSE]();
-				opener = opener[_BASE.MENU][_MENU.OPENER];
+				opener[_B.MENU][_M.FOCUS_ITEM](opener);
+				opener[_B.MENU][_M.CANCEL_COLLAPSE]();
+				opener = opener[_B.MENU][_M.OPENER];
 			}
 		};
 
-		Dom.addEventListener(menuElement, 'mouseleave', () => this[_MENU.FOCUS_ITEM]());
+		Dom.addEventListener(menuElement, 'mouseleave', () => this[_M.FOCUS_ITEM]());
 		Dom.addEventListener(menuElement, 'mousedown', Dom.STOP_PROPAGATION);
 		Dom.addEventListener(menuElement, 'mouseenter', cancelOpenerCollapse);
 
 	}
 
-	get [_MENU.EXPANDING_ITEM]() {
-		return this[_MENU.ITEM_LIST]
+	get [_M.EXPANDING_ITEM]() {
+		return this[_M.ITEM_LIST]
 			.filter(item => item instanceof SubmenuMenuItem)
-			.find(submenuItem => submenuItem[_SUBMENU.EXPANDED_MENU] !== null) || null;
+			.find(submenuItem => submenuItem[_S.EXPANDED_MENU] !== null) || null;
 	}
 
-	[_MENU.FOCUS_ITEM](item = null) {
-		const focusingItem = this[_MENU.FOCUSING_ITEM];
-
-		if (focusingItem) {
-			focusingItem && focusingItem[_FUNCTION.BLUR]();
-		}
-
-		if (item !== null) {
-			item[_FUNCTION.FOCUS]();
-		}
-
-		const expandingItem = this[_MENU.EXPANDING_ITEM];
-
-		if (expandingItem !== item) {
-			this[_MENU.COLLAPSE_ITEM]();
-		} else {
-			this[_MENU.CANCEL_COLLAPSE]();
-		}
-
-		this[_MENU.FOCUSING_ITEM] = item;
+	[_M.FOCUS_ITEM](item = null) {
+		this[_M.FOCUSING_ITEM] && this[_M.FOCUSING_ITEM][_F.BLUR]();
+		item !== null && item[_F.FOCUS]();
+		this[this[_M.EXPANDING_ITEM] === item ? _M.CANCEL_COLLAPSE : _M.COLLAPSE_ITEM]();
+		this[_M.FOCUSING_ITEM] = item;
 	}
 
-	[_MENU.EXPAND_ITEM]() {
-		if (this[_MENU.FOCUSING_ITEM] instanceof SubmenuMenuItem) {
-			this[_MENU.FOCUSING_ITEM][_SUBMENU.EXPAND]();
+	[_M.EXPAND_ITEM]() {
+		if (this[_M.FOCUSING_ITEM] instanceof SubmenuMenuItem) {
+			this[_M.FOCUSING_ITEM][_S.EXPAND]();
 		}
 	}
 
-	[_MENU.COLLAPSE_ITEM](delay = 500) {
-		this[_MENU.CANCEL_COLLAPSE]();
-
-		const expandingItem = this[_MENU.EXPANDING_ITEM];
+	[_M.COLLAPSE_ITEM](delay = 500) {
+		const expandingItem = this[_M.EXPANDING_ITEM];
 
 		if (expandingItem && expandingItem instanceof SubmenuMenuItem) {
-			this[_MENU.COLLAPSING_DELAY] = setTimeout(() => expandingItem[_SUBMENU.COLLAPSE](), delay);
+			this[_M.COLLAPSING_DELAY] = setTimeout(() => expandingItem[_S.COLLAPSE](), delay);
 		}
 	}
 
-	[_MENU.CANCEL_COLLAPSE]() {
-		clearTimeout(this[_MENU.COLLAPSING_DELAY]);
+	[_M.CANCEL_COLLAPSE]() {
+		clearTimeout(this[_M.COLLAPSING_DELAY]);
 	}
 
-	[_MENU.OPEN]() {
-		Dom.REQUEST_ANIMATION_FRAME(() => Dom.setStyle(this[_MENU.MENU_ELEMENT], { opacity: 1 }));
+	[_M.OPEN]() {
+		Dom.REQUEST_ANIMATION_FRAME(() => Dom.setStyle(this[_M.MENU_ELEMENT], { opacity: 1 }));
 	}
 
-	[_MENU.CLOSE]() {
-		Dom.removeChild(this[_MENU.MENU_ELEMENT].parentElement, this[_MENU.MENU_ELEMENT]);
-		this[_MENU.COLLAPSE_ITEM](0);
+	[_M.CLOSE]() {
+		Dom.removeChild(this[_M.MENU_ELEMENT].parentElement, this[_M.MENU_ELEMENT]);
+		this[_M.COLLAPSE_ITEM](0);
 	}
 
 	/**
@@ -125,9 +108,9 @@ export class Menu extends AbstractMenu {
 	 *
 	 * @param {import('./Base').BaseMenuItem} item A menu item being appended
 	 */
-	[_MENU.APPEND](item) {
-		this[_MENU.ITEM_LIST].push(item);
-		Dom.appendChild(this[_MENU.MENU_ELEMENT], item[_BASE.ROW_ELEMENT]);
+	[_M.APPEND](item) {
+		this[_M.ITEM_LIST].push(item);
+		// Dom.appendChild(this[_MENU.MENU_ELEMENT], item[_BASE.ROW_ELEMENT]);
 	}
 
 	/**
@@ -137,21 +120,21 @@ export class Menu extends AbstractMenu {
 	 * @param {boolean} reversed Searching direction
 	 * @returns The target item found or not.
 	 */
-	[_MENU.NEXT](flag = null, reversed = false) {
-		const sequence = this[_MENU.ITEM_LIST].filter(IS_FOCUSABLE_ITEM);
+	[_M.NEXT](flag = null, reversed = false) {
+		const sequence = this[_M.ITEM_LIST].filter(IS_FOCUSABLE_ITEM);
 
 		if (reversed) {
 			sequence.reverse();
 		}
 
-		const focusingIndex = sequence.findIndex(item => item === this[_MENU.FOCUSING_ITEM]);
+		const focusingIndex = sequence.findIndex(item => item === this[_M.FOCUSING_ITEM]);
 		const length = sequence.length;
 
 		for (let index = 0; index < length; index++) {
 			const current = sequence[(focusingIndex + index + 1) % length];
 
-			if (flag === null || current[_FUNCTION.FLAG] === flag) {
-				this[_MENU.FOCUS_ITEM](current);
+			if (flag === null || current[_F.FLAG] === flag) {
+				this[_M.FOCUS_ITEM](current);
 
 				return true;
 			}
@@ -160,28 +143,86 @@ export class Menu extends AbstractMenu {
 		return false;
 	}
 
-	static [_MENU.S_CREATE](options) {
+	[_M.SET_OFFSET](position) {
+		Dom.setStyle(this[_M.MENU_ELEMENT], {
+			top: `${position.y}px`, left: `${position.x}px`
+		});
+	}
+
+	static [_M.S_CREATE](options) {
 		const finalOptions = normalizeMenuOptions(options);
 		const menu = new this();
+		const fragement = Dom.DOCUMENT.createDocumentFragment();
 
 		finalOptions.forEach((groupOptions, index) => {
-			groupOptions.forEach(options => menu[_MENU.APPEND](new options.type(menu, options)));
-			index !== options.length - 1 && menu[_MENU.APPEND](new SpearatorMenuItem(menu));
+			groupOptions.forEach(options => {
+				const item = new options.type(menu, options);
+
+				menu[_M.APPEND](item);
+				Dom.appendChild(fragement, item[_B.ROW_ELEMENT]);
+			});
+
+			index !== options.length - 1 && menu[_M.APPEND](new SpearatorMenuItem(menu));
 		});
+
+		Dom.appendChild(menu[_M.MENU_ELEMENT], fragement);
 
 		return menu;
 	}
 }
 
 const ICON_POSITION_STYLE = { right: 0, top: 0 };
+const DEFAULT_POSITION = { x: 0, y: 0 };
 
-export function popup(options, position) {
-	const menu = Menu[_MENU.S_CREATE](options);
+function reOffsetCurrentMenu(element) {
+	const rect = Dom.getRect(element);
+
+	if (rect.bottom > Dom.WINDOW.innerHeight) {
+		Dom.setStyle(element, {
+			top: `${element.offsetTop - element.offsetHeight}px`
+		});
+	}
+
+	if (rect.right > Dom.WINDOW.innerWidth) {
+		Dom.setStyle(element, {
+			left: `${element.offsetLeft - element.offsetWidth}px`
+		});
+	}
+
+	//TODO resize
+}
+
+export function popup(options, position = DEFAULT_POSITION) {
+	const menu = Menu[_M.S_CREATE](options);
 
 	setCurrentMenu(menu);
 	appendMenu(menu);
+	menu[_M.SET_OFFSET](position);
+	reOffsetCurrentMenu(menu[_M.MENU_ELEMENT]);
 
 	return menu;
+}
+
+/**
+ * @param {HTMLElement} menuElement
+ * @param {HTMLElement} itemElement
+ */
+function reOffsetSubmenuMenu(menuElement, itemRect) {
+	const menuRect = Dom.getRect(menuElement);
+
+	if (menuRect.bottom > Dom.WINDOW.innerHeight) {
+		Dom.setStyle(menuElement, {
+			top: `${itemRect.bottom - menuElement.offsetHeight}px`
+		});
+	}
+
+	if (menuRect.right > Dom.WINDOW.innerWidth) {
+		Dom.setStyle(menuElement, {
+			left: `${itemRect.left - menuElement.offsetWidth}px`
+		});
+	}
+
+	//TODO resize
 }
 
 export class SubmenuMenuItem extends FunctionMenuItem {
@@ -192,35 +233,38 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 
 		Dom.setStyle(expandingSpan, MENU_ITEM_ICON_BOX_STYLE, ICON_POSITION_STYLE);
 		Dom.addClass(expandingSpan, 'menu-item-expanding');
-		Dom.appendChild(this[_BASE.TEXT_ELEMENT], expandingSpan);
+		Dom.appendChild(this[_B.TEXT_ELEMENT], expandingSpan);
 
-		this[_SUBMENU.SUB_MENU_OPITONS] = options.submenu;
-		this[_SUBMENU.EXPANDED_MENU] = null;
-		this[_BASE.LISTEN_ENTER](() => this[_BASE.MENU][_MENU.EXPAND_ITEM]());
+		this[_S.SUB_MENU_OPITONS] = options.submenu;
+		this[_S.EXPANDED_MENU] = null;
+		this[_B.LISTEN_ENTER](() => this[_B.MENU][_M.EXPAND_ITEM]());
 	}
 
-	[_SUBMENU.EXPAND]() {
-		if (this[_SUBMENU.EXPANDED_MENU] === null) {
-			const menu = Menu[_MENU.S_CREATE](this[_SUBMENU.SUB_MENU_OPITONS]);
+	[_S.EXPAND]() {
+		if (this[_S.EXPANDED_MENU] === null) {
+			const menu = Menu[_M.S_CREATE](this[_S.SUB_MENU_OPITONS]);
+			const rect = Dom.getRect(this[_B.ROW_ELEMENT]);
 
-			menu[_MENU.OPENER] = this;
-			this[_SUBMENU.EXPANDED_MENU] = menu;
+			menu[_M.OPENER] = this;
+			this[_S.EXPANDED_MENU] = menu;
 			appendMenu(menu);
+			menu[_M.SET_OFFSET]({ x: rect.right, y: rect.top });
+			reOffsetSubmenuMenu(menu[_M.MENU_ELEMENT], rect);
 		}
 	}
 
-	[_SUBMENU.COLLAPSE]() {
-		const expandedMenu = this[_SUBMENU.EXPANDED_MENU];
+	[_S.COLLAPSE]() {
+		const expandedMenu = this[_S.EXPANDED_MENU];
 
 		if (expandedMenu !== null) {
-			expandedMenu[_MENU.CLOSE]();
-			this[_SUBMENU.EXPANDED_MENU] = null;
+			expandedMenu[_M.CLOSE]();
+			this[_S.EXPANDED_MENU] = null;
 		}
 	}
 
-	[_BASE.ACTIVE]() {
-		this[_SUBMENU.EXPAND]();
-		this[_SUBMENU.EXPANDED_MENU][_MENU.NEXT]();
+	[_B.ACTIVE]() {
+		this[_S.EXPAND]();
+		this[_S.EXPANDED_MENU][_M.NEXT]();
 	}
 }
 

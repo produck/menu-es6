@@ -14,4 +14,5 @@ export const
 	CLOSE = 'X',
 	APPEND = 'A',
 	NEXT = 'N',
-	FOCUS_ITEM = 'F';
+	FOCUS_ITEM = 'F',
+	SET_OFFSET = '_';
