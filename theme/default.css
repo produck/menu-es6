@@ -20,6 +20,11 @@ span.menu-item-expanding::before {
 	content: '>';
 }
 
-.menu {
-	border: 1px solid #000 !important;
+span.menu-item-checkbox,
+span.menu-item-expanding {
+	text-align: center;
+}
+
+.menu-item.checked span.menu-item-checkbox::before {
+	content: '√';
 }

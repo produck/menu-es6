@@ -33,21 +33,24 @@ export const MENU_ITEM_LABEL_SPAN_STYLE = {
 };
 
 const LABEL_REG = /^([^&]*)(&[a-z]|&&)?([^&]*)$/i;
-const NODE_LIST = 'n', FLAG = 'f';
+const FRAGEMENT = 'n', FLAG = 'f';
 
 function resolveLabelText(text) {
-	const result = { [NODE_LIST]: [], [FLAG]: null };
+	const fragement = Dom.createFragement();
+	const result = { [FRAGEMENT]: fragement, [FLAG]: null };
 	const [, left, flag, right] = text.match(LABEL_REG);
 
 	if (flag === undefined) {
-		result[NODE_LIST] = [Dom.createTextNode(left)];
+		Dom.appendChild(fragement, Dom.createTextNode(left));
 	} else if (flag === '&&') {
-		result[NODE_LIST] = [Dom.createTextNode([left, '&', right].join(''))];
+		Dom.appendChild(fragement, Dom.createTextNode([left, '&', right].join('')));
 	} else {
 		const u = Dom.createElement('u');
 
 		u.textContent = result[FLAG] = flag[1].toLowerCase();
-		result[NODE_LIST] = [Dom.createTextNode(left), u, Dom.createTextNode(right)];
+		Dom.appendChild(fragement, Dom.createTextNode(left));
+		Dom.appendChild(fragement, u);
+		Dom.appendChild(fragement, Dom.createTextNode(right));
 	}
 
 	return result;
@@ -71,7 +74,7 @@ export class FunctionMenuItem extends BaseMenuItem {
 
 		const result = resolveLabelText(options.label);
 
-		result[NODE_LIST].forEach(node => Dom.appendChild(labelSpan, node));
+		Dom.appendChild(labelSpan, result[FRAGEMENT]);
 		Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
 
 		this[_.LABEL_SPAN] = labelSpan;

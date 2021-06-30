@@ -152,7 +152,7 @@ export class Menu extends AbstractMenu {
 	static [_M.S_CREATE](options) {
 		const finalOptions = normalizeMenuOptions(options);
 		const menu = new this();
-		const fragement = Dom.DOCUMENT.createDocumentFragment();
+		const fragement = Dom.createFragement();
 
 		finalOptions.forEach((groupOptions, index) => {
 			groupOptions.forEach(options => {

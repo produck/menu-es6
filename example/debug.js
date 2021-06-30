@@ -1,4 +1,5 @@
 import '../theme/default.css';
+import './debug.css';
 import { popup, MenuItem, getPositionFromMouseEvent } from '@/Menu/index';
 
 window.addEventListener('load', function () {
@@ -42,7 +43,8 @@ window.addEventListener('load', function () {
 			],
 			[
 				{
-					type: MenuItem.Clickable
+					type: MenuItem.Clickable,
+					isChecked: true
 				},
 				{
 					type: MenuItem.Clickable,

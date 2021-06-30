@@ -128,3 +128,7 @@ export function STOP_AND_PREVENT(event) {
 export function getRect(element) {
 	return element.getBoundingClientRect();
 }
+
+export function createFragement() {
+	return DOCUMENT.createDocumentFragment();
+}

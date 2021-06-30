@@ -11,7 +11,8 @@ const CHECKING_POSITION_STYLE = { top: 0, left: 0 };
 
 const MENU_ITEM_ROW_STYLE_ON_DISABLED = {
 	color: Var(VAR.DISABLED_FRONTGROUND_COLOR),
-	'background-color': 'transparent'
+	'background-color': 'transparent',
+	cursor: 'default'
 };
 
 export class ClickableMenuItem extends FunctionMenuItem {
@@ -24,6 +25,7 @@ export class ClickableMenuItem extends FunctionMenuItem {
 		const checkboxSpan = Dom.createElement('span');
 
 		Dom.addClass(acceleratorSpan, 'menu-item-accelerator');
+		Dom.addClass(checkboxSpan, 'menu-item-checkbox');
 
 		Dom.setStyle(acceleratorSpan, MENU_ITEM_LABEL_SPAN_STYLE);
 		Dom.setStyle(checkboxSpan, MENU_ITEM_ICON_BOX_STYLE, CHECKING_POSITION_STYLE);
@@ -39,12 +41,15 @@ export class ClickableMenuItem extends FunctionMenuItem {
 
 		this[_.CLICK_LISTENER] = options.click;
 		this[_.KEY_ENTER] = event => event.key === 'Enter' && this[_.CLICK]();
+
 		const disabled = this[_.DISABLED] = options.isDisabled();
 
 		if (disabled) {
 			Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_ON_DISABLED);
 			Dom.addClass(rowElement, 'disabled');
 		}
+
+		options.isChecked() && Dom.addClass(rowElement, 'checked');
 	}
 
 	get [_BASE.FOCUSABLE]() {
