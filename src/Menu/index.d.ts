@@ -36,7 +36,7 @@ namespace Options {
 		click?: () => void;
 		isChecked?: () => boolean;
 		isDisabled?: () => boolean;
-		accelerator: Text[][];
+		accelerator?: DocumentFragment[];
 	}
 
 	interface SubmenuMenuItem extends FunctionMenuItem {

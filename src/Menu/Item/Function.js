@@ -47,7 +47,8 @@ function resolveLabelText(text) {
 	} else {
 		const u = Dom.createElement('u');
 
-		u.textContent = result[FLAG] = flag[1].toLowerCase();
+		u.textContent = flag[1];
+		result[FLAG] = flag[1].toLowerCase();
 		Dom.appendChild(fragement, Dom.createTextNode(left));
 		Dom.appendChild(fragement, u);
 		Dom.appendChild(fragement, Dom.createTextNode(right));

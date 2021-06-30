@@ -15,6 +15,18 @@ const MENU_ITEM_ROW_STYLE_ON_DISABLED = {
 	cursor: 'default'
 };
 
+const joinAcceleratorElement = acceleratorBarList => {
+	const lastBarIndex = acceleratorBarList.length - 1;
+	const fragement = Dom.createFragement();
+
+	acceleratorBarList.forEach((bar, index) => {
+		Dom.appendChild(fragement, bar);
+		index !== lastBarIndex && Dom.appendChild(fragement, Dom.createTextNode(' '));
+	});
+
+	return fragement;
+};
+
 export class ClickableMenuItem extends FunctionMenuItem {
 	constructor(menu, options) {
 		super(menu, options);
@@ -27,10 +39,11 @@ export class ClickableMenuItem extends FunctionMenuItem {
 		Dom.addClass(acceleratorSpan, 'menu-item-accelerator');
 		Dom.addClass(checkboxSpan, 'menu-item-checkbox');
 
-		Dom.setStyle(acceleratorSpan, MENU_ITEM_LABEL_SPAN_STYLE);
+		Dom.setStyle(acceleratorSpan, MENU_ITEM_LABEL_SPAN_STYLE, { 'text-align': 'right' });
 		Dom.setStyle(checkboxSpan, MENU_ITEM_ICON_BOX_STYLE, CHECKING_POSITION_STYLE);
 		Dom.appendChild(textElement, acceleratorSpan);
 		Dom.appendChild(textElement, checkboxSpan);
+		Dom.appendChild(acceleratorSpan, joinAcceleratorElement(options.accelerator));
 
 		Dom.addEventListener(rowElement, 'mouseup', event => {
 			Dom.STOP_AND_PREVENT(event);
@@ -118,7 +131,13 @@ export function normalize(_options) {
 	}
 
 	options.click = _click;
-	options.accelerator = _accelerator;
+	options.accelerator = _accelerator.map(_bar => {
+		if (!Dom.instanceOf(_bar, DocumentFragment)) {
+			throw new Error('A `.accelerator` MUST be a `DocumentFragement`.');
+		}
+
+		return _bar;
+	});
 
 	options.isChecked = isFunction(_isChecked)
 		? _isChecked

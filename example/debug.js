@@ -2,14 +2,22 @@ import '../theme/default.css';
 import './debug.css';
 import { popup, MenuItem, getPositionFromEvent } from '@/Menu/index';
 
+
 window.addEventListener('load', function () {
 	window.addEventListener('contextmenu', event => {
+		const acc0 = document.createDocumentFragment();
+		const acc1 = document.createDocumentFragment();
+
+		acc0.appendChild(new Text('Ctrl+A'));
+		acc1.appendChild(new Text('B'));
+
 		event.preventDefault();
 		popup([
 			[
 				{
 					type: MenuItem.Clickable,
-					label: 'test'
+					label: '&Testing for common...',
+					accelerator: [acc0, acc1]
 				},
 				{
 					type: MenuItem.Submenu,
