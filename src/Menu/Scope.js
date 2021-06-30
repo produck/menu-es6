@@ -19,32 +19,32 @@ Dom.appendChild(Dom.BODY, container);
 
 let currentMenu = null;
 
-export function setCurrentMenu(menu) {
+export const setCurrentMenu = (menu) => {
 	closeAllMenu();
 	currentMenu = menu;
-}
+};
 
-export function appendMenu(menu) {
+export const appendMenu = (menu) => {
 	Dom.appendChild(container, menu[_MENU.MENU_ELEMENT]);
 	menu[_MENU.OPEN]();
-}
+};
 
-export function closeAllMenu() {
+export const closeAllMenu = () => {
 	if (currentMenu !== null) {
 		currentMenu[_MENU.CLOSE]();
 		currentMenu = null;
 	}
-}
+};
 
-function selectUp() {
+const selectUp = () => {
 	getTopMenu()[_MENU.NEXT](null, true);
-}
+};
 
-function selectDown() {
+const selectDown = () => {
 	getTopMenu()[_MENU.NEXT]();
-}
+};
 
-function getTopMenu() {
+const getTopMenu = () => {
 	let menu = currentMenu;
 
 	while (menu[_MENU.EXPANDING_ITEM] !== null) {
@@ -52,7 +52,7 @@ function getTopMenu() {
 	}
 
 	return menu;
-}
+};
 
 const tryCollapse = () => {
 	const topMenu = getTopMenu();

@@ -1,7 +1,7 @@
 const NORMALIZER = 'n', TYPE = 't';
 const TYPE_NORMALIZER_MAP = [];
 
-function normalize(options) {
+const normalize = (options) => {
 	const pair = TYPE_NORMALIZER_MAP.find(pair => pair[TYPE] === options.type);
 
 	if (pair === undefined) {
@@ -9,11 +9,11 @@ function normalize(options) {
 	}
 
 	return pair[NORMALIZER](options);
-}
+};
 
 const isArray = any => Array.isArray(any);
 
-export function normalizeMenuOptions(_options) {
+export const normalizeMenuOptions = (_options) => {
 	if (!isArray(_options)) {
 		throw new Error('Menu options MUST be an array.');
 	}
@@ -35,11 +35,11 @@ export function normalizeMenuOptions(_options) {
 			return itemOptionsList;
 		}, []);
 	});
-}
+};
 
-export function register(MenuItemClass, normalize) {
+export const register = (MenuItemClass, normalize) => {
 	TYPE_NORMALIZER_MAP.push({
 		[TYPE]: MenuItemClass,
 		[NORMALIZER]: normalize
 	});
-}
+};

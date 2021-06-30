@@ -1,6 +1,6 @@
 import '../theme/default.css';
 import './debug.css';
-import { popup, MenuItem, getPositionFromMouseEvent } from '@/Menu/index';
+import { popup, MenuItem, getPositionFromEvent } from '@/Menu/index';
 
 window.addEventListener('load', function () {
 	window.addEventListener('contextmenu', event => {
@@ -59,6 +59,6 @@ window.addEventListener('load', function () {
 					};
 				})
 			]
-		], getPositionFromMouseEvent(event));
+		], getPositionFromEvent(event));
 	});
 });

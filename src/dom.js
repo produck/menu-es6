@@ -2,133 +2,132 @@ export const DOCUMENT = document, WINDOW = window;
 export const BODY = DOCUMENT.body;
 export const REQUEST_ANIMATION_FRAME = requestAnimationFrame;
 export const ASSIGN = Object.assign;
+export const instanceOf = (instance, contructor) => instance instanceof contructor;
 
 /**
  * @param {HTMLElement} element
  * @param {string} eventType
  * @param {EventListener} listener
  */
-export function addEventListener(element, eventType, listener) {
+export const addEventListener = (element, eventType, listener) => {
 	element.addEventListener(eventType, listener);
-}
+};
 
-export function removeEventListener(element, eventType, listener) {
+export const removeEventListener = (element, eventType, listener) => {
 	element.removeEventListener(eventType, listener);
-}
+};
 
 /**
  * @param {HTMLElement} element
  */
-export function removeAllChild(element) {
+export const removeAllChild = (element) => {
 	return Array
 		.from(element.children)
 		.map(childElement => removeChild(element, childElement));
-}
+};
 
 /**
  * @param {HTMLElement} element
  */
-export function removeFromParent(element) {
+export const removeFromParent = (element) => {
 	return removeChild(element.parentElement, element);
-}
+};
 
 /**
  * @param {string} tagName
  * @returns {HTMLElement}
  */
-export function createElement(tagName) {
+export const createElement = (tagName) => {
 	return DOCUMENT.createElement(tagName);
-}
+};
 
-export function createTextNode(data) {
+export const createTextNode = (data) => {
 	return DOCUMENT.createTextNode(data);
-}
+};
 
 /**
  * @param {HTMLElement} element
  * @param {object} ruleObject
  */
-export function setStyle(element, ...ruleObjectList) {
+export const setStyle = (element, ...ruleObjectList) => {
 	for (const ruleObject of ruleObjectList) {
 		for (const property in ruleObject) {
 			element.style.setProperty(property, ruleObject[property]);
 		}
 	}
-}
+};
 
 /**
  * @param {HTMLElement} element
  * @param {string} name
  */
-export function setClassName(element, name) {
+export const setClassName = (element, name) => {
 	element.className = name;
-}
+};
 
 /**
  * @param {HTMLElement} parentElement
  * @param {HTMLElement} element
  */
-export function appendChild(parentElement, element) {
+export const appendChild = (parentElement, element) => {
 	parentElement.appendChild(element);
-}
+};
 
 /**
  * @param {HTMLElement} parentElement
  * @param {HTMLElement} element
  */
-export function removeChild(parentElement, element) {
+export const removeChild = (parentElement, element) => {
 	parentElement.removeChild(element);
-}
+};
 
 /**
  * @param {HTMLElement} element
  * @param  {...string} tokens
  */
-export function addClass(element, ...tokens) {
+export const addClass = (element, ...tokens) => {
 	element.classList.add(...tokens);
-}
+};
 
 /**
  * @param {HTMLElement} element
  * @param  {...string} tokens
  */
-export function removeClass(element, ...tokens) {
+export const removeClass = (element, ...tokens) => {
 	element.classList.remove(...tokens);
-}
+};
 
-export function createEvent(eventType, data = null) {
+export const createEvent = (eventType, data = null) => {
 	const event = new Event(eventType, { bubbles: true });
 
 	event.data = data;
 
 	return event;
-}
+};
 
 /**
- *
  * @param {HTMLElement} element
  * @param {Event} event
  */
-export function dispatchEvent(element, event) {
+export const dispatchEvent = (element, event) => {
 	element.dispatchEvent(event);
-}
+};
 
 export const PREVENT_DEFAULT = event => event.preventDefault();
 export const STOP_PROPAGATION = event => event.stopPropagation();
 
-export function STOP_AND_PREVENT(event) {
+export const STOP_AND_PREVENT = (event) => {
 	PREVENT_DEFAULT(event);
 	STOP_PROPAGATION(event);
-}
+};
 
 /**
- *
  * @param {HTMLElement} element
  */
-export function getRect(element) {
+export const getRect = (element) => {
 	return element.getBoundingClientRect();
-}
+};
 
-export function createFragement() {
+export const createFragement = () => {
 	return DOCUMENT.createDocumentFragment();
-}
+};

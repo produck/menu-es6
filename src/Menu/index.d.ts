@@ -53,4 +53,4 @@ interface Position {
 
 export function popup(options: Options.Menu, position?: Position): void;
 
-export function getPositionFromMouseEvent(event: MouseEvent): Position;
+export function getPositionFromEvent(event: MouseEvent): Position;

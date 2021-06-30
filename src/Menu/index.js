@@ -10,6 +10,4 @@ registerMenuItem(SpearatorMenuItem, normalizeSpearatorMenuItemOptions);
 
 export { popup, MenuItem };
 
-export function getPositionFromMouseEvent(event) {
-	return { x: event.clientX, y: event.clientY };
-}
+export const getPositionFromEvent = event => ({ x: event.clientX, y: event.clientY });

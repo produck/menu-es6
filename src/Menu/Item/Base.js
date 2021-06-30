@@ -15,7 +15,7 @@ const MENU_ITEM_TEXT_STYLE = {
 
 export class BaseMenuItem {
 	constructor(menu) {
-		if (!(menu instanceof AbstractMenu)) {
+		if (!Dom.instanceOf(menu, AbstractMenu)) {
 			throw new Error('A menu required.');
 		}
 

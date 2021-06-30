@@ -6,7 +6,7 @@ import { eslint } from 'rollup-plugin-eslint';
 
 const meta = require('../package.json');
 
-const MODULE_NAME = 'splitview';
+const MODULE_NAME = 'menu';
 const BANNER =
 	'/*!\n' +
 	` * ${meta.name} v${meta.version}\n` +

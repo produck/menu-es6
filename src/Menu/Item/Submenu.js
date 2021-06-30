@@ -65,7 +65,7 @@ export class Menu extends AbstractMenu {
 
 	get [_M.EXPANDING_ITEM]() {
 		return this[_M.ITEM_LIST]
-			.filter(item => item instanceof SubmenuMenuItem)
+			.filter(item => Dom.instanceOf(item, SubmenuMenuItem))
 			.find(submenuItem => submenuItem[_S.EXPANDED_MENU] !== null) || null;
 	}
 
@@ -77,15 +77,17 @@ export class Menu extends AbstractMenu {
 	}
 
 	[_M.EXPAND_ITEM]() {
-		if (this[_M.FOCUSING_ITEM] instanceof SubmenuMenuItem) {
+		if (Dom.instanceOf(this[_M.FOCUSING_ITEM], SubmenuMenuItem)) {
 			this[_M.FOCUSING_ITEM][_S.EXPAND]();
 		}
 	}
 
 	[_M.COLLAPSE_ITEM](delay = 500) {
+		this[_M.CANCEL_COLLAPSE]();
+
 		const expandingItem = this[_M.EXPANDING_ITEM];
 
-		if (expandingItem && expandingItem instanceof SubmenuMenuItem) {
+		if (expandingItem && Dom.instanceOf(expandingItem, SubmenuMenuItem)) {
 			this[_M.COLLAPSING_DELAY] = setTimeout(() => expandingItem[_S.COLLAPSE](), delay);
 		}
 	}
@@ -143,6 +145,11 @@ export class Menu extends AbstractMenu {
 		return false;
 	}
 
+	/**
+	 * Adjustment for avoiding a popuped menu overflow.
+	 *
+	 * @param {{x: number, y:number}} position
+	 */
 	[_M.SET_OFFSET](position) {
 		Dom.setStyle(this[_M.MENU_ELEMENT], {
 			top: `${position.y}px`, left: `${position.x}px`

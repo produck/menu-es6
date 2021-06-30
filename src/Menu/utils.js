@@ -1,10 +1,6 @@
 import * as VAR from './vars';
 
-export function CSSVarGenerator(namespace) {
-	return function generateVarName(name) {
-		return `var(--${namespace}-${name})`;
-	};
-}
+export const CSSVarGenerator = namespace => name => `var(--${namespace}-${name})`;
 
 export const Var = CSSVarGenerator('menu');
 
