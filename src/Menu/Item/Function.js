@@ -2,9 +2,9 @@ import * as Dom from 'dom';
 import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
 import { Var, VAR } from '../utils';
 
-import * as _ from '@/symbol/item/function';
+import * as _ from '@/symbol/function';
 import * as _MENU from '@/symbol/menu';
-import * as _BASE from '@/symbol/item/base';
+import * as _BASE from '@/symbol/base';
 
 const MENU_ITEM_ROW_STYLE_DEFAULT = {
 	'cursor': 'pointer',

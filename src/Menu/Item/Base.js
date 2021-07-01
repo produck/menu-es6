@@ -1,6 +1,6 @@
 import * as Dom from 'dom';
 import { AbstractMenu } from '../Abstract';
-import * as _ from '@/symbol/item/base';
+import * as _ from '@/symbol/base';
 
 const MENU_ITEM_ROW_STYLE = {
 	display: 'block',

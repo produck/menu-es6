@@ -3,9 +3,9 @@ import { FunctionMenuItem, MENU_ITEM_LABEL_SPAN_STYLE, normalize as normalizeFun
 import { MENU_ITEM_ICON_BOX_STYLE, VAR, Var } from '../utils';
 
 import { closeAllMenu } from '../Scope';
-import * as _BASE from '@/symbol/item/base';
-import * as _ from '@/symbol/item/clickable';
-import * as _FUNCTION from '@/symbol/item/function';
+import * as _BASE from '@/symbol/base';
+import * as _ from '@/symbol/clickable';
+import * as _FUNCTION from '@/symbol/function';
 
 const CHECKING_POSITION_STYLE = { top: 0, left: 0 };
 

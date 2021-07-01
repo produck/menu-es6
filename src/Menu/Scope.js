@@ -1,7 +1,7 @@
 import * as Dom from 'dom';
 import * as _MENU from '@/symbol/menu';
-import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/item/submenu';
-import { ACTIVE } from '@/symbol/item/base';
+import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/submenu';
+import { ACTIVE } from '@/symbol/base';
 
 const container = Dom.createElement('div');
 const CONTAINER_STYLE = {

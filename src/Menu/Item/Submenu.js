@@ -7,9 +7,9 @@ import { SpearatorMenuItem } from './Spearator';
 import { normalizeMenuOptions } from '../normalize';
 import { appendMenu, setCurrentMenu } from '../Scope';
 
-import * as _S from '@/symbol/item/submenu';
-import * as _B from '@/symbol/item/base';
-import * as _F from '@/symbol/item/function';
+import * as _S from '@/symbol/submenu';
+import * as _B from '@/symbol/base';
+import * as _F from '@/symbol/function';
 import * as _M from '@/symbol/menu';
 
 const MENU_STYLE = {

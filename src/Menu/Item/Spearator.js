@@ -3,7 +3,7 @@ import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base'
 import { Var, VAR } from '../utils';
 
 import * as _MENU from '@/symbol/menu';
-import * as _BASE from '@/symbol/item/base';
+import * as _BASE from '@/symbol/base';
 
 const SPEARATOR_MENU_ITEM_STYLE = {
 	display: 'block',

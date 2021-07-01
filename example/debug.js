@@ -1,9 +1,34 @@
 import '../theme/default.css';
 import './debug.css';
 import { popup, MenuItem, getPositionFromEvent } from '@/Menu/index';
+import * as MenuBar from '@/MenuBar/index';
 
 
 window.addEventListener('load', function () {
+	const test = document.createElement('div');
+
+	this.document.body.appendChild(test);
+
+	function MockMenu() {
+		return [
+			[
+				{ type: MenuItem.Clickable, label: 'l2' }
+			],
+		];
+	}
+
+	MenuBar.mount(test);
+	MenuBar.setMenuBar([
+		{
+			title: 'title1',
+			menu: MockMenu()
+		},
+		{
+			title: 'title2',
+			menu: MockMenu()
+		}
+	]);
+
 	window.addEventListener('contextmenu', event => {
 		const icon = document.createDocumentFragment();
 		const acc0 = document.createDocumentFragment();
