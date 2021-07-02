@@ -152,6 +152,10 @@ window.addEventListener('load', function () {
 					};
 				})
 			]
-		], getPositionFromEvent(event), true);
+		], {
+			position: getPositionFromEvent(event),
+			mnemonic: true,
+			blocking: true
+		});
 	});
 });

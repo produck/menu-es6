@@ -51,14 +51,16 @@ export class ClickableMenuItem extends FunctionMenuItem {
 		this[_.CLICK_LISTENER] = options.click;
 		this[_.KEY_ENTER] = event => event.key === 'Enter' && this[_.CLICK]();
 
-		const disabled = this[_.DISABLED] = options.isDisabled();
+		const disabled = this[_.DISABLED] = options.isDisabled;
 
 		if (disabled) {
 			Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_ON_DISABLED);
 			Dom.addClass(rowElement, 'disabled');
 		}
 
-		options.isChecked() && Dom.addClass(rowElement, 'checked');
+		if (options.isChecked) {
+			Dom.addClass(rowElement, 'checked');
+		}
 	}
 
 	get [_BASE.FOCUSABLE]() {
@@ -80,6 +82,7 @@ export class ClickableMenuItem extends FunctionMenuItem {
 	[_.CLICK]() {
 		Dom.REQUEST_ANIMATION_FRAME(closeAllMenu);
 		this[_.CLICK_LISTENER]();
+		Dom.dispatchEvent(Dom.WINDOW, Dom.createEvent('-click-end'));
 	}
 
 	[_BASE.ACTIVE]() {
@@ -87,10 +90,7 @@ export class ClickableMenuItem extends FunctionMenuItem {
 	}
 }
 
-const DEFAULT_CLICK_FN = () => console.warn('Undefined click');
-const FALSE_GETTER = () => false;
-const TRUE_GETTER = () => true;
-
+const DEFAULT_CLICK_FN = () => console.warn(undefined);
 const isFunction = any => typeof any === 'function';
 const isBoolean = any => typeof any === 'boolean';
 const isArray = any => Array.isArray(any);
@@ -98,8 +98,8 @@ const isArray = any => Array.isArray(any);
 export function normalize(_options) {
 	const options = Dom.ASSIGN({
 		click: DEFAULT_CLICK_FN,
-		isChecked: FALSE_GETTER,
-		isDisabled: FALSE_GETTER,
+		isChecked: false,
+		isDisabled: false,
 		accelerator: []
 	}, normalizeFunctionMenuItemOptions(_options));
 
@@ -114,19 +114,18 @@ export function normalize(_options) {
 		throw new Error('A `.click()` of clickable item MUST be a function.');
 	}
 
-	if (!isFunction(_isChecked) && !isBoolean(_isChecked)) {
-		throw new Error('A `.isChecked` MUST be `() => boolean` or `boolean`.');
+	if (!isBoolean(_isChecked)) {
+		throw new Error('A `.isChecked` MUST be a `boolean`.');
 	}
 
-	if (!isFunction(_isDisabled) && !isBoolean(_isDisabled)) {
-		throw new Error('A `.isChecked` MUST be `() => boolean` or `boolean`.');
+	if (!isBoolean(_isDisabled)) {
+		throw new Error('A `.isDisabled` MUST be a `boolean`.');
 	}
 
 	if (!isArray(_accelerator)) {
 		throw new Error('A `.accelerator` MUST be an array of string.');
 	}
 
-	options.click = _click;
 	options.accelerator = _accelerator.map(_bar => {
 		if (!Dom.instanceOf(_bar, DocumentFragment)) {
 			throw new Error('A `.accelerator` MUST be a `DocumentFragement`.');
@@ -135,13 +134,9 @@ export function normalize(_options) {
 		return _bar;
 	});
 
-	options.isChecked = isFunction(_isChecked)
-		? _isChecked
-		: _isChecked ? TRUE_GETTER : FALSE_GETTER;
-
-	options.isDisabled = isFunction(_isDisabled)
-		? _isDisabled
-		: _isDisabled ? TRUE_GETTER : FALSE_GETTER;
+	options.click = _click;
+	options.isChecked = _isChecked;
+	options.isDisabled = _isDisabled;
 
 	return options;
 }

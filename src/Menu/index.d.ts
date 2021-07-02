@@ -51,7 +51,13 @@ interface Position {
 	y: number;
 }
 
-export function popup(options: Options.Menu, position?: Position): void;
+interface Modifier {
+	position: Position;
+	mnemonic: boolean;
+	blocking: boolean;
+}
+
+export function popup(menuOptions: Options.Menu, modifierOptions?: Modifier): void;
 
 export function getPositionFromEvent(event: MouseEvent): Position;
 

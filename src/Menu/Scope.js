@@ -6,7 +6,7 @@ import { ACTIVE } from '@/symbol/base';
 const container = Dom.createElement('div');
 const CONTAINER_STYLE = {
 	width: 0,
-	height: 0,
+	height: '100%',
 	display: 'block',
 	position: 'fixed',
 	top: 0,
@@ -19,9 +19,13 @@ Dom.appendChild(Dom.BODY, container);
 
 let currentMenu = null;
 
-export const setCurrentMenu = (menu) => {
+export const setCurrentMenu = (menu, blocking = false) => {
 	closeAllMenu();
 	currentMenu = menu;
+
+	if (blocking) {
+		Dom.setStyle(container, { width: '100%' });
+	}
 };
 
 export const appendMenu = (menu) => {
@@ -33,6 +37,7 @@ export const closeAllMenu = () => {
 	if (currentMenu !== null) {
 		currentMenu[_MENU.CLOSE]();
 		currentMenu = null;
+		Dom.setStyle(container, { width: 0 });
 	}
 };
 

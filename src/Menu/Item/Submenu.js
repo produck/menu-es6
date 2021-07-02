@@ -5,7 +5,7 @@ import { AbstractMenu } from '../Abstract';
 import { FunctionMenuItem, normalize as normalizeFunctionMenuItemOptions } from './Function';
 import { SpearatorMenuItem } from './Spearator';
 import { normalizeMenuOptions } from '../normalize';
-import { appendMenu, setCurrentMenu } from '../Scope';
+import { appendMenu } from '../Scope';
 
 import * as _S from '@/symbol/submenu';
 import * as _B from '@/symbol/base';
@@ -58,8 +58,8 @@ export class Menu extends AbstractMenu {
 		};
 
 		Dom.addEventListener(menuElement, 'mouseleave', () => this[_M.FOCUS_ITEM]());
+		Dom.addEventListener(menuElement, 'mousedown', Dom.STOP_PROPAGATION);
 		Dom.addEventListener(menuElement, 'mouseenter', cancelOpenerCollapse);
-
 	}
 
 	get [_M.EXPANDING_ITEM]() {
@@ -180,36 +180,6 @@ export class Menu extends AbstractMenu {
 }
 
 const ICON_POSITION_STYLE = { right: 0, top: 0 };
-const DEFAULT_POSITION = { x: 0, y: 0 };
-
-function reOffsetCurrentMenu(element) {
-	const rect = Dom.getRect(element);
-
-	if (rect.bottom > Dom.WINDOW.innerHeight) {
-		Dom.setStyle(element, {
-			top: `${element.offsetTop - element.offsetHeight}px`
-		});
-	}
-
-	if (rect.right > Dom.WINDOW.innerWidth) {
-		Dom.setStyle(element, {
-			left: `${element.offsetLeft - element.offsetWidth}px`
-		});
-	}
-
-	//TODO resize
-}
-
-export function popup(options, position = DEFAULT_POSITION, hasFlag = false) {
-	const menu = Menu[_M.S_CREATE](options, hasFlag);
-
-	setCurrentMenu(menu);
-	appendMenu(menu);
-	menu[_M.SET_OFFSET](position);
-	reOffsetCurrentMenu(menu[_M.MENU_ELEMENT]);
-
-	return menu;
-}
 
 /**
  * @param {HTMLElement} menuElement
@@ -246,8 +216,6 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		this[_S.SUB_MENU_OPITONS] = options.submenu;
 		this[_S.EXPANDED_MENU] = null;
 		this[_B.LISTEN_ENTER](() => this[_B.MENU][_M.EXPAND_ITEM]());
-
-		Dom.addEventListener(this[_B.ROW_ELEMENT], 'mousedown', Dom.STOP_PROPAGATION);
 	}
 
 	[_S.EXPAND]() {

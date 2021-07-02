@@ -7,8 +7,6 @@ import * as _N from '@/symbol/button';
 import { MENU_BAR_STYLE, MENU_BUTTON_OUTER_STYLE } from './style';
 import { normalize } from './normalize';
 
-const CLASS_FOCUSED = 'focused';
-
 class MenuBarButton {
 	constructor(menuBar, options) {
 		this[_N.MENU_BAR] = menuBar;
@@ -30,17 +28,19 @@ class MenuBarButton {
 	}
 
 	[_N.FOCUS]() {
-		Dom.addClass(this[_N.OUTER_ELEMENT], CLASS_FOCUSED);
+		Dom.addClass(this[_N.OUTER_ELEMENT], 'focused');
 	}
 
 	[_N.BLUR]() {
-		Dom.removeClass(this[_N.OUTER_ELEMENT], CLASS_FOCUSED);
+		Dom.removeClass(this[_N.OUTER_ELEMENT], 'focused');
 	}
 
 	[_N.OPEN_MENU]() {
 		const rect = Dom.getRect(this[_N.OUTER_ELEMENT]);
 
-		popup(this[_N.MENU_OPTIONS], { x: rect.left, y: rect.bottom });
+		popup(this[_N.MENU_OPTIONS], {
+			position: { x: rect.left, y: rect.bottom },
+		});
 	}
 }
 
@@ -125,6 +125,7 @@ export const mount = (element) => {
 const tryDeactive = () => currentMenuBar && currentMenuBar[_B.DEACTIVE]();
 
 Dom.addEventListener(Dom.WINDOW, 'mousedown', tryDeactive);
+Dom.addEventListener(Dom.WINDOW, '-click-end', tryDeactive);
 Dom.addEventListener(Dom.WINDOW, 'blur', tryDeactive);
 
 export const setMenuBar = (options, hasMnemonic = false) => {
