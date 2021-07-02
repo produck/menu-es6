@@ -1,6 +1,6 @@
 import '../theme/default.css';
 import './debug.css';
-import { popup, MenuItem, getPositionFromEvent } from '@/Menu/index';
+import { popup, MenuItem } from '@/Menu/index';
 import * as MenuBar from '@/MenuBar/index';
 
 
@@ -153,7 +153,6 @@ window.addEventListener('load', function () {
 				})
 			]
 		], {
-			position: getPositionFromEvent(event),
 			mnemonic: true,
 			blocking: true
 		});

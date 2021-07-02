@@ -7,6 +7,7 @@ import * as MenuItem from './Item/index';
 import { closeAllMenu, setCurrentMenu, appendMenu } from './Scope';
 
 import * as _M from '@/symbol/menu';
+import { currentPosition } from '@/utils';
 
 registerMenuItem(ClickableMenuItem, normalizeClickableMenuItemOptions);
 registerMenuItem(SubmenuMenuItem, normalizeSubmenuMenuItemOptions);
@@ -15,8 +16,6 @@ registerMenuItem(SpearatorMenuItem, normalizeSpearatorMenuItemOptions);
 export { MenuItem, normalizeMenuOptions as normalize, closeAllMenu };
 
 export const getPositionFromEvent = event => ({ x: event.clientX, y: event.clientY });
-
-const DEFAULT_POSITION = { x: 0, y: 0 };
 
 function reOffsetCurrentMenu(element) {
 	const rect = Dom.getRect(element);
@@ -38,7 +37,7 @@ function reOffsetCurrentMenu(element) {
 
 function normalizeModifier(_options) {
 	const options = {
-		position: DEFAULT_POSITION,
+		position: currentPosition,
 		mnemonic: false,
 		blocking: false
 	};

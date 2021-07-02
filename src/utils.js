@@ -39,3 +39,7 @@ export function resolveLabelText(text, noMnemonic = false) {
 
 	return result;
 }
+
+export let currentPosition = { x: 0, y: 0 };
+
+Dom.addEventListener(Dom.WINDOW, 'mousemove', event => currentPosition = { x: event.clientX, y: event.clientY });
