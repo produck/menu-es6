@@ -21,4 +21,6 @@ export const
 	OUTLINE_COLOR = `outline-${COLOR}`,
 	SPEARATOR_COLOR = `${SPEARATOR}-${COLOR}`,
 	SPEARATOR_WHITESPACE_X = `${SPEARATOR}-${WHITESPACE}-x`,
-	WHITESPACE_Y = `${WHITESPACE}-y`;
+	WHITESPACE_Y = `${WHITESPACE}-y`,
+	SPACE_SM = 'space-sm',
+	BAR_HEIGHT = 'bar-height';

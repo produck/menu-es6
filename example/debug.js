@@ -26,6 +26,63 @@ window.addEventListener('load', function () {
 		{
 			title: 'title2',
 			menu: MockMenu()
+		},
+		{
+			menu: [
+				[
+					{
+						type: MenuItem.Clickable,
+						label: '&Testing for common...',
+					},
+					{
+						type: MenuItem.Submenu,
+						submenu: [
+							[
+								{
+									type: MenuItem.Clickable,
+									label: 'l2'
+								}
+							],
+							[
+								{
+									type: MenuItem.Submenu,
+									label: 'open &l3',
+									submenu: [
+										[
+											{
+												type: MenuItem.Clickable,
+												label: 'l3-0'
+											},
+										]
+									]
+								},
+								{
+									type: MenuItem.Clickable,
+									label: 'l2-1'
+								}
+							]
+						]
+					}
+				],
+				[
+					{
+						type: MenuItem.Clickable,
+						isChecked: true
+					},
+					{
+						type: MenuItem.Clickable,
+						label: 'disable one',
+						isDisabled: true
+					},
+					{ type: MenuItem.Spearator },
+					() => new Array(2).fill(1).map((_, index) => {
+						return {
+							type: MenuItem.Clickable,
+							label: `d${index}`
+						};
+					})
+				]
+			]
 		}
 	]);
 

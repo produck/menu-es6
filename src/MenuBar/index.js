@@ -4,7 +4,7 @@ import { popup, closeAllMenu } from '@/Menu/index';
 import * as _B from '@/symbol/bar';
 import * as _N from '@/symbol/button';
 
-import { MENU_BAR_STYLE } from './style';
+import { MENU_BAR_STYLE, MENU_BUTTON_OUTER_STYLE } from './style';
 import { normalize } from './normalize';
 
 const CLASS_FOCUSED = 'focused';
@@ -20,6 +20,7 @@ class MenuBarButton {
 		Dom.addClass(outerElement, 'menu-bar-button');
 		Dom.addClass(innerElement, 'menu-bar-button-title');
 		Dom.appendChild(outerElement, innerElement);
+		Dom.setStyle(outerElement, MENU_BUTTON_OUTER_STYLE);
 
 		innerElement.innerText = options.title;
 
@@ -37,8 +38,6 @@ class MenuBarButton {
 	}
 
 	[_N.OPEN_MENU]() {
-		closeAllMenu();
-
 		const rect = Dom.getRect(this[_N.OUTER_ELEMENT]);
 
 		popup(this[_N.MENU_OPTIONS], { x: rect.left, y: rect.bottom });
@@ -65,19 +64,48 @@ class MenuBar {
 		this[_B.FOCUSING_BUTTON] = null;
 
 		const toggleActive = () => {
+			const oldFocusingButton = this[_B.FOCUSING_BUTTON];
+
+			this[_B.BLUR_FOCUSING_BUTTON]();
 			this[_B.ACTIVE] = !this[_B.ACTIVE];
-			this[_B.FOCUS_BUTTON]();
+			this[_B.FOCUS_BUTTON](oldFocusingButton);
 		};
 
 		Dom.addEventListener(container, 'click', toggleActive);
+		Dom.addEventListener(container, 'mousedown', Dom.STOP_PROPAGATION);
+		Dom.addEventListener(container, 'contextmenu', Dom.STOP_AND_PREVENT);
+		Dom.addEventListener(container, 'mouseleave', () => {
+			if (!this[_B.ACTIVE]) {
+				this[_B.BLUR_FOCUSING_BUTTON]();
+			}
+		});
+	}
+
+	[_B.BLUR_FOCUSING_BUTTON]() {
+		this[_B.FOCUSING_BUTTON] && this[_B.FOCUSING_BUTTON][_N.BLUR]();
+		this[_B.FOCUSING_BUTTON] = null;
+	}
+
+	[_B.DEACTIVE]() {
+		this[_B.ACTIVE] = false;
+		this[_B.BLUR_FOCUSING_BUTTON]();
 	}
 
 	[_B.FOCUS_BUTTON](button = this[_B.FOCUSING_BUTTON]) {
-		closeAllMenu();
-		this[_B.FOCUSING_BUTTON] && this[_B.FOCUSING_BUTTON][_N.BLUR]();
-		button && button[_N.FOCUS]();
+		const oldFocusingButton = this[_B.FOCUSING_BUTTON];
+
+		this[_B.BLUR_FOCUSING_BUTTON]();
+
+		if (button) {
+			button[_N.FOCUS]();
+
+			if (button !== oldFocusingButton) {
+				closeAllMenu();
+				this[_B.ACTIVE] && button[_N.OPEN_MENU]();
+			}
+		}
+
 		this[_B.FOCUSING_BUTTON] = button;
-		this[_B.ACTIVE] && button[_N.OPEN_MENU]();
 	}
 
 	[_B.APPEND_BUTTON](button) {
@@ -93,6 +121,11 @@ export const mount = (element) => {
 		Dom.appendChild(element, currentMenuBar[_B.BAR_ELEMENT]);
 	}
 };
+
+const tryDeactive = () => currentMenuBar && currentMenuBar[_B.DEACTIVE]();
+
+Dom.addEventListener(Dom.WINDOW, 'mousedown', tryDeactive);
+Dom.addEventListener(Dom.WINDOW, 'blur', tryDeactive);
 
 export const setMenuBar = (options, hasMnemonic = false) => {
 	const finalOptions = normalize(options);

@@ -5,5 +5,8 @@ export const
 	BAR_ELEMENT = 'e',
 	FOCUSING_BUTTON = 'f',
 
+	DEACTIVE = 'D',
 	APPEND_BUTTON = 'A',
-	FOCUS_BUTTON = 'F';
+	FOCUS_BUTTON = 'F',
+	BLUR_FOCUSING_BUTTON = 'B',
+	TOGGLE_ACTIVE = 'T';

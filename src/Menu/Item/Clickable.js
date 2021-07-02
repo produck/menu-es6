@@ -45,11 +45,7 @@ export class ClickableMenuItem extends FunctionMenuItem {
 		Dom.appendChild(textElement, checkboxSpan);
 		Dom.appendChild(acceleratorSpan, joinAcceleratorElement(options.accelerator));
 
-		Dom.addEventListener(rowElement, 'mouseup', event => {
-			Dom.STOP_AND_PREVENT(event);
-			this[_.CLICK]();
-		});
-
+		Dom.addEventListener(rowElement, 'mouseup', () => this[_.CLICK]());
 		Dom.addEventListener(rowElement, 'contextmenu', Dom.STOP_AND_PREVENT);
 
 		this[_.CLICK_LISTENER] = options.click;

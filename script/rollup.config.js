@@ -61,7 +61,7 @@ export default moduleList.map(config => {
 	// }));
 
 	return defineConfig({
-		input: path.resolve('src/Menu/index.js'),
+		input: path.resolve('index.js'),
 		output: {
 			file: config.output,
 			format: config.format,

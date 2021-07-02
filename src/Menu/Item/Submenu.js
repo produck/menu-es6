@@ -17,7 +17,6 @@ const MENU_STYLE = {
 	position: 'fixed',
 	margin: '0',
 	padding: `${Var(VAR.WHITESPACE_Y)} 0`,
-	'font-size': '12px',
 	'white-space': 'nowrap',
 	'border': '1px solid transparent',
 	'line-height': Var(VAR.FUNCTION_ITEM_HEIGHT),
@@ -59,7 +58,6 @@ export class Menu extends AbstractMenu {
 		};
 
 		Dom.addEventListener(menuElement, 'mouseleave', () => this[_M.FOCUS_ITEM]());
-		Dom.addEventListener(menuElement, 'mousedown', Dom.STOP_PROPAGATION);
 		Dom.addEventListener(menuElement, 'mouseenter', cancelOpenerCollapse);
 
 	}
@@ -248,6 +246,8 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 		this[_S.SUB_MENU_OPITONS] = options.submenu;
 		this[_S.EXPANDED_MENU] = null;
 		this[_B.LISTEN_ENTER](() => this[_B.MENU][_M.EXPAND_ITEM]());
+
+		Dom.addEventListener(this[_B.ROW_ELEMENT], 'mousedown', Dom.STOP_PROPAGATION);
 	}
 
 	[_S.EXPAND]() {
