@@ -45,7 +45,7 @@ export class Menu extends AbstractMenu {
 		this[_M.FOCUSING_ITEM] = null;
 		this[_M.OPENER] = null;
 		this[_M.COLLAPSING_DELAY] = null;
-		this[_M.HAS_FLAG] = false;
+		this[_M.HAS_MNEMONIC] = false;
 
 		const cancelOpenerCollapse = () => {
 			let opener = this[_M.OPENER];
@@ -117,11 +117,11 @@ export class Menu extends AbstractMenu {
 	/**
 	 * Try to find a `next` item then focusing.
 	 *
-	 * @param {string|null} flag Filtering item by a-z
+	 * @param {string|null} mnemonic Filtering item by a-z
 	 * @param {boolean} reversed Searching direction
 	 * @returns The target item found or not.
 	 */
-	[_M.NEXT](flag = null, reversed = false) {
+	[_M.NEXT](mnemonic = null, reversed = false) {
 		const sequence = this[_M.ITEM_LIST].filter(IS_FOCUSABLE_ITEM);
 
 		if (reversed) {
@@ -134,7 +134,7 @@ export class Menu extends AbstractMenu {
 		for (let index = 0; index < length; index++) {
 			const current = sequence[(focusingIndex + index + 1) % length];
 
-			if (flag === null || current[_F.FLAG] === flag) {
+			if (mnemonic === null || current[_F.MNEMONIC] === mnemonic) {
 				this[_M.FOCUS_ITEM](current);
 
 				return true;
@@ -155,12 +155,12 @@ export class Menu extends AbstractMenu {
 		});
 	}
 
-	static [_M.S_CREATE](options, hasFlag) {
+	static [_M.S_CREATE](options, hasMnemonic) {
 		const finalOptions = normalizeMenuOptions(options);
 		const menu = new this();
 		const fragement = Dom.createFragement();
 
-		menu[_M.HAS_FLAG] = hasFlag;
+		menu[_M.HAS_MNEMONIC] = hasMnemonic;
 
 		finalOptions.forEach((groupOptions, index) => {
 			groupOptions.forEach(options => {
@@ -220,7 +220,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 
 	[_S.EXPAND]() {
 		if (this[_S.EXPANDED_MENU] === null) {
-			const menu = Menu[_M.S_CREATE](this[_S.SUB_MENU_OPITONS], this[_B.MENU][_M.HAS_FLAG]);
+			const menu = Menu[_M.S_CREATE](this[_S.SUB_MENU_OPITONS], this[_B.MENU][_M.HAS_MNEMONIC]);
 			const rect = Dom.getRect(this[_B.ROW_ELEMENT]);
 
 			menu[_M.OPENER] = this;

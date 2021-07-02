@@ -5,7 +5,7 @@ export const
 	FOCUSING_ITEM = 'f',
 	EXPANDING_ITEM = 'e',
 	COLLAPSING_DELAY = 'd',
-	HAS_FLAG = 'h',
+	HAS_MNEMONIC = 'h',
 
 	COLLAPSE_ITEM = 'C',
 	EXPAND_ITEM = 'E',

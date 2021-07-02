@@ -81,7 +81,6 @@ function normalizeModifier(_options) {
 
 export function popup(menuOptions, modifierOptions) {
 	const { position, mnemonic, blocking } = normalizeModifier(modifierOptions);
-	console.log(position, mnemonic, blocking);
 	const menu = Menu[_M.S_CREATE](menuOptions, mnemonic);
 
 	setCurrentMenu(menu, blocking);

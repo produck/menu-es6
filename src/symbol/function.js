@@ -3,4 +3,4 @@ export const
 	BLUR = 'r',
 	LABEL_SPAN = 'l',
 	FOCUSING = 'f',
-	FLAG = 'g';
+	MNEMONIC = 'g';

@@ -32,24 +32,24 @@ export const MENU_ITEM_LABEL_SPAN_STYLE = {
 };
 
 const LABEL_REG = /^([^&]*)(&[a-z]|&&)?([^&]*)$/i;
-const FRAGEMENT = 'n', FLAG = 'f';
+const FRAGEMENT = 'n', MNEMONIC = 'f';
 
-function resolveLabelText(text, noFlag = false) {
+function resolveLabelText(text, noMnemonic = false) {
 	const fragement = Dom.createFragement();
-	const result = { [FRAGEMENT]: fragement, [FLAG]: null };
-	const [, left, flag, right] = text.match(LABEL_REG);
+	const result = { [FRAGEMENT]: fragement, [MNEMONIC]: null };
+	const [, left, mnemonic, right] = text.match(LABEL_REG);
 
-	if (flag === undefined) {
+	if (mnemonic === undefined) {
 		Dom.appendChild(fragement, Dom.createTextNode(left));
-	} else if (flag === '&&') {
+	} else if (mnemonic === '&&') {
 		Dom.appendChild(fragement, Dom.createTextNode([left, '&', right].join('')));
-	} else if (noFlag) {
-		Dom.appendChild(fragement, Dom.createTextNode([left, flag[1], right].join('')));
+	} else if (noMnemonic) {
+		Dom.appendChild(fragement, Dom.createTextNode([left, mnemonic[1], right].join('')));
 	} else  {
 		const u = Dom.createElement('u');
 
-		u.textContent = flag[1];
-		result[FLAG] = flag[1].toLowerCase();
+		u.textContent = mnemonic[1];
+		result[MNEMONIC] = mnemonic[1].toLowerCase();
 		Dom.appendChild(fragement, Dom.createTextNode(left));
 		Dom.appendChild(fragement, u);
 		Dom.appendChild(fragement, Dom.createTextNode(right));
@@ -79,14 +79,14 @@ export class FunctionMenuItem extends BaseMenuItem {
 		Dom.setStyle(textElement, MENU_ITEM_TEXT_STYLE);
 		Dom.appendChild(textElement, labelSpan);
 
-		const result = resolveLabelText(options.label, !menu[_MENU.HAS_FLAG]);
+		const result = resolveLabelText(options.label, !menu[_MENU.HAS_MNEMONIC]);
 
 		Dom.appendChild(labelSpan, result[FRAGEMENT]);
 		Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
 
 		this[_.LABEL_SPAN] = labelSpan;
 		this[_BASE.LISTEN_ENTER](() => menu[_MENU.FOCUS_ITEM](this));
-		this[_.FLAG] = result[FLAG];
+		this[_.MNEMONIC] = result[MNEMONIC];
 	}
 
 	[_.FOCUS]() {
