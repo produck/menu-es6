@@ -3,6 +3,7 @@ export const
 	OUTER_ELEMENT = 'o',
 	INNER_ELEMENT = 'i',
 	MENU_OPTIONS = '_',
+	MNEMONIC = 'm',
 
 	FOCUS = 'F',
 	BLUR = 'B',

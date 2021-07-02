@@ -1,5 +1,5 @@
 import * as Dom from 'dom';
-import { Var, VAR, MENU_ITEM_ICON_BOX_STYLE } from '../utils';
+import { Var, VAR, MENU_ITEM_ICON_BOX_STYLE } from '@/utils';
 
 import { AbstractMenu } from '../Abstract';
 import { FunctionMenuItem, normalize as normalizeFunctionMenuItemOptions } from './Function';

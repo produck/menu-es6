@@ -20,11 +20,11 @@ window.addEventListener('load', function () {
 	MenuBar.mount(test);
 	MenuBar.setMenuBar([
 		{
-			title: 'title1',
+			title: '&title1',
 			menu: MockMenu()
 		},
 		{
-			title: 'title2',
+			title: 't&itle2',
 			menu: MockMenu()
 		},
 		{
@@ -84,7 +84,7 @@ window.addEventListener('load', function () {
 				]
 			]
 		}
-	]);
+	], true);
 
 	window.addEventListener('contextmenu', event => {
 		const icon = document.createDocumentFragment();

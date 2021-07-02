@@ -11,4 +11,4 @@ declare namespace Options {
 
 export function mount(element: HTMLElement): void;
 
-export function setMenuBar(options: Options.MenuBar): void;
+export function setMenuBar(options: Options.MenuBar, hasMnemonic?: boolean): void;

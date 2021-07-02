@@ -1,4 +1,4 @@
-import { VAR, Var } from '@/Menu/utils';
+import { VAR, Var } from '@/utils';
 
 export const MENU_BAR_STYLE = {
 	display: 'flex',

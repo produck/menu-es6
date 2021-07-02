@@ -1,6 +1,6 @@
 import * as Dom from 'dom';
 import { FunctionMenuItem, MENU_ITEM_LABEL_SPAN_STYLE, normalize as normalizeFunctionMenuItemOptions } from './Function';
-import { MENU_ITEM_ICON_BOX_STYLE, VAR, Var } from '../utils';
+import { MENU_ITEM_ICON_BOX_STYLE, VAR, Var } from '@/utils';
 
 import { closeAllMenu } from '../Scope';
 import * as _BASE from '@/symbol/base';

@@ -1,6 +1,6 @@
 import * as Dom from 'dom';
 import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
-import { Var, VAR } from '../utils';
+import { Var, VAR, resolveLabelText, FRAGEMENT, MNEMONIC } from '@/utils';
 
 import * as _ from '@/symbol/function';
 import * as _MENU from '@/symbol/menu';
@@ -30,33 +30,6 @@ export const MENU_ITEM_LABEL_SPAN_STYLE = {
 	'flex-grow': '1',
 	'padding': `0 ${Var(VAR.FUNCTION_ITEM_WHITESPACE)}`,
 };
-
-const LABEL_REG = /^([^&]*)(&[a-z]|&&)?([^&]*)$/i;
-const FRAGEMENT = 'n', MNEMONIC = 'f';
-
-function resolveLabelText(text, noMnemonic = false) {
-	const fragement = Dom.createFragement();
-	const result = { [FRAGEMENT]: fragement, [MNEMONIC]: null };
-	const [, left, mnemonic, right] = text.match(LABEL_REG);
-
-	if (mnemonic === undefined) {
-		Dom.appendChild(fragement, Dom.createTextNode(left));
-	} else if (mnemonic === '&&') {
-		Dom.appendChild(fragement, Dom.createTextNode([left, '&', right].join('')));
-	} else if (noMnemonic) {
-		Dom.appendChild(fragement, Dom.createTextNode([left, mnemonic[1], right].join('')));
-	} else  {
-		const u = Dom.createElement('u');
-
-		u.textContent = mnemonic[1];
-		result[MNEMONIC] = mnemonic[1].toLowerCase();
-		Dom.appendChild(fragement, Dom.createTextNode(left));
-		Dom.appendChild(fragement, u);
-		Dom.appendChild(fragement, Dom.createTextNode(right));
-	}
-
-	return result;
-}
 
 export class FunctionMenuItem extends BaseMenuItem {
 	constructor(menu, options) {

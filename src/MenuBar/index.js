@@ -6,6 +6,7 @@ import * as _N from '@/symbol/button';
 
 import { MENU_BAR_STYLE, MENU_BUTTON_OUTER_STYLE } from './style';
 import { normalize } from './normalize';
+import { FRAGEMENT, MNEMONIC, resolveLabelText } from '@/utils';
 
 class MenuBarButton {
 	constructor(menuBar, options) {
@@ -20,7 +21,10 @@ class MenuBarButton {
 		Dom.appendChild(outerElement, innerElement);
 		Dom.setStyle(outerElement, MENU_BUTTON_OUTER_STYLE);
 
-		innerElement.innerText = options.title;
+		const result = resolveLabelText(options.title, !menuBar[_B.HAS_MNEMONIC]);
+
+		Dom.appendChild(innerElement, result[FRAGEMENT]);
+		this[_N.MNEMONIC] = result[MNEMONIC];
 
 		const focusThis = () => this[_N.MENU_BAR][_B.FOCUS_BUTTON](this);
 
@@ -40,6 +44,7 @@ class MenuBarButton {
 
 		popup(this[_N.MENU_OPTIONS], {
 			position: { x: rect.left, y: rect.bottom },
+			mnemonic: this[_N.MENU_BAR][_B.HAS_MNEMONIC]
 		});
 	}
 }
