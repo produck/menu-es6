@@ -59,11 +59,12 @@ const getTopMenu = () => {
 	return menu;
 };
 
-const tryCollapse = () => {
+const tryCollapse = event => {
 	const topMenu = getTopMenu();
 
 	if (topMenu[_MENU.OPENER] !== null) {
 		topMenu[_MENU.OPENER][COLLAPSE]();
+		event.used = true;
 
 		return true;
 	}
@@ -71,13 +72,14 @@ const tryCollapse = () => {
 	return false;
 };
 
-const tryExpand = () => {
+const tryExpand = event => {
 	const topMenu = getTopMenu();
 	const focusingItem = topMenu[_MENU.FOCUSING_ITEM];
 
 	if (focusingItem && focusingItem[SUB_MENU_OPITONS]) {
 		topMenu[_MENU.EXPAND_ITEM]();
 		selectDown();
+		event.used = true;
 	}
 };
 
@@ -97,7 +99,7 @@ const KEY_MAP_OPERATION = {
 	Enter: tryActive
 };
 
-const KEY_REG = /^[a-z]$/;
+const KEY_REG = /^[a-z]$/i;
 
 Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
 Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
@@ -106,11 +108,15 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 
 	if (currentMenu) {
 		if (key in KEY_MAP_OPERATION) {
-			KEY_MAP_OPERATION[event.key]();
+			KEY_MAP_OPERATION[key](event);
 		} else if (KEY_REG.test(key)) {
 			const topMenu = getTopMenu();
 
-			topMenu[_MENU.NEXT](key) && topMenu[_MENU.FOCUSING_ITEM][ACTIVE]();
+			if (topMenu[_MENU.NEXT](key.toLowerCase())) {
+				topMenu[_MENU.FOCUSING_ITEM][ACTIVE]();
+			}
+
+			event.used = true;
 		}
 	}
 });

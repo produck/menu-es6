@@ -116,7 +116,6 @@ export class Menu extends AbstractMenu {
 	 */
 	[_M.APPEND](item) {
 		this[_M.ITEM_LIST].push(item);
-		// Dom.appendChild(this[_MENU.MENU_ELEMENT], item[_BASE.ROW_ELEMENT]);
 	}
 
 	/**

@@ -6,7 +6,9 @@ export const
 	FOCUSING_BUTTON = 'f',
 
 	DEACTIVE = 'D',
+	ACTIVATE = 'V',
+	TOGGLE = 'T',
 	APPEND_BUTTON = 'A',
 	FOCUS_BUTTON = 'F',
 	BLUR_FOCUSING_BUTTON = 'B',
-	TOGGLE_ACTIVE = 'T';
+	NEXT = 'N';

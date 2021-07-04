@@ -56,7 +56,7 @@ let containerElement = null;
 let currentMenuBar = null;
 
 class MenuBar {
-	constructor(hasMnemonic) {
+	constructor() {
 		const container = Dom.createElement('div');
 
 		Dom.addClass(container, 'menu-bar');
@@ -65,7 +65,7 @@ class MenuBar {
 		this[_B.ACTIVE] = false;
 		this[_B.BAR_ELEMENT] = container;
 		this[_B.BUTTON_LIST] = [];
-		this[_B.HAS_MNEMONIC] = hasMnemonic;
+		this[_B.HAS_MNEMONIC] = false;
 		this[_B.FOCUSING_BUTTON] = null;
 
 		const toggleActive = () => {
@@ -93,7 +93,7 @@ class MenuBar {
 
 	[_B.DEACTIVE]() {
 		this[_B.ACTIVE] = false;
-		this[_B.BLUR_FOCUSING_BUTTON]();
+		closeAllMenu();
 	}
 
 	[_B.FOCUS_BUTTON](button = this[_B.FOCUSING_BUTTON]) {
@@ -116,6 +116,36 @@ class MenuBar {
 	[_B.APPEND_BUTTON](button) {
 		this[_B.BUTTON_LIST].push(button);
 	}
+
+	/**
+	 * Try to find a `next` item then focusing.
+	 *
+	 * @param {string|null} mnemonic Filtering item by a-z
+	 * @param {boolean} reversed Searching direction
+	 * @returns The target item found or not.
+	 */
+	[_B.NEXT](mnemonic = null, reversed = false) {
+		const sequence = this[_B.BUTTON_LIST].slice(0);
+
+		if (reversed) {
+			sequence.reverse();
+		}
+
+		const focusingIndex = sequence.findIndex(button => button === this[_B.FOCUSING_BUTTON]);
+		const length = sequence.length;
+
+		for (let index = 0; index < length; index++) {
+			const current = sequence[(focusingIndex + index + 1) % length];
+
+			if (mnemonic === null || current[_N.MNEMONIC] === mnemonic) {
+				this[_B.FOCUS_BUTTON](current);
+
+				return true;
+			}
+		}
+
+		return false;
+	}
 }
 
 export const mount = (element) => {
@@ -127,11 +157,16 @@ export const mount = (element) => {
 	}
 };
 
-const tryDeactive = () => currentMenuBar && currentMenuBar[_B.DEACTIVE]();
+const tryDeactiveAndClear = () => {
+	if (isReady) {
+		currentMenuBar[_B.DEACTIVE]();
+		currentMenuBar[_B.BLUR_FOCUSING_BUTTON]();
+	}
+};
 
-Dom.addEventListener(Dom.WINDOW, 'mousedown', tryDeactive);
-Dom.addEventListener(Dom.WINDOW, '-click-end', tryDeactive);
-Dom.addEventListener(Dom.WINDOW, 'blur', tryDeactive);
+Dom.addEventListener(Dom.WINDOW, 'mousedown', tryDeactiveAndClear);
+Dom.addEventListener(Dom.WINDOW, '-click-end', tryDeactiveAndClear);
+Dom.addEventListener(Dom.WINDOW, 'blur', tryDeactiveAndClear);
 
 export const setMenuBar = (options, hasMnemonic = false) => {
 	const finalOptions = normalize(options);
@@ -152,3 +187,66 @@ export const setMenuBar = (options, hasMnemonic = false) => {
 		Dom.appendChild(containerElement, menuBar[_B.BAR_ELEMENT]);
 	}
 };
+
+const isReady = () => currentMenuBar !== null && containerElement !== null;
+
+let selecting = false;
+
+const KEY_MAP_OPERATION = {
+	Alt: () => {
+		const buttonList = currentMenuBar[_B.BUTTON_LIST];
+
+		if (buttonList.length > 0) {
+			if (currentMenuBar[_B.FOCUSING_BUTTON] === null) {
+				selecting = true;
+				currentMenuBar[_B.FOCUS_BUTTON](buttonList[0]);
+			} else {
+				selecting = false;
+				currentMenuBar[_B.DEACTIVE]();
+				currentMenuBar[_B.BLUR_FOCUSING_BUTTON]();
+			}
+		}
+	},
+	Enter: () => {
+		if (!currentMenuBar[_B.ACTIVE]) {
+			const old = currentMenuBar[_B.FOCUSING_BUTTON];
+
+			currentMenuBar[_B.BLUR_FOCUSING_BUTTON]();
+			currentMenuBar[_B.ACTIVE] = true;
+			currentMenuBar[_B.FOCUS_BUTTON](old);
+		}
+	},
+	ArrowLeft: () => {
+		if (selecting) {
+			currentMenuBar[_B.NEXT](null, true);
+		}
+	},
+	ArrowRight: () => {
+		if (selecting) {
+			currentMenuBar[_B.NEXT]();
+		}
+	},
+	Escape: () => {
+		if (currentMenuBar[_B.ACTIVE]) {
+			currentMenuBar[_B.DEACTIVE]();
+		} else if (currentMenuBar[_B.FOCUSING_BUTTON]) {
+			selecting = false;
+			currentMenuBar[_B.BLUR_FOCUSING_BUTTON]();
+		}
+	}
+};
+
+const KEY_REG = /^[a-z0-9`~?]$/i;
+
+Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
+	if (isReady()) {
+		const key = event.key;
+
+		if (key in KEY_MAP_OPERATION) {
+			Dom.PREVENT_DEFAULT(event);
+			KEY_MAP_OPERATION[key]();
+		} else if (KEY_REG.test(key)) {
+			console.log(key);
+		}
+	}
+});

@@ -20,16 +20,20 @@ export function resolveLabelText(text, noMnemonic = false) {
 		Dom.appendChild(fragement, Dom.createTextNode(left));
 	} else if (mnemonic === '&&') {
 		Dom.appendChild(fragement, Dom.createTextNode([left, '&', right].join('')));
-	} else if (noMnemonic) {
-		Dom.appendChild(fragement, Dom.createTextNode([left, mnemonic[1], right].join('')));
-	} else  {
-		const u = Dom.createElement('u');
+	} else {
+		const mnemonicChar = mnemonic[1];
 
-		u.textContent = mnemonic[1];
-		result[MNEMONIC] = mnemonic[1].toLowerCase();
-		Dom.appendChild(fragement, Dom.createTextNode(left));
-		Dom.appendChild(fragement, u);
-		Dom.appendChild(fragement, Dom.createTextNode(right));
+		if (noMnemonic) {
+			Dom.appendChild(fragement, Dom.createTextNode([left, mnemonicChar, right].join('')));
+		} else  {
+			const u = Dom.createElement('u');
+
+			u.textContent = mnemonicChar;
+			result[MNEMONIC] = mnemonicChar.toLowerCase();
+			Dom.appendChild(fragement, Dom.createTextNode(left));
+			Dom.appendChild(fragement, u);
+			Dom.appendChild(fragement, Dom.createTextNode(right));
+		}
 	}
 
 	return result;
