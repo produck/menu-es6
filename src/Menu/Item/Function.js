@@ -1,6 +1,6 @@
 import * as Dom from 'dom';
 import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
-import { Var, VAR, resolveLabelText, FRAGEMENT, MNEMONIC } from '@/utils';
+import { Var, VAR, resolveLabelText, FRAGEMENT, MNEMONIC, throwError } from '@/utils';
 
 import * as _ from '@/symbol/function';
 import * as _MENU from '@/symbol/menu';
@@ -93,11 +93,11 @@ export function normalize(_options) {
 	} = _options;
 
 	if (typeof _label !== 'string') {
-		throw new Error('A menu item label MUST be a string.');
+		throwError('A menu item label MUST be a string.');
 	}
 
 	if (_icon !== null && !Dom.instanceOf(_icon, DocumentFragment)) {
-		throw new Error('A menu item icon MUST be a DocumentFragment.');
+		throwError('A menu item icon MUST be a DocumentFragment.');
 	}
 
 	options.label = _label;
@@ -105,3 +105,9 @@ export function normalize(_options) {
 
 	return options;
 }
+
+export const MENU_ITEM_ICON_BOX_STYLE = {
+	position: 'absolute',
+	height: '100%',
+	width: Var(VAR.FUNCTION_ITEM_WHITESPACE)
+};

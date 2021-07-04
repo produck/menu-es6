@@ -5,15 +5,10 @@ export const CSSVarGenerator = namespace => name => `var(--${namespace}-${name})
 
 export const Var = CSSVarGenerator('menu');
 
-export const MENU_ITEM_ICON_BOX_STYLE = {
-	position: 'absolute',
-	height: '100%',
-	width: Var(VAR.FUNCTION_ITEM_WHITESPACE)
-};
-
 export { VAR };
 
 const LABEL_REG = /^([^&]*)(&[a-z]|&&)?([^&]*)$/i;
+
 export const FRAGEMENT = 'n', MNEMONIC = 'f';
 
 export function resolveLabelText(text, noMnemonic = false) {
@@ -39,6 +34,8 @@ export function resolveLabelText(text, noMnemonic = false) {
 
 	return result;
 }
+
+export const throwError = message => { throw new Error(message); };
 
 export let currentPosition = { x: 0, y: 0 };
 

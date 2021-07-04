@@ -1,6 +1,12 @@
 import * as Dom from 'dom';
-import { FunctionMenuItem, MENU_ITEM_LABEL_SPAN_STYLE, normalize as normalizeFunctionMenuItemOptions } from './Function';
-import { MENU_ITEM_ICON_BOX_STYLE, VAR, Var } from '@/utils';
+import { throwError, VAR, Var } from '@/utils';
+
+import {
+	FunctionMenuItem,
+	MENU_ITEM_LABEL_SPAN_STYLE,
+	normalize as normalizeFunctionMenuItemOptions,
+	MENU_ITEM_ICON_BOX_STYLE
+} from './Function';
 
 import { closeAllMenu } from '../Scope';
 import * as _BASE from '@/symbol/base';
@@ -111,24 +117,24 @@ export function normalize(_options) {
 	} = _options;
 
 	if (!isFunction(_click)) {
-		throw new Error('A `.click()` of clickable item MUST be a function.');
+		throwError('A `.click()` of clickable item MUST be a function.');
 	}
 
 	if (!isBoolean(_isChecked)) {
-		throw new Error('A `.isChecked` MUST be a `boolean`.');
+		throwError('A `.isChecked` MUST be a `boolean`.');
 	}
 
 	if (!isBoolean(_isDisabled)) {
-		throw new Error('A `.isDisabled` MUST be a `boolean`.');
+		throwError('A `.isDisabled` MUST be a `boolean`.');
 	}
 
 	if (!isArray(_accelerator)) {
-		throw new Error('A `.accelerator` MUST be an array of string.');
+		throwError('A `.accelerator` MUST be an array of string.');
 	}
 
 	options.accelerator = _accelerator.map(_bar => {
 		if (!Dom.instanceOf(_bar, DocumentFragment)) {
-			throw new Error('A `.accelerator` MUST be a `DocumentFragement`.');
+			throwError('A `.accelerator` MUST be a `DocumentFragement`.');
 		}
 
 		return _bar;

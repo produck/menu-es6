@@ -1,6 +1,7 @@
 import * as Dom from 'dom';
 import { AbstractMenu } from '../Abstract';
 import * as _ from '@/symbol/base';
+import { throwError } from '@/utils';
 
 const MENU_ITEM_ROW_STYLE = {
 	display: 'block',
@@ -16,7 +17,7 @@ const MENU_ITEM_TEXT_STYLE = {
 export class BaseMenuItem {
 	constructor(menu) {
 		if (!Dom.instanceOf(menu, AbstractMenu)) {
-			throw new Error('A menu required.');
+			throwError('A menu required.');
 		}
 
 		const rowElement = Dom.createElement('li');

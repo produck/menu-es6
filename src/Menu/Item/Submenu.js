@@ -1,11 +1,16 @@
 import * as Dom from 'dom';
-import { Var, VAR, MENU_ITEM_ICON_BOX_STYLE } from '@/utils';
+import { Var, VAR } from '@/utils';
 
 import { AbstractMenu } from '../Abstract';
-import { FunctionMenuItem, normalize as normalizeFunctionMenuItemOptions } from './Function';
 import { SpearatorMenuItem } from './Spearator';
 import { normalizeMenuOptions } from '../normalize';
 import { appendMenu } from '../Scope';
+
+import {
+	FunctionMenuItem,
+	normalize as normalizeFunctionMenuItemOptions,
+	MENU_ITEM_ICON_BOX_STYLE
+} from './Function';
 
 import * as _S from '@/symbol/submenu';
 import * as _B from '@/symbol/base';
@@ -183,20 +188,20 @@ const ICON_POSITION_STYLE = { right: 0, top: 0 };
 
 /**
  * @param {HTMLElement} menuElement
- * @param {HTMLElement} itemElement
+ * @param {DOMRect} rect
  */
-function reOffsetSubmenuMenu(menuElement, itemRect) {
+export function relayoutMenu(menuElement, rect) {
 	const menuRect = Dom.getRect(menuElement);
 
 	if (menuRect.bottom > Dom.WINDOW.innerHeight) {
 		Dom.setStyle(menuElement, {
-			top: `${itemRect.bottom - menuElement.offsetHeight}px`
+			top: `${rect.bottom - menuElement.offsetHeight}px`
 		});
 	}
 
 	if (menuRect.right > Dom.WINDOW.innerWidth) {
 		Dom.setStyle(menuElement, {
-			left: `${itemRect.left - menuElement.offsetWidth}px`
+			left: `${rect.left - menuElement.offsetWidth}px`
 		});
 	}
 
@@ -227,7 +232,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 			this[_S.EXPANDED_MENU] = menu;
 			appendMenu(menu);
 			menu[_M.SET_OFFSET]({ x: rect.right, y: rect.top });
-			reOffsetSubmenuMenu(menu[_M.MENU_ELEMENT], rect);
+			relayoutMenu(menu[_M.MENU_ELEMENT], rect);
 		}
 	}
 

@@ -1,11 +1,12 @@
 import { normalizeMenuOptions } from '@/Menu/normalize';
+import { throwError } from '@/utils';
 
 /**
  * @param {Array} _options
  */
 export const normalize = _options => {
 	if (!Array.isArray(_options)) {
-		throw new Error('A menu bar options MUST be an array.');
+		throwError('A menu bar options MUST be an array.');
 	}
 
 	const options = _options.map(_buttonOptions => {
@@ -20,7 +21,7 @@ export const normalize = _options => {
 		} = _buttonOptions;
 
 		if (typeof _title !== 'string') {
-			throw new Error('A menu bar button title MUST be a string.');
+			throwError('A menu bar button title MUST be a string.');
 		}
 
 		options.menu = normalizeMenuOptions(_menu);
