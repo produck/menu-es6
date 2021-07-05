@@ -1,5 +1,4 @@
 import * as Dom from 'dom';
-import { AbstractMenu } from '../Abstract';
 import * as _ from '@/symbol/base';
 import { throwError } from '@/utils';
 
@@ -13,6 +12,8 @@ const MENU_ITEM_TEXT_STYLE = {
 	position: 'relative',
 	display: 'flex'
 };
+
+export class AbstractMenu {}
 
 export class BaseMenuItem {
 	constructor(menu) {

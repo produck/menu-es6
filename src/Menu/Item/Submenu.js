@@ -1,7 +1,7 @@
 import * as Dom from 'dom';
 import { Var, VAR } from '@/utils';
 
-import { AbstractMenu } from '../Abstract';
+import { AbstractMenu } from './Base';
 import { SpearatorMenuItem } from './Spearator';
 import { normalizeMenuOptions } from '../normalize';
 import { appendMenu } from '../Scope';

@@ -57,7 +57,14 @@ interface Modifier {
 	blocking: boolean;
 }
 
-export function popup(menuOptions: Options.Menu, modifierOptions?: Modifier): void;
+interface MenuController {
+	close(): void;
+	next(): void;
+	readonly expandable: boolean;
+	readonly expanding: boolean;
+}
+
+export function popup(menuOptions: Options.Menu, modifierOptions?: Modifier): MenuController;
 
 export function getPositionFromEvent(event: MouseEvent): Position;
 

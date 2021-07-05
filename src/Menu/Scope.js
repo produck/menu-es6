@@ -18,7 +18,7 @@ Dom.setStyle(container, CONTAINER_STYLE);
 Dom.addClass(container, 'menu-scope');
 Dom.appendChild(Dom.BODY, container);
 
-let currentMenu = null;
+export let currentMenu = null;
 
 export const setCurrentMenu = (menu, blocking = false) => {
 	closeAllMenu();
@@ -60,12 +60,11 @@ const getTopMenu = () => {
 	return menu;
 };
 
-const tryCollapse = event => {
+const tryCollapse = () => {
 	const topMenu = getTopMenu();
 
 	if (topMenu[_MENU.OPENER] !== null) {
 		topMenu[_MENU.OPENER][COLLAPSE]();
-		event.used = true;
 
 		return true;
 	}
@@ -73,14 +72,13 @@ const tryCollapse = event => {
 	return false;
 };
 
-const tryExpand = event => {
+const tryExpand = () => {
 	const topMenu = getTopMenu();
 	const focusingItem = topMenu[_MENU.FOCUSING_ITEM];
 
 	if (focusingItem && focusingItem[SUB_MENU_OPITONS]) {
 		topMenu[_MENU.EXPAND_ITEM]();
 		selectDown();
-		event.used = true;
 	}
 };
 
@@ -114,8 +112,6 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 			if (topMenu[_MENU.NEXT](key.toLowerCase())) {
 				topMenu[_MENU.FOCUSING_ITEM][ACTIVE]();
 			}
-
-			event.used = true;
 		}
 	}
 });

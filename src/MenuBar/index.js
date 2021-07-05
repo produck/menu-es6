@@ -49,7 +49,7 @@ class MenuBarButton {
 	[_N.OPEN_MENU]() {
 		const { left, bottom } = Dom.getRect(this[_N.OUTER_ELEMENT]);
 
-		popup(this[_N.MENU_OPTIONS], {
+		currentMenu = popup(this[_N.MENU_OPTIONS], {
 			position: { x: left, y: bottom },
 			mnemonic: this[_N.MENU_BAR][_B.HAS_MNEMONIC]
 		});
@@ -61,6 +61,10 @@ let containerElement = null;
  * @type {MenuBar}
  */
 let currentMenuBar = null;
+/**
+ * @type {import('../Menu'.MenuController)}
+ */
+let currentMenu = null;
 
 class MenuBar {
 	constructor() {
@@ -101,19 +105,23 @@ class MenuBar {
 	}
 
 	set [_B.ACTIVE](value) {
-		const barElement = this[_B.BAR_ELEMENT];
+		if (value !== this[_B._ACTIVE]) {
+			const barElement = this[_B.BAR_ELEMENT];
 
-		this[_B._ACTIVE] = value;
+			this[_B._ACTIVE] = value;
 
-		if (value) {
-			Dom.addClass(barElement, 'active');
+			if (value) {
+				Dom.addClass(barElement, 'active');
+				selecting = true;
 
-			if (this[_B._FOCUSING_BUTTON]) {
-				this[_B._FOCUSING_BUTTON][_N.OPEN_MENU]();
+				if (this[_B._FOCUSING_BUTTON]) {
+					this[_B._FOCUSING_BUTTON][_N.OPEN_MENU]();
+				}
+			} else {
+				Dom.removeClass(barElement, 'active');
+				closeAllMenu();
+				currentMenu = null;
 			}
-		} else {
-			Dom.removeClass(barElement, 'active');
-			closeAllMenu();
 		}
 	}
 
@@ -219,40 +227,89 @@ export const setMenuBar = (options, hasMnemonic = false) => {
 
 const isReady = () => currentMenuBar !== null && containerElement !== null;
 
+let selecting = false;
+let expandable = null;
+let expanding = null;
+
 const KEY_MAP_OPERATION = {
 	Alt: () => {
 		const buttonList = currentMenuBar[_B.BUTTON_LIST];
 
 		if (buttonList.length > 0) {
 			if (currentMenuBar[_B.FOCUSING_BUTTON] === null) {
+				selecting = true;
 				currentMenuBar[_B.HAS_MNEMONIC] = true;
 				currentMenuBar[_B.FOCUSING_BUTTON] = buttonList[0];
 			} else {
+				selecting = false;
 				currentMenuBar[_B.HAS_MNEMONIC] = false;
 				currentMenuBar[_B.ACTIVE] = false;
 				currentMenuBar[_B.FOCUSING_BUTTON] = null;
+				currentMenu = null;
 			}
 		}
 	},
 	Enter: () => {
 		if (!currentMenuBar[_B.ACTIVE]) {
 			currentMenuBar[_B.ACTIVE] = true;
+
+			if (currentMenu) {
+				currentMenu.next();
+			}
+		}
+	},
+	ArrowDown: () => {
+		if (!currentMenuBar[_B.ACTIVE]) {
+			currentMenuBar[_B.ACTIVE] = true;
+			currentMenu.next();
 		}
 	},
 	ArrowLeft: () => {
-		currentMenuBar[_B.NEXT](null, true);
+		if (selecting) {
+			if (currentMenu === null || expanding === false) {
+				currentMenuBar[_B.NEXT](null, true);
+
+				if (currentMenuBar[_B.ACTIVE]) {
+					currentMenu.next();
+				}
+			}
+		}
 	},
 	ArrowRight: () => {
-		currentMenuBar[_B.NEXT]();
+		if (selecting) {
+			if (currentMenu === null || expandable === false) {
+				currentMenuBar[_B.NEXT]();
+
+				if (currentMenuBar[_B.ACTIVE]) {
+					currentMenu.next();
+				}
+			}
+		}
 	},
 	Escape: () => {
-		if (currentMenuBar[_B.ACTIVE]) {
-			currentMenuBar[_B.ACTIVE] = false;
-		} else if (currentMenuBar[_B.FOCUSING_BUTTON]) {
-			currentMenuBar[_B.FOCUSING_BUTTON] = null;
+		if (currentMenu && currentMenu.closed) {
+			if (currentMenuBar[_B.ACTIVE]) {
+				currentMenuBar[_B.ACTIVE] = false;
+			} else if (currentMenuBar[_B.FOCUSING_BUTTON]) {
+				currentMenuBar[_B.FOCUSING_BUTTON] = null;
+				selecting = false;
+			}
+
+			currentMenu = null;
 		}
 	}
 };
+
+(function observe() {
+	if (currentMenu) {
+		expanding = currentMenu.expanding;
+		expandable = currentMenu.expandable;
+	} else {
+		expandable = expanding = null;
+	}
+
+	Dom.REQUEST_ANIMATION_FRAME(observe);
+}());
 
 Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 	if (isReady()) {
@@ -262,7 +319,13 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 			Dom.PREVENT_DEFAULT(event);
 			KEY_MAP_OPERATION[key]();
 		} else if (MNEMONIC_REG.test(key)) {
-			console.log(key);
+			if (!currentMenuBar[_B.ACTIVE]) {
+				currentMenuBar[_B.ACTIVE] = true;
+			}
+
+			if (currentMenuBar[_B.NEXT](key.toLowerCase())) {
+				currentMenu.next();
+			}
 		}
 	}
 });

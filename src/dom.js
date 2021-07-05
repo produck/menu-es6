@@ -9,8 +9,8 @@ export const instanceOf = (instance, contructor) => instance instanceof contruct
  * @param {string} eventType
  * @param {EventListener} listener
  */
-export const addEventListener = (element, eventType, listener) => {
-	element.addEventListener(eventType, listener);
+export const addEventListener = (element, eventType, listener, options) => {
+	element.addEventListener(eventType, listener, options);
 };
 
 export const removeEventListener = (element, eventType, listener) => {
