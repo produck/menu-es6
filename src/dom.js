@@ -22,7 +22,7 @@ export const removeEventListener = (element, eventType, listener) => {
  */
 export const removeAllChild = (element) => {
 	return Array
-		.from(element.children)
+		.from(element.childNodes)
 		.map(childElement => removeChild(element, childElement));
 };
 

@@ -1,4 +1,3 @@
-import * as Dom from '@/dom';
 import { register as registerMenuItem, normalizeMenuOptions } from './normalize';
 import { ClickableMenuItem, normalize as normalizeClickableMenuItemOptions } from './Item/Clickable';
 import { SubmenuMenuItem, Menu, normalize as normalizeSubmenuMenuItemOptions, relayoutMenu } from './Item/Submenu';

@@ -1,6 +1,8 @@
 export const
 	ACTIVE = 'a',
+	_ACTIVE = '_a',
 	HAS_MNEMONIC = 'h',
+	_HAS_MNEMONIC = '_h',
 	BUTTON_LIST = 'b',
 	BAR_ELEMENT = 'e',
 	FOCUSING_BUTTON = 'f',
