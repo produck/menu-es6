@@ -1,4 +1,5 @@
 import * as Dom from 'dom';
+import * as lang from 'lang';
 import { Var, VAR } from '@/utils';
 
 import { AbstractMenu } from './Base';
@@ -55,7 +56,7 @@ export class Menu extends AbstractMenu {
 		const cancelOpenerCollapse = () => {
 			let opener = this[_M.OPENER];
 
-			while (opener !== null) {
+			while (!lang.isNull(opener)) {
 				opener[_B.MENU][_M.FOCUS_ITEM](opener);
 				opener[_B.MENU][_M.CANCEL_COLLAPSE]();
 				opener = opener[_B.MENU][_M.OPENER];
@@ -69,19 +70,19 @@ export class Menu extends AbstractMenu {
 
 	get [_M.EXPANDING_ITEM]() {
 		return this[_M.ITEM_LIST]
-			.filter(item => Dom.instanceOf(item, SubmenuMenuItem))
-			.find(submenuItem => submenuItem[_S.EXPANDED_MENU] !== null) || null;
+			.filter(item => lang.instanceOf(item, SubmenuMenuItem))
+			.find(submenuItem => !lang.isNull(submenuItem[_S.EXPANDED_MENU])) || null;
 	}
 
 	[_M.FOCUS_ITEM](item = null) {
 		this[_M.FOCUSING_ITEM] && this[_M.FOCUSING_ITEM][_F.BLUR]();
-		item !== null && item[_F.FOCUS]();
+		!lang.isNull(item) && item[_F.FOCUS]();
 		this[this[_M.EXPANDING_ITEM] === item ? _M.CANCEL_COLLAPSE : _M.COLLAPSE_ITEM]();
 		this[_M.FOCUSING_ITEM] = item;
 	}
 
 	[_M.EXPAND_ITEM]() {
-		if (Dom.instanceOf(this[_M.FOCUSING_ITEM], SubmenuMenuItem)) {
+		if (lang.instanceOf(this[_M.FOCUSING_ITEM], SubmenuMenuItem)) {
 			this[_M.FOCUSING_ITEM][_S.EXPAND]();
 		}
 	}
@@ -91,7 +92,7 @@ export class Menu extends AbstractMenu {
 
 		const expandingItem = this[_M.EXPANDING_ITEM];
 
-		if (expandingItem && Dom.instanceOf(expandingItem, SubmenuMenuItem)) {
+		if (expandingItem && lang.instanceOf(expandingItem, SubmenuMenuItem)) {
 			this[_M.COLLAPSING_DELAY] = setTimeout(() => expandingItem[_S.COLLAPSE](), delay);
 		}
 	}
@@ -138,7 +139,7 @@ export class Menu extends AbstractMenu {
 		for (let index = 0; index < length; index++) {
 			const current = sequence[(focusingIndex + index + 1) % length];
 
-			if (mnemonic === null || current[_F.MNEMONIC] === mnemonic) {
+			if (lang.isNull(mnemonic) || current[_F.MNEMONIC] === mnemonic) {
 				this[_M.FOCUS_ITEM](current);
 
 				return true;
@@ -189,7 +190,7 @@ const ICON_POSITION_STYLE = { right: 0, top: 0 };
  * @param {HTMLElement} menuElement
  * @param {DOMRect} rect
  */
-export function relayoutMenu(menuElement, rect) {
+export const relayoutMenu = (menuElement, rect) => {
 	const menuRect = Dom.getRect(menuElement);
 
 	if (menuRect.bottom > Dom.WINDOW.innerHeight) {
@@ -205,7 +206,7 @@ export function relayoutMenu(menuElement, rect) {
 	}
 
 	//TODO resize
-}
+};
 
 export class SubmenuMenuItem extends FunctionMenuItem {
 	constructor(menu, options) {
@@ -223,7 +224,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 	}
 
 	[_S.EXPAND]() {
-		if (this[_S.EXPANDED_MENU] === null) {
+		if (lang.isNull(this[_S.EXPANDED_MENU])) {
 			const menu = Menu[_M.S_CREATE](this[_S.SUB_MENU_OPITONS], this[_B.MENU][_M.HAS_MNEMONIC]);
 			const rect = Dom.getRect(this[_B.ROW_ELEMENT]);
 
@@ -238,7 +239,7 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 	[_S.COLLAPSE]() {
 		const expandedMenu = this[_S.EXPANDED_MENU];
 
-		if (expandedMenu !== null) {
+		if (!lang.isNull(expandedMenu)) {
 			expandedMenu[_M.CLOSE]();
 			this[_S.EXPANDED_MENU] = null;
 		}
@@ -250,8 +251,8 @@ export class SubmenuMenuItem extends FunctionMenuItem {
 	}
 }
 
-export function normalize(_options) {
-	const options = Dom.ASSIGN({
+export const normalize = (_options) => {
+	const options = lang.assign({
 		submenu: []
 	}, normalizeFunctionMenuItemOptions(_options));
 
@@ -262,4 +263,4 @@ export function normalize(_options) {
 	options.submenu = normalizeMenuOptions(_submenu);
 
 	return options;
-}
+};

@@ -1,4 +1,6 @@
 import * as Dom from 'dom';
+import * as lang from 'lang';
+
 import * as _ from '@/symbol/base';
 import { throwError } from '@/utils';
 
@@ -17,7 +19,7 @@ export class AbstractMenu {}
 
 export class BaseMenuItem {
 	constructor(menu) {
-		if (!Dom.instanceOf(menu, AbstractMenu)) {
+		if (!lang.instanceOf(menu, AbstractMenu)) {
 			throwError('A menu required.');
 		}
 
@@ -45,7 +47,7 @@ export class BaseMenuItem {
 	}
 }
 
-export function normalize(_options) {
+export const normalize = (_options) => {
 	const options = {
 		id: null
 	};

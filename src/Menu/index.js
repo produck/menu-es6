@@ -7,8 +7,8 @@ import { closeAllMenu, setCurrentMenu, appendMenu, currentMenu } from './Scope';
 
 import * as _M from '@/symbol/menu';
 import * as _S from '@/symbol//submenu';
-import { throwError, getCurrentPosition, isBoolean, isObject } from '@/utils';
-import { instanceOf } from 'dom';
+import { getCurrentPosition } from '@/utils';
+import * as lang from 'lang';
 
 registerMenuItem(ClickableMenuItem, normalizeClickableMenuItemOptions);
 registerMenuItem(SubmenuMenuItem, normalizeSubmenuMenuItemOptions);
@@ -18,7 +18,7 @@ export { MenuItem, normalizeMenuOptions as normalize, closeAllMenu };
 
 export const getPositionFromEvent = event => ({ x: event.clientX, y: event.clientY });
 
-function normalizeModifier(_options) {
+const normalizeModifier = (_options) => {
 	const options = {
 		position: getCurrentPosition(),
 		mnemonic: false,
@@ -31,16 +31,16 @@ function normalizeModifier(_options) {
 		blocking: _blocking = options.blocking
 	} = _options;
 
-	if (!isBoolean(_mnemonic)) {
-		throwError('A `modifier.mnemonic` MUST be a boolean.');
+	if (!lang.isBoolean(_mnemonic)) {
+		lang.throwError('A `modifier.mnemonic` MUST be a boolean.');
 	}
 
-	if (!isBoolean(_blocking)) {
-		throwError('A `modifier.blocking` MUST be a boolean.');
+	if (!lang.isBoolean(_blocking)) {
+		lang.throwError('A `modifier.blocking` MUST be a boolean.');
 	}
 
-	if (!isObject(_position)) {
-		throwError('A `modifier.position` MUST be a boolean.');
+	if (!lang.isObject(_position)) {
+		lang.throwError('A `modifier.position` MUST be a boolean.');
 	} else {
 		const {
 			x: _x = options.position.x,
@@ -48,7 +48,7 @@ function normalizeModifier(_options) {
 		} = _position;
 
 		if (isNaN(_x) || isNaN(_y)) {
-			throwError('Invalid position.');
+			lang.throwError('Invalid position.');
 		}
 
 		options.position.x = _x;
@@ -59,7 +59,7 @@ function normalizeModifier(_options) {
 	options.blocking = _blocking;
 
 	return options;
-}
+};
 
 const MockRectFromPosition = position => {
 	return {
@@ -74,7 +74,7 @@ const MenuController = menu => {
 	return {
 		next: () => menu[_M.NEXT](),
 		get expanding() {
-			return menu[_M.EXPANDING_ITEM] !== null;
+			return !lang.isNull(menu[_M.EXPANDING_ITEM]);
 		},
 		get expandable() {
 			let current = menu;
@@ -83,7 +83,7 @@ const MenuController = menu => {
 				current = current[_M.EXPANDING_ITEM][_S.EXPANDED_MENU];
 			}
 
-			return instanceOf(current[_M.FOCUSING_ITEM], SubmenuMenuItem);
+			return lang.instanceOf(current[_M.FOCUSING_ITEM], SubmenuMenuItem);
 		},
 		get closed() {
 			return currentMenu !== menu;
@@ -91,7 +91,7 @@ const MenuController = menu => {
 	};
 };
 
-export function popup(menuOptions, modifierOptions) {
+export const popup = (menuOptions, modifierOptions) => {
 	const { position, mnemonic, blocking } = normalizeModifier(modifierOptions);
 	const menu = Menu[_M.S_CREATE](menuOptions, mnemonic);
 
@@ -101,4 +101,4 @@ export function popup(menuOptions, modifierOptions) {
 	relayoutMenu(menu[_M.MENU_ELEMENT], MockRectFromPosition(position));
 
 	return MenuController(menu);
-}
+};

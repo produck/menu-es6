@@ -3,6 +3,7 @@ import * as _MENU from '@/symbol/menu';
 import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/submenu';
 import { ACTIVE } from '@/symbol/base';
 import { MNEMONIC_REG } from '@/utils';
+import * as lang from 'lang';
 
 const container = Dom.createElement('div');
 const CONTAINER_STYLE = {
@@ -35,7 +36,7 @@ export const appendMenu = (menu) => {
 };
 
 export const closeAllMenu = () => {
-	if (currentMenu !== null) {
+	if (!lang.isNull(currentMenu)) {
 		currentMenu[_MENU.CLOSE]();
 		currentMenu = null;
 		Dom.setStyle(container, { width: 0 });
@@ -53,7 +54,7 @@ const selectDown = () => {
 const getTopMenu = () => {
 	let menu = currentMenu;
 
-	while (menu[_MENU.EXPANDING_ITEM] !== null) {
+	while (!lang.isNull(menu[_MENU.EXPANDING_ITEM])) {
 		menu = menu[_MENU.EXPANDING_ITEM][EXPANDED_MENU];
 	}
 
@@ -63,7 +64,7 @@ const getTopMenu = () => {
 const tryCollapse = () => {
 	const topMenu = getTopMenu();
 
-	if (topMenu[_MENU.OPENER] !== null) {
+	if (!lang.isNull(topMenu[_MENU.OPENER])) {
 		topMenu[_MENU.OPENER][COLLAPSE]();
 
 		return true;

@@ -20,6 +20,6 @@ export class SpearatorMenuItem extends BaseMenuItem {
 	}
 }
 
-export function normalize(_options) {
+export const normalize = (_options) => {
 	return normalizeBaseMenuItemOptions(_options);
 }

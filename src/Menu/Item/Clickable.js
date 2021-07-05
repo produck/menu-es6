@@ -1,5 +1,6 @@
 import * as Dom from 'dom';
-import { isArray, isBoolean, isFunction, throwError, VAR, Var } from '@/utils';
+import * as lang from 'lang';
+import { VAR, Var } from '@/utils';
 
 import {
 	FunctionMenuItem,
@@ -98,8 +99,8 @@ export class ClickableMenuItem extends FunctionMenuItem {
 
 const DEFAULT_CLICK_FN = () => console.warn(undefined);
 
-export function normalize(_options) {
-	const options = Dom.ASSIGN({
+export const  normalize = (_options) => {
+	const options = lang.assign({
 		click: DEFAULT_CLICK_FN,
 		isChecked: false,
 		isDisabled: false,
@@ -113,25 +114,25 @@ export function normalize(_options) {
 		accelerator: _accelerator = options.accelerator
 	} = _options;
 
-	if (!isFunction(_click)) {
-		throwError('A `.click()` of clickable item MUST be a function.');
+	if (!lang.isFunction(_click)) {
+		lang.throwError('A `.click()` of clickable item MUST be a function.');
 	}
 
-	if (!isBoolean(_isChecked)) {
-		throwError('A `.isChecked` MUST be a `boolean`.');
+	if (!lang.isBoolean(_isChecked)) {
+		lang.throwError('A `.isChecked` MUST be a `boolean`.');
 	}
 
-	if (!isBoolean(_isDisabled)) {
-		throwError('A `.isDisabled` MUST be a `boolean`.');
+	if (!lang.isBoolean(_isDisabled)) {
+		lang.throwError('A `.isDisabled` MUST be a `boolean`.');
 	}
 
-	if (!isArray(_accelerator)) {
-		throwError('A `.accelerator` MUST be an array of string.');
+	if (!lang.isArray(_accelerator)) {
+		lang.throwError('A `.accelerator` MUST be an array of string.');
 	}
 
 	options.accelerator = _accelerator.map(_bar => {
-		if (!Dom.instanceOf(_bar, DocumentFragment)) {
-			throwError('A `.accelerator` MUST be a `DocumentFragement`.');
+		if (!lang.instanceOf(_bar, DocumentFragment)) {
+			lang.throwError('A `.accelerator` MUST be a `DocumentFragement`.');
 		}
 
 		return _bar;

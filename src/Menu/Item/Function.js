@@ -1,6 +1,7 @@
 import * as Dom from 'dom';
 import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
-import { Var, VAR, resolveLabelText, FRAGEMENT, MNEMONIC, throwError, isString } from '@/utils';
+import { Var, VAR, resolveLabelText, FRAGEMENT, MNEMONIC } from '@/utils';
+import * as lang from 'lang';
 
 import * as _ from '@/symbol/function';
 import * as _MENU from '@/symbol/menu';
@@ -38,7 +39,7 @@ export class FunctionMenuItem extends BaseMenuItem {
 		const textElement = this[_BASE.TEXT_ELEMENT];
 		const labelSpan = Dom.createElement('span');
 
-		if (options.icon !== null) {
+		if (!lang.isNull(options.icon)) {
 			const iconSpan = Dom.createElement('span');
 
 			Dom.addClass(iconSpan, 'menu-item-icon');
@@ -81,8 +82,8 @@ export class FunctionMenuItem extends BaseMenuItem {
 	}
 }
 
-export function normalize(_options) {
-	const options = Dom.ASSIGN({
+export const normalize = (_options) => {
+	const options = lang.assign({
 		label: '<NO_LABEL>',
 		icon: null
 	}, normalizeBaseMenuItemOptions(_options));
@@ -92,19 +93,19 @@ export function normalize(_options) {
 		icon: _icon = options.icon
 	} = _options;
 
-	if (!isString(_label)) {
-		throwError('A menu item label MUST be a string.');
+	if (!lang.isString(_label)) {
+		lang.throwError('A menu item label MUST be a string.');
 	}
 
-	if (_icon !== null && !Dom.instanceOf(_icon, DocumentFragment)) {
-		throwError('A menu item icon MUST be a DocumentFragment.');
+	if (!lang.isNull(_icon) && !lang.instanceOf(_icon, DocumentFragment)) {
+		lang.throwError('A menu item icon MUST be a DocumentFragment.');
 	}
 
 	options.label = _label;
 	options.icon = _icon;
 
 	return options;
-}
+};
 
 export const MENU_ITEM_ICON_BOX_STYLE = {
 	position: 'absolute',

@@ -1,8 +1,6 @@
 export const DOCUMENT = document, WINDOW = window;
 export const BODY = DOCUMENT.body;
 export const REQUEST_ANIMATION_FRAME = requestAnimationFrame;
-export const ASSIGN = Object.assign;
-export const instanceOf = (instance, contructor) => instance instanceof contructor;
 
 /**
  * @param {HTMLElement} element

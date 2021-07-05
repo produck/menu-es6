@@ -7,6 +7,7 @@ import * as _N from '@/symbol/button';
 import { MENU_BAR_STYLE, MENU_BUTTON_OUTER_STYLE } from './style';
 import { normalize } from './normalize';
 import { FRAGEMENT, MNEMONIC, MNEMONIC_REG, resolveLabelText } from '@/utils';
+import { isNull } from 'lang';
 
 class MenuBarButton {
 	constructor(menuBar, options) {
@@ -133,11 +134,11 @@ class MenuBar {
 		const currentButton = this[_B.FOCUSING_BUTTON];
 
 		if (value !== currentButton) {
-			if (currentButton !== null) {
+			if (!isNull(currentButton)) {
 				currentButton[_N.BLUR]();
 			}
 
-			if (value !== null) {
+			if (!isNull(value)) {
 				value[_N.FOCUS]();
 
 				if (this[_B.ACTIVE]) {
@@ -173,7 +174,7 @@ class MenuBar {
 		for (let index = 0; index < length; index++) {
 			const current = sequence[(focusingIndex + index + 1) % length];
 
-			if (mnemonic === null || current[_N.MNEMONIC] === mnemonic) {
+			if (isNull(mnemonic) || current[_N.MNEMONIC] === mnemonic) {
 				this[_B.FOCUSING_BUTTON] = current;
 
 				return true;
@@ -219,13 +220,13 @@ export const setMenuBar = (options, hasMnemonic = false) => {
 
 	Dom.appendChild(menuBar[_B.BAR_ELEMENT], fragement);
 
-	if (containerElement !== null) {
+	if (!isNull(containerElement)) {
 		Dom.removeAllChild(containerElement);
 		Dom.appendChild(containerElement, menuBar[_B.BAR_ELEMENT]);
 	}
 };
 
-const isReady = () => currentMenuBar !== null && containerElement !== null;
+const isReady = () => !isNull(currentMenuBar) && !isNull(containerElement);
 
 let selecting = false;
 let expandable = null;
@@ -236,7 +237,7 @@ const KEY_MAP_OPERATION = {
 		const buttonList = currentMenuBar[_B.BUTTON_LIST];
 
 		if (buttonList.length > 0) {
-			if (currentMenuBar[_B.FOCUSING_BUTTON] === null) {
+			if (isNull(currentMenuBar[_B.FOCUSING_BUTTON])) {
 				selecting = true;
 				currentMenuBar[_B.HAS_MNEMONIC] = true;
 				currentMenuBar[_B.FOCUSING_BUTTON] = buttonList[0];
@@ -266,7 +267,7 @@ const KEY_MAP_OPERATION = {
 	},
 	ArrowLeft: () => {
 		if (selecting) {
-			if (currentMenu === null || expanding === false) {
+			if (isNull(currentMenu) || expanding === false) {
 				currentMenuBar[_B.NEXT](null, true);
 
 				if (currentMenuBar[_B.ACTIVE]) {
@@ -277,7 +278,7 @@ const KEY_MAP_OPERATION = {
 	},
 	ArrowRight: () => {
 		if (selecting) {
-			if (currentMenu === null || expandable === false) {
+			if (isNull(currentMenu) || expandable === false) {
 				currentMenuBar[_B.NEXT]();
 
 				if (currentMenuBar[_B.ACTIVE]) {

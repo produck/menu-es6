@@ -13,7 +13,7 @@ const LABEL_REG = /^([^&]*)(&[a-z]|&&)?([^&]*)$/i;
 
 export const FRAGEMENT = 'n', MNEMONIC = 'f';
 
-export function resolveLabelText(text, noMnemonic = false) {
+export const resolveLabelText = (text, noMnemonic = false) => {
 	const fragement = Dom.createFragement();
 	const result = { [FRAGEMENT]: fragement, [MNEMONIC]: null };
 	const [, left, mnemonic, right] = text.match(LABEL_REG);
@@ -39,7 +39,7 @@ export function resolveLabelText(text, noMnemonic = false) {
 	}
 
 	return result;
-}
+};
 
 export const throwError = message => { throw new Error(message); };
 
@@ -50,13 +50,3 @@ Dom.addEventListener(Dom.WINDOW, 'mousemove', event => {
 	x = event.clientX;
 	y = event.clientY;
 });
-
-const typeOf = (any, typeString) => typeof any === typeString;
-
-export const
-	isFunction = any => typeOf(any, 'function'),
-	isString = any => typeOf(any, 'string'),
-	isNumber = any => typeOf(any, 'number'),
-	isBoolean = any => typeOf(any, 'boolean'),
-	isObject = any => typeOf(any, 'object'),
-	isArray = any => Array.isArray(any);

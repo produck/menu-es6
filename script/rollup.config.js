@@ -44,6 +44,7 @@ export default moduleList.map(config => {
 		alias({
 			entries: [
 				{ find: 'dom', replacement: path.join(__dirname, '../src/dom.js') },
+				{ find: 'lang', replacement: path.join(__dirname, '../src/lang.js') },
 				{ find: '@', replacement: path.join(__dirname, '../src') }
 			]
 		}),

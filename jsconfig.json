@@ -3,6 +3,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"dom": ["./src/dom.js"],
+			"lang": ["./src/lang.js"],
 			"@/*": ["./src/*"],
 			"@/": ["./src/"],
 		}
