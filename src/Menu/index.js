@@ -6,7 +6,7 @@ import * as MenuItem from './Item/index';
 import { closeAllMenu, setCurrentMenu, appendMenu } from './Scope';
 
 import * as _M from '@/symbol/menu';
-import { throwError, currentPosition } from '@/utils';
+import { throwError, getCurrentPosition, isBoolean, isObject } from '@/utils';
 
 registerMenuItem(ClickableMenuItem, normalizeClickableMenuItemOptions);
 registerMenuItem(SubmenuMenuItem, normalizeSubmenuMenuItemOptions);
@@ -18,7 +18,7 @@ export const getPositionFromEvent = event => ({ x: event.clientX, y: event.clien
 
 function normalizeModifier(_options) {
 	const options = {
-		position: currentPosition,
+		position: getCurrentPosition(),
 		mnemonic: false,
 		blocking: false
 	};
@@ -29,15 +29,15 @@ function normalizeModifier(_options) {
 		blocking: _blocking = options.blocking
 	} = _options;
 
-	if (typeof _mnemonic !== 'boolean') {
+	if (!isBoolean(_mnemonic)) {
 		throwError('A `modifier.mnemonic` MUST be a boolean.');
 	}
 
-	if (typeof _blocking !== 'boolean') {
+	if (!isBoolean(_blocking)) {
 		throwError('A `modifier.blocking` MUST be a boolean.');
 	}
 
-	if (typeof _position !== 'object') {
+	if (!isObject(_position)) {
 		throwError('A `modifier.position` MUST be a boolean.');
 	} else {
 		const {

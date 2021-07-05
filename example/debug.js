@@ -153,7 +153,7 @@ window.addEventListener('load', function () {
 				})
 			]
 		], {
-			mnemonic: true,
+			mnemonic: false,
 			blocking: true
 		});
 	});

@@ -6,7 +6,7 @@ import * as _N from '@/symbol/button';
 
 import { MENU_BAR_STYLE, MENU_BUTTON_OUTER_STYLE } from './style';
 import { normalize } from './normalize';
-import { FRAGEMENT, MNEMONIC, resolveLabelText } from '@/utils';
+import { FRAGEMENT, MNEMONIC, MNEMONIC_REG, resolveLabelText } from '@/utils';
 
 class MenuBarButton {
 	constructor(menuBar, options) {
@@ -23,9 +23,9 @@ class MenuBarButton {
 		Dom.appendChild(outerElement, innerElement);
 		Dom.setStyle(outerElement, MENU_BUTTON_OUTER_STYLE);
 
-		const focusThis = () => this[_N.MENU_BAR][_B.FOCUS_BUTTON](this);
+		const focusThis = () => this[_N.MENU_BAR][_B.FOCUSING_BUTTON] = this;
 
-		Dom.addEventListener(innerElement, 'mouseenter', focusThis);
+		Dom.addEventListener(outerElement, 'mouseenter', focusThis);
 
 		this[_N.SET_LABEL]();
 	}
@@ -47,10 +47,10 @@ class MenuBarButton {
 	}
 
 	[_N.OPEN_MENU]() {
-		const rect = Dom.getRect(this[_N.OUTER_ELEMENT]);
+		const { left, bottom } = Dom.getRect(this[_N.OUTER_ELEMENT]);
 
 		popup(this[_N.MENU_OPTIONS], {
-			position: { x: rect.left, y: rect.bottom },
+			position: { x: left, y: bottom },
 			mnemonic: this[_N.MENU_BAR][_B.HAS_MNEMONIC]
 		});
 	}
@@ -71,27 +71,19 @@ class MenuBar {
 
 		this[_B.BAR_ELEMENT] = container;
 		this[_B.BUTTON_LIST] = [];
-		this[_B.FOCUSING_BUTTON] = null;
 
-		const toggleActive = () => {
-			const oldFocusingButton = this[_B.FOCUSING_BUTTON];
-
-			this[_B.BLUR_FOCUSING_BUTTON]();
-			this[_B.ACTIVE] = !this[_B.ACTIVE];
-			this[_B.FOCUS_BUTTON](oldFocusingButton);
-		};
-
-		Dom.addEventListener(container, 'click', toggleActive);
+		Dom.addEventListener(container, 'click', () => this[_B.ACTIVE] = !this[_B.ACTIVE]);
 		Dom.addEventListener(container, 'mousedown', Dom.STOP_PROPAGATION);
 		Dom.addEventListener(container, 'contextmenu', Dom.STOP_AND_PREVENT);
 		Dom.addEventListener(container, 'mouseleave', () => {
 			if (!this[_B.ACTIVE]) {
-				this[_B.BLUR_FOCUSING_BUTTON]();
+				this[_B.FOCUSING_BUTTON] = null;
 			}
 		});
 
 		this[_B._HAS_MNEMONIC] = false;
 		this[_B._ACTIVE] = false;
+		this[_B._FOCUSING_BUTTON] = null;
 	}
 
 	get [_B.HAS_MNEMONIC]() {
@@ -115,36 +107,38 @@ class MenuBar {
 
 		if (value) {
 			Dom.addClass(barElement, 'active');
+
+			if (this[_B._FOCUSING_BUTTON]) {
+				this[_B._FOCUSING_BUTTON][_N.OPEN_MENU]();
+			}
 		} else {
 			Dom.removeClass(barElement, 'active');
 			closeAllMenu();
 		}
 	}
 
-	[_B.BLUR_FOCUSING_BUTTON]() {
-		this[_B.FOCUSING_BUTTON] && this[_B.FOCUSING_BUTTON][_N.BLUR]();
-		this[_B.FOCUSING_BUTTON] = null;
+	get [_B.FOCUSING_BUTTON]() {
+		return this[_B._FOCUSING_BUTTON];
 	}
 
-	[_B.DEACTIVE]() {
-		this[_B.ACTIVE] = false;
-	}
+	set [_B.FOCUSING_BUTTON](value) {
+		const currentButton = this[_B.FOCUSING_BUTTON];
 
-	[_B.FOCUS_BUTTON](button = this[_B.FOCUSING_BUTTON]) {
-		const oldFocusingButton = this[_B.FOCUSING_BUTTON];
+		if (value !== currentButton) {
+			if (currentButton !== null) {
+				currentButton[_N.BLUR]();
+			}
 
-		this[_B.BLUR_FOCUSING_BUTTON]();
+			if (value !== null) {
+				value[_N.FOCUS]();
 
-		if (button) {
-			button[_N.FOCUS]();
-
-			if (button !== oldFocusingButton) {
-				closeAllMenu();
-				this[_B.ACTIVE] && button[_N.OPEN_MENU]();
+				if (this[_B.ACTIVE]) {
+					value[_N.OPEN_MENU]();
+				}
 			}
 		}
 
-		this[_B.FOCUSING_BUTTON] = button;
+		this[_B._FOCUSING_BUTTON] = value;
 	}
 
 	[_B.APPEND_BUTTON](button) {
@@ -172,7 +166,7 @@ class MenuBar {
 			const current = sequence[(focusingIndex + index + 1) % length];
 
 			if (mnemonic === null || current[_N.MNEMONIC] === mnemonic) {
-				this[_B.FOCUS_BUTTON](current);
+				this[_B.FOCUSING_BUTTON] = current;
 
 				return true;
 			}
@@ -193,8 +187,8 @@ export const mount = (element) => {
 
 const tryDeactiveAndClear = () => {
 	if (isReady) {
-		currentMenuBar[_B.DEACTIVE]();
-		currentMenuBar[_B.BLUR_FOCUSING_BUTTON]();
+		currentMenuBar[_B.ACTIVE] = false;
+		currentMenuBar[_B.FOCUSING_BUTTON] = null;
 		currentMenuBar[_B.HAS_MNEMONIC] = false;
 	}
 };
@@ -207,8 +201,6 @@ export const setMenuBar = (options, hasMnemonic = false) => {
 	const finalOptions = normalize(options);
 	const menuBar = currentMenuBar = new MenuBar(hasMnemonic);
 	const fragement = Dom.createFragement();
-
-	console.log(menuBar);
 
 	finalOptions.forEach(buttonOptions => {
 		const button = new MenuBarButton(menuBar, buttonOptions);
@@ -234,21 +226,17 @@ const KEY_MAP_OPERATION = {
 		if (buttonList.length > 0) {
 			if (currentMenuBar[_B.FOCUSING_BUTTON] === null) {
 				currentMenuBar[_B.HAS_MNEMONIC] = true;
-				currentMenuBar[_B.FOCUS_BUTTON](buttonList[0]);
+				currentMenuBar[_B.FOCUSING_BUTTON] = buttonList[0];
 			} else {
 				currentMenuBar[_B.HAS_MNEMONIC] = false;
-				currentMenuBar[_B.DEACTIVE]();
-				currentMenuBar[_B.BLUR_FOCUSING_BUTTON]();
+				currentMenuBar[_B.ACTIVE] = false;
+				currentMenuBar[_B.FOCUSING_BUTTON] = null;
 			}
 		}
 	},
 	Enter: () => {
 		if (!currentMenuBar[_B.ACTIVE]) {
-			const old = currentMenuBar[_B.FOCUSING_BUTTON];
-
-			currentMenuBar[_B.BLUR_FOCUSING_BUTTON]();
 			currentMenuBar[_B.ACTIVE] = true;
-			currentMenuBar[_B.FOCUS_BUTTON](old);
 		}
 	},
 	ArrowLeft: () => {
@@ -259,14 +247,12 @@ const KEY_MAP_OPERATION = {
 	},
 	Escape: () => {
 		if (currentMenuBar[_B.ACTIVE]) {
-			currentMenuBar[_B.DEACTIVE]();
+			currentMenuBar[_B.ACTIVE] = false;
 		} else if (currentMenuBar[_B.FOCUSING_BUTTON]) {
-			currentMenuBar[_B.BLUR_FOCUSING_BUTTON]();
+			currentMenuBar[_B.FOCUSING_BUTTON] = null;
 		}
 	}
 };
-
-const KEY_REG = /^[a-z0-9`~?]$/i;
 
 Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 	if (isReady()) {
@@ -275,7 +261,7 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 		if (key in KEY_MAP_OPERATION) {
 			Dom.PREVENT_DEFAULT(event);
 			KEY_MAP_OPERATION[key]();
-		} else if (KEY_REG.test(key)) {
+		} else if (MNEMONIC_REG.test(key)) {
 			console.log(key);
 		}
 	}

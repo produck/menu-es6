@@ -2,6 +2,7 @@ import * as Dom from 'dom';
 import * as _MENU from '@/symbol/menu';
 import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/submenu';
 import { ACTIVE } from '@/symbol/base';
+import { MNEMONIC_REG } from '@/utils';
 
 const container = Dom.createElement('div');
 const CONTAINER_STYLE = {
@@ -99,8 +100,6 @@ const KEY_MAP_OPERATION = {
 	Enter: tryActive
 };
 
-const KEY_REG = /^[a-z]$/i;
-
 Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
 Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
 Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
@@ -109,7 +108,7 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 	if (currentMenu) {
 		if (key in KEY_MAP_OPERATION) {
 			KEY_MAP_OPERATION[key](event);
-		} else if (KEY_REG.test(key)) {
+		} else if (MNEMONIC_REG.test(key)) {
 			const topMenu = getTopMenu();
 
 			if (topMenu[_MENU.NEXT](key.toLowerCase())) {

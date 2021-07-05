@@ -1,5 +1,5 @@
 import * as Dom from 'dom';
-import { throwError, VAR, Var } from '@/utils';
+import { isArray, isBoolean, isFunction, throwError, VAR, Var } from '@/utils';
 
 import {
 	FunctionMenuItem,
@@ -97,9 +97,6 @@ export class ClickableMenuItem extends FunctionMenuItem {
 }
 
 const DEFAULT_CLICK_FN = () => console.warn(undefined);
-const isFunction = any => typeof any === 'function';
-const isBoolean = any => typeof any === 'boolean';
-const isArray = any => Array.isArray(any);
 
 export function normalize(_options) {
 	const options = Dom.ASSIGN({

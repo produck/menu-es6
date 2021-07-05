@@ -1,6 +1,6 @@
 import * as Dom from 'dom';
 import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
-import { Var, VAR, resolveLabelText, FRAGEMENT, MNEMONIC, throwError } from '@/utils';
+import { Var, VAR, resolveLabelText, FRAGEMENT, MNEMONIC, throwError, isString } from '@/utils';
 
 import * as _ from '@/symbol/function';
 import * as _MENU from '@/symbol/menu';
@@ -92,7 +92,7 @@ export function normalize(_options) {
 		icon: _icon = options.icon
 	} = _options;
 
-	if (typeof _label !== 'string') {
+	if (!isString(_label)) {
 		throwError('A menu item label MUST be a string.');
 	}
 

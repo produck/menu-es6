@@ -1,4 +1,4 @@
-import { throwError } from '@/utils';
+import { isArray, isFunction, throwError } from '@/utils';
 
 const NORMALIZER = 'n', TYPE = 't';
 const TYPE_NORMALIZER_MAP = [];
@@ -13,8 +13,6 @@ const normalize = (options) => {
 	return pair[NORMALIZER](options);
 };
 
-const isArray = any => Array.isArray(any);
-
 export const normalizeMenuOptions = (_options) => {
 	if (!isArray(_options)) {
 		throwError('Menu options MUST be an array.');
@@ -28,7 +26,7 @@ export const normalizeMenuOptions = (_options) => {
 		const NORMALIZE_ITEM_OPTIONS = options => normalize(options);
 
 		return _groupOptions.reduce((itemOptionsList, itemOptions) => {
-			const finalItemOptionsList = typeof itemOptions === 'function'
+			const finalItemOptionsList = isFunction(itemOptions)
 				? itemOptions().map(NORMALIZE_ITEM_OPTIONS)
 				: [NORMALIZE_ITEM_OPTIONS(itemOptions)];
 
