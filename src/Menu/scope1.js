@@ -102,6 +102,10 @@ const KEY_MAP_OPERATION = {
 Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
 Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
 
+export const state = {
+
+};
+
 Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 	const { key } = event;
 

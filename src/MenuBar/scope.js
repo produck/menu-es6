@@ -74,15 +74,14 @@ const KEY_MAP_OPERATION = {
 		}
 	},
 	Escape: () => {
-		if (state[_.MENU] && state[_.MENU].closed) {
+		if (lang.isNull(state[_.MENU]) || state[_.MENU].closed) {
 			if (state[_.MENU_BAR][_BAR.ACTIVE]) {
 				state[_.MENU_BAR][_BAR.ACTIVE] = false;
+				state[_.MENU] = null;
 			} else if (state[_.MENU_BAR][_BAR.FOCUSING_BUTTON]) {
 				state[_.MENU_BAR][_BAR.FOCUSING_BUTTON] = null;
 				state[_.SELECTING] = false;
 			}
-
-			state[_.MENU] = null;
 		}
 	}
 };

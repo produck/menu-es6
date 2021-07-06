@@ -5,7 +5,7 @@ import { Var, VAR } from '@/utils';
 import { AbstractMenu } from './Base';
 import { SpearatorMenuItem } from './Spearator';
 import { normalizeMenuOptions } from '../normalize';
-import { appendMenu } from '../Scope';
+import { appendMenu } from '../scope1';
 
 import {
 	FunctionMenuItem,

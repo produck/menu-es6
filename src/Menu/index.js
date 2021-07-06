@@ -3,7 +3,7 @@ import { ClickableMenuItem, normalize as normalizeClickableMenuItemOptions } fro
 import { SubmenuMenuItem, Menu, normalize as normalizeSubmenuMenuItemOptions, relayoutMenu } from './Item/Submenu';
 import { SpearatorMenuItem, normalize as normalizeSpearatorMenuItemOptions } from './Item/Spearator';
 import * as MenuItem from './Item/index';
-import { closeAllMenu, setCurrentMenu, appendMenu, currentMenu } from './Scope';
+import { closeAllMenu, setCurrentMenu, appendMenu, currentMenu } from './scope1';
 
 import * as _M from '@/symbol/menu';
 import * as _S from '@/symbol//submenu';
