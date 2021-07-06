@@ -4,7 +4,7 @@ import { popup } from '@/Menu/index';
 import { FRAGEMENT, MNEMONIC, resolveLabelText, VAR, Var } from '@/utils';
 
 export const MENU_BUTTON_OUTER_STYLE = {
-	padding: `0 ${Var(VAR.SPACE_SM)}`,
+	padding: `0 ${Var(VAR.SIZE_SM)}`,
 };
 
 import * as _ from '@/symbol/button';

@@ -10,16 +10,16 @@ import * as _BASE from '@/symbol/base';
 const MENU_ITEM_ROW_STYLE_DEFAULT = {
 	'cursor': 'pointer',
 	color: Var(VAR.FRONTGROUND_COLOR),
-	'background-color': 'transparent'
+	'background': 'transparent'
 };
 
 const MENU_ITEM_ROW_STYLE_ON_FOCUS = {
 	color: Var(VAR.ACTIVE_FRONTGROUND_COLOR),
-	'background-color': Var(VAR.ACTIVE_BACKGROUND_COLOR)
+	'background': Var(VAR.ACTIVE_BACKGROUND_COLOR)
 };
 
 const MENU_ITEM_TEXT_STYLE = {
-	'height': Var(VAR.FUNCTION_ITEM_HEIGHT)
+	'height': Var(VAR.SIZE_LG)
 };
 
 const ICON_SPAN_STYLE = {
@@ -28,7 +28,7 @@ const ICON_SPAN_STYLE = {
 
 export const MENU_ITEM_LABEL_SPAN_STYLE = {
 	'flex-grow': '1',
-	'padding': `0 ${Var(VAR.FUNCTION_ITEM_WHITESPACE)}`,
+	'padding': `0 ${Var(VAR.SIZE_LG)}`,
 };
 
 export class FunctionMenuItem extends BaseMenuItem {
@@ -109,5 +109,5 @@ export const normalize = (_options) => {
 export const MENU_ITEM_ICON_BOX_STYLE = {
 	position: 'absolute',
 	height: '100%',
-	width: Var(VAR.FUNCTION_ITEM_WHITESPACE)
+	width: Var(VAR.SIZE_LG)
 };

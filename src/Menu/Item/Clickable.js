@@ -18,7 +18,7 @@ const CHECKING_POSITION_STYLE = { top: 0, left: 0 };
 
 const MENU_ITEM_ROW_STYLE_ON_DISABLED = {
 	color: Var(VAR.DISABLED_FRONTGROUND_COLOR),
-	'background-color': 'transparent',
+	'background': 'transparent',
 	cursor: 'default'
 };
 

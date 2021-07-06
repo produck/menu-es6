@@ -17,17 +17,29 @@ export const state = {
 const isReady =
 	() => !lang.isNull(state[_.CONTAINER]) && !lang.isNull(state[_.MENU_BAR]);
 
+let holding = false;
+
+Dom.addEventListener(Dom.WINDOW, 'keyup', event => {
+	if (event.key === 'Alt') {
+		holding = false;
+	}
+});
+
 const KEY_MAP_OPERATION = {
 	Alt: () => {
-		const buttonList = state[_.MENU_BAR][_BAR.BUTTON_LIST];
+		if (!holding) {
+			holding = true;
 
-		if (buttonList.length > 0) {
-			if (lang.isNull(state[_.MENU_BAR][_BAR.FOCUSING_BUTTON])) {
-				closeAllMenu();
-				state[_.SELECTING] = state[_.MENU_BAR][_BAR.HAS_MNEMONIC] = true;
-				state[_.MENU_BAR][_BAR.FOCUSING_BUTTON] = buttonList[0];
-			} else {
-				resetMenuBar();
+			const buttonList = state[_.MENU_BAR][_BAR.BUTTON_LIST];
+
+			if (buttonList.length > 0) {
+				if (lang.isNull(state[_.MENU_BAR][_BAR.FOCUSING_BUTTON])) {
+					closeAllMenu();
+					state[_.SELECTING] = state[_.MENU_BAR][_BAR.HAS_MNEMONIC] = true;
+					state[_.MENU_BAR][_BAR.FOCUSING_BUTTON] = buttonList[0];
+				} else {
+					resetMenuBar();
+				}
 			}
 		}
 	},
@@ -79,8 +91,12 @@ const KEY_MAP_OPERATION = {
 const resetMenuBar = () => {
 	if (isReady()) {
 		state[_.MENU_BAR][_BAR.FOCUSING_BUTTON] = null;
-		state[_.MENU_BAR][_BAR.ACTIVE] =
-			state[_.MENU_BAR][_BAR.HAS_MNEMONIC] = state[_.SELECTING] = false;
+
+		holding =
+			state[_.MENU_BAR][_BAR.ACTIVE] =
+			state[_.MENU_BAR][_BAR.HAS_MNEMONIC] =
+			state[_.SELECTING] =
+			false;
 	}
 };
 
@@ -93,7 +109,6 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 		const key = event.key;
 
 		if (key in KEY_MAP_OPERATION) {
-			Dom.PREVENT_DEFAULT(event);
 			KEY_MAP_OPERATION[key]();
 		} else if (MNEMONIC_REG.test(key)) {
 			if (current.closed) {

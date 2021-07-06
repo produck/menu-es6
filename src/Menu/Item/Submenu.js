@@ -21,17 +21,16 @@ import { Expandable } from './Expandable';
 const MENU_STYLE = {
 	display: 'block',
 	position: 'fixed',
-	margin: '0',
-	padding: `${Var(VAR.WHITESPACE_Y)} 0`,
+	margin: 0,
+	padding: `${Var(VAR.SIZE_SM)} 0`,
 	'white-space': 'nowrap',
 	'border': '1px solid transparent',
-	'line-height': Var(VAR.FUNCTION_ITEM_HEIGHT),
-	'background-color': Var(VAR.BACKGROUND_COLOR),
+	'line-height': Var(VAR.SIZE_LG),
+	'background': Var(VAR.BACKGROUND_COLOR),
 	'color': Var(VAR.FRONTGROUND_COLOR),
 	'user-select': 'none',
 	'opacity': 0,
-	'transition-property': 'opacity',
-	'transition-duration': '0.3s'
+	'transition': 'opacity 0.3s',
 };
 
 const IS_FOCUSABLE_ITEM = item => item[_B.FOCUSABLE];
