@@ -54,12 +54,12 @@ export default moduleList.map(config => {
 		pluginList.push(terser());
 	}
 
-	// pluginList.push(eslint({
-	// 	throwOnError: true,
-	// 	throwOnWarning: true,
-	// 	include: ['src/**'],
-	// 	exclude: ['node_modules/**']
-	// }));
+	pluginList.push(eslint({
+		throwOnError: true,
+		throwOnWarning: true,
+		include: ['src/**'],
+		exclude: ['node_modules/**']
+	}));
 
 	return defineConfig({
 		input: path.resolve('index.js'),

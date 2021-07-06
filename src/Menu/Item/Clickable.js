@@ -131,7 +131,7 @@ export const  normalize = (_options) => {
 	}
 
 	options.accelerator = _accelerator.map(_bar => {
-		if (!lang.instanceOf(_bar, DocumentFragment)) {
+		if (!lang.instanceOf(_bar, Dom.DOCUMENT_FRAGEMENT)) {
 			lang.throwError('A `.accelerator` MUST be a `DocumentFragement`.');
 		}
 
@@ -143,4 +143,4 @@ export const  normalize = (_options) => {
 	options.isDisabled = _isDisabled;
 
 	return options;
-}
+};

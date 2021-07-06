@@ -59,8 +59,6 @@ export class MenuBar {
 		if (value !== this[_._ACTIVE]) {
 			const barElement = this[_.BAR_ELEMENT];
 
-			this[_._ACTIVE] = value;
-
 			if (value) {
 				Dom.addClass(barElement, 'active');
 				state[_SCOPE.SELECTING] = true;
@@ -73,6 +71,8 @@ export class MenuBar {
 				closeAllMenu();
 				state[_SCOPE.MENU] = null;
 			}
+
+			this[_._ACTIVE] = value;
 		}
 	}
 

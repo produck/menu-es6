@@ -5,6 +5,7 @@ import { MNEMONIC_REG } from '@/utils';
 
 import * as _BAR from '@/symbol/bar';
 import * as _ from '@/symbol/menubar-scope';
+import { closeAllMenu } from '@/Menu/index';
 
 export const state = {
 	[_.CONTAINER]: null,
@@ -22,6 +23,7 @@ const KEY_MAP_OPERATION = {
 
 		if (buttonList.length > 0) {
 			if (lang.isNull(state[_.MENU_BAR][_BAR.FOCUSING_BUTTON])) {
+				closeAllMenu();
 				state[_.SELECTING] = true;
 				state[_.MENU_BAR][_BAR.HAS_MNEMONIC] = true;
 				state[_.MENU_BAR][_BAR.FOCUSING_BUTTON] = buttonList[0];

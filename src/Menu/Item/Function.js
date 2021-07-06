@@ -97,7 +97,7 @@ export const normalize = (_options) => {
 		lang.throwError('A menu item label MUST be a string.');
 	}
 
-	if (!lang.isNull(_icon) && !lang.instanceOf(_icon, DocumentFragment)) {
+	if (!lang.isNull(_icon) && !lang.instanceOf(_icon, Dom.DOCUMENT_FRAGEMENT)) {
 		lang.throwError('A menu item icon MUST be a DocumentFragment.');
 	}
 

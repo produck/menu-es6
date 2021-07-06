@@ -1,14 +1,15 @@
 export const DOCUMENT = document, WINDOW = window;
 export const BODY = DOCUMENT.body;
 export const REQUEST_ANIMATION_FRAME = requestAnimationFrame;
+export const DOCUMENT_FRAGEMENT = DocumentFragment;
 
 /**
  * @param {HTMLElement} element
  * @param {string} eventType
  * @param {EventListener} listener
  */
-export const addEventListener = (element, eventType, listener, options) => {
-	element.addEventListener(eventType, listener, options);
+export const addEventListener = (element, eventType, listener) => {
+	element.addEventListener(eventType, listener);
 };
 
 export const removeEventListener = (element, eventType, listener) => {

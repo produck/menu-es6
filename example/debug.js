@@ -1,8 +1,6 @@
 import '../theme/default.css';
 import './debug.css';
-import { popup, MenuItem } from '@/Menu/index';
-import * as MenuBar from '@/MenuBar/index';
-
+import { popup, MenuItem, Bar as MenuBar } from '../index';
 
 window.addEventListener('load', function () {
 	const test = document.createElement('div');
