@@ -61,4 +61,4 @@ export const normalize = (_options) => {
 	options.type = _type;
 
 	return options;
-}
+};
