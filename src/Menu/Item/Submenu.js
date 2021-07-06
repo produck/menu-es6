@@ -5,10 +5,9 @@ import { Var, VAR } from '@/utils';
 import { AbstractMenu } from './Base';
 import { SpearatorMenuItem } from './Spearator';
 import { normalizeMenuOptions } from '../normalize';
-import { appendMenu } from '../scope1';
+import { appendMenu } from '../scope';
 
 import {
-	FunctionMenuItem,
 	normalize as normalizeFunctionMenuItemOptions,
 	MENU_ITEM_ICON_BOX_STYLE
 } from './Function';
@@ -17,6 +16,7 @@ import * as _S from '@/symbol/submenu';
 import * as _B from '@/symbol/base';
 import * as _F from '@/symbol/function';
 import * as _M from '@/symbol/menu';
+import { Expandable } from './Expandable';
 
 const MENU_STYLE = {
 	display: 'block',
@@ -208,7 +208,7 @@ export const relayoutMenu = (menuElement, rect) => {
 	//TODO resize
 };
 
-export class SubmenuMenuItem extends FunctionMenuItem {
+export class SubmenuMenuItem extends Expandable {
 	constructor(menu, options) {
 		super(menu, options);
 

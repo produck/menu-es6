@@ -4,6 +4,7 @@ import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/submenu';
 import { ACTIVE } from '@/symbol/base';
 import { MNEMONIC_REG } from '@/utils';
 import * as lang from 'lang';
+import { Expandable } from './Item/Expandable';
 
 const container = Dom.createElement('div');
 const CONTAINER_STYLE = {
@@ -19,7 +20,7 @@ Dom.setStyle(container, CONTAINER_STYLE);
 Dom.addClass(container, 'menu-scope');
 Dom.appendChild(Dom.BODY, container);
 
-export let currentMenu = null;
+let currentMenu = null;
 
 export const setCurrentMenu = (menu, blocking = false) => {
 	closeAllMenu();
@@ -39,6 +40,7 @@ export const closeAllMenu = () => {
 	if (!lang.isNull(currentMenu)) {
 		currentMenu[_MENU.CLOSE]();
 		currentMenu = null;
+		expandable = expanding = null;
 		Dom.setStyle(container, { width: 0 });
 	}
 };
@@ -102,18 +104,37 @@ const KEY_MAP_OPERATION = {
 Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
 Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
 
-export const state = {
+let expanding = null, expandable = null;
 
-};
+export const current = Object.freeze({
+	get expanding() {
+		return expanding;
+	},
+	get expandable() {
+		return expandable;
+	},
+	get closed() {
+		return lang.isNull(currentMenu);
+	},
+	next() {
+		if (currentMenu) {
+			currentMenu[_MENU.NEXT]();
+		}
+	}
+});
 
 Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 	const { key } = event;
 
 	if (currentMenu) {
+		const topMenu = getTopMenu();
+
+		expanding = !lang.isNull(currentMenu[_MENU.EXPANDING_ITEM]);
+		expandable = lang.instanceOf(topMenu[_MENU.FOCUSING_ITEM], Expandable);
+
 		if (key in KEY_MAP_OPERATION) {
 			KEY_MAP_OPERATION[key](event);
 		} else if (MNEMONIC_REG.test(key)) {
-			const topMenu = getTopMenu();
 
 			if (topMenu[_MENU.NEXT](key.toLowerCase())) {
 				topMenu[_MENU.FOCUSING_ITEM][ACTIVE]();

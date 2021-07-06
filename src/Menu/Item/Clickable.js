@@ -9,10 +9,10 @@ import {
 	MENU_ITEM_ICON_BOX_STYLE
 } from './Function';
 
-import { closeAllMenu } from '../scope1';
 import * as _BASE from '@/symbol/base';
 import * as _ from '@/symbol/clickable';
 import * as _FUNCTION from '@/symbol/function';
+import { closeAllMenu } from '../scope';
 
 const CHECKING_POSITION_STYLE = { top: 0, left: 0 };
 
@@ -87,9 +87,8 @@ export class ClickableMenuItem extends FunctionMenuItem {
 	}
 
 	[_.CLICK]() {
-		Dom.REQUEST_ANIMATION_FRAME(closeAllMenu);
 		this[_.CLICK_LISTENER]();
-		Dom.dispatchEvent(Dom.WINDOW, Dom.createEvent('-click-end'));
+		closeAllMenu();
 	}
 
 	[_BASE.ACTIVE]() {

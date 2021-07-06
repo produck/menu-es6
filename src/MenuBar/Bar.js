@@ -29,6 +29,7 @@ export class MenuBar {
 
 		Dom.addEventListener(container, 'click', () => this[_.ACTIVE] = !this[_.ACTIVE]);
 		Dom.addEventListener(container, 'mousedown', Dom.STOP_PROPAGATION);
+		Dom.addEventListener(container, 'mouseup', Dom.STOP_PROPAGATION);
 		Dom.addEventListener(container, 'contextmenu', Dom.STOP_AND_PREVENT);
 		Dom.addEventListener(container, 'mouseleave', () => {
 			if (!this[_.ACTIVE]) {
@@ -69,7 +70,6 @@ export class MenuBar {
 			} else {
 				Dom.removeClass(barElement, 'active');
 				closeAllMenu();
-				state[_SCOPE.MENU] = null;
 			}
 
 			this[_._ACTIVE] = value;

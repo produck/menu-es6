@@ -2,7 +2,6 @@ import * as Dom from 'dom';
 
 import { popup } from '@/Menu/index';
 import { FRAGEMENT, MNEMONIC, resolveLabelText, VAR, Var } from '@/utils';
-import { state } from './scope';
 
 export const MENU_BUTTON_OUTER_STYLE = {
 	padding: `0 ${Var(VAR.SPACE_SM)}`,
@@ -10,7 +9,6 @@ export const MENU_BUTTON_OUTER_STYLE = {
 
 import * as _ from '@/symbol/button';
 import * as _B from '@/symbol/bar';
-import * as _SCOPE from '@/symbol/menubar-scope';
 
 export class MenuBarButton {
 	constructor(menuBar, options) {
@@ -53,7 +51,7 @@ export class MenuBarButton {
 	[_.OPEN_MENU]() {
 		const { left, bottom } = Dom.getRect(this[_.OUTER_ELEMENT]);
 
-		state[_SCOPE.MENU] = popup(this[_.MENU_OPTIONS], {
+		popup(this[_.MENU_OPTIONS], {
 			position: { x: left, y: bottom },
 			mnemonic: this[_.MENU_BAR][_B.HAS_MNEMONIC]
 		});

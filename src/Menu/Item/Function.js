@@ -18,7 +18,6 @@ const MENU_ITEM_ROW_STYLE_ON_FOCUS = {
 	'background-color': Var(VAR.ACTIVE_BACKGROUND_COLOR)
 };
 
-
 const MENU_ITEM_TEXT_STYLE = {
 	'height': Var(VAR.FUNCTION_ITEM_HEIGHT)
 };

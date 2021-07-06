@@ -3,10 +3,9 @@ import { ClickableMenuItem, normalize as normalizeClickableMenuItemOptions } fro
 import { SubmenuMenuItem, Menu, normalize as normalizeSubmenuMenuItemOptions, relayoutMenu } from './Item/Submenu';
 import { SpearatorMenuItem, normalize as normalizeSpearatorMenuItemOptions } from './Item/Spearator';
 import * as MenuItem from './Item/index';
-import { closeAllMenu, setCurrentMenu, appendMenu, currentMenu } from './scope1';
+import { closeAllMenu, setCurrentMenu, appendMenu, current } from './scope';
 
 import * as _M from '@/symbol/menu';
-import * as _S from '@/symbol//submenu';
 import { getCurrentPosition } from '@/utils';
 import * as lang from 'lang';
 
@@ -14,7 +13,7 @@ registerMenuItem(ClickableMenuItem, normalizeClickableMenuItemOptions);
 registerMenuItem(SubmenuMenuItem, normalizeSubmenuMenuItemOptions);
 registerMenuItem(SpearatorMenuItem, normalizeSpearatorMenuItemOptions);
 
-export { MenuItem, normalizeMenuOptions as normalize, closeAllMenu };
+export { MenuItem, normalizeMenuOptions as normalize, closeAllMenu, current };
 
 export const getPositionFromEvent = event => ({ x: event.clientX, y: event.clientY });
 
@@ -70,27 +69,6 @@ const MockRectFromPosition = position => {
 	};
 };
 
-const MenuController = menu => {
-	return {
-		next: () => menu[_M.NEXT](),
-		get expanding() {
-			return !lang.isNull(menu[_M.EXPANDING_ITEM]);
-		},
-		get expandable() {
-			let current = menu;
-
-			while (current[_M.EXPANDING_ITEM]) {
-				current = current[_M.EXPANDING_ITEM][_S.EXPANDED_MENU];
-			}
-
-			return lang.instanceOf(current[_M.FOCUSING_ITEM], SubmenuMenuItem);
-		},
-		get closed() {
-			return currentMenu !== menu;
-		}
-	};
-};
-
 export const popup = (menuOptions, modifierOptions) => {
 	const { position, mnemonic, blocking } = normalizeModifier(modifierOptions);
 	const menu = Menu[_M.S_CREATE](menuOptions, mnemonic);
@@ -99,6 +77,4 @@ export const popup = (menuOptions, modifierOptions) => {
 	appendMenu(menu);
 	menu[_M.SET_OFFSET](position);
 	relayoutMenu(menu[_M.MENU_ELEMENT], MockRectFromPosition(position));
-
-	return MenuController(menu);
 };

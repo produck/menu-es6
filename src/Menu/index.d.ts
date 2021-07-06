@@ -58,8 +58,8 @@ interface Modifier {
 }
 
 interface MenuController {
-	close(): void;
 	next(): void;
+	readonly closed: boolean;
 	readonly expandable: boolean;
 	readonly expanding: boolean;
 }
@@ -69,3 +69,5 @@ export function popup(menuOptions: Options.Menu, modifierOptions?: Modifier): Me
 export function getPositionFromEvent(event: MouseEvent): Position;
 
 export function closeAllMenu(): void;
+
+export const current: MenuController;
