@@ -7,7 +7,6 @@ import { terser } from'rollup-plugin-terser';
 import livereload from'rollup-plugin-livereload';
 import serve from'rollup-plugin-serve';
 import html from'@rollup/plugin-html';
-import scss from'rollup-plugin-scss';
 
 const DIST_DIR = path.join(__dirname, '../.dev');
 
@@ -31,10 +30,6 @@ export default defineConfig({
 		eslint(),
 		serve({ host: '0.0.0.0', port: 3000, contentBase: DIST_DIR }),
 		livereload({ watch: DIST_DIR }),
-		// scss({
-		// 	// output: false
-		// 	output: path.join(DIST_DIR, 'defalut.css')
-		// }),
 		postcss({
 			extensions: ['.css']
 		}),

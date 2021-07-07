@@ -7,21 +7,6 @@ import * as _ from '@/symbol/function';
 import * as _MENU from '@/symbol/menu';
 import * as _BASE from '@/symbol/base';
 
-const MENU_ITEM_ROW_STYLE_DEFAULT = {
-	'cursor': 'pointer',
-	color: Var(VAR.FRONTGROUND_COLOR),
-	'background': 'transparent'
-};
-
-const MENU_ITEM_ROW_STYLE_ON_FOCUS = {
-	color: Var(VAR.ACTIVE_FRONTGROUND_COLOR),
-	'background': Var(VAR.ACTIVE_BACKGROUND_COLOR)
-};
-
-const MENU_ITEM_TEXT_STYLE = {
-	'height': Var(VAR.SIZE_LG)
-};
-
 const ICON_SPAN_STYLE = {
 	'margin-right': '0.5em'
 };
@@ -49,13 +34,11 @@ export class FunctionMenuItem extends BaseMenuItem {
 
 		Dom.addClass(labelSpan, 'menu-item-label');
 		Dom.setStyle(labelSpan, MENU_ITEM_LABEL_SPAN_STYLE);
-		Dom.setStyle(textElement, MENU_ITEM_TEXT_STYLE);
 		Dom.appendChild(textElement, labelSpan);
 
 		const result = resolveLabelText(options.label, !menu[_MENU.HAS_MNEMONIC]);
 
 		Dom.appendChild(labelSpan, result[FRAGEMENT]);
-		Dom.setStyle(this[_BASE.ROW_ELEMENT], MENU_ITEM_ROW_STYLE_DEFAULT);
 
 		this[_.LABEL_SPAN] = labelSpan;
 		this[_BASE.LISTEN_ENTER](() => menu[_MENU.FOCUS_ITEM](this));
@@ -63,16 +46,12 @@ export class FunctionMenuItem extends BaseMenuItem {
 	}
 
 	[_.FOCUS]() {
-		const rowElement = this[_BASE.ROW_ELEMENT];
-
-		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE_ON_FOCUS);
-		Dom.addClass(rowElement, 'focus');
+		Dom.addClass(this[_BASE.ROW_ELEMENT], 'focus');
 	}
 
 	[_.BLUR]() {
 		const rowElement = this[_BASE.ROW_ELEMENT];
 
-		Dom.setStyle(rowElement, MENU_ITEM_ROW_STYLE_DEFAULT);
 		Dom.removeClass(rowElement, 'focus');
 	}
 
@@ -113,5 +92,6 @@ export const normalize = (_options) => {
 export const MENU_ITEM_ICON_BOX_STYLE = {
 	position: 'absolute',
 	height: '100%',
-	width: Var(VAR.SIZE_LG)
+	width: Var(VAR.SIZE_LG),
+	'text-align': 'center'
 };

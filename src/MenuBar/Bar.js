@@ -16,7 +16,6 @@ export const MENU_BAR_STYLE = {
 	height: `${Var(VAR.BAR_HEIGHT)}`,
 	'line-height': `${Var(VAR.BAR_HEIGHT)}`,
 	'font-size': Var(VAR.SIZE_MD),
-	background: Var(VAR.BACKGROUND_COLOR),
 	color: Var(VAR.FRONTGROUND_COLOR)
 };
 

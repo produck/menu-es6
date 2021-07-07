@@ -1,6 +1,6 @@
 import '../src/style.scss';
 import './debug.css';
-import { popup, MenuItem, Bar as MenuBar } from '../index';
+import { popup, MenuItem, Bar as MenuBar } from '../src/index';
 
 window.addEventListener('load', function () {
 	const test = document.createElement('div');

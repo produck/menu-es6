@@ -41,11 +41,11 @@ export class MenuBarButton {
 	}
 
 	[_.FOCUS]() {
-		Dom.addClass(this[_.OUTER_ELEMENT], 'focused');
+		Dom.addClass(this[_.OUTER_ELEMENT], 'focus');
 	}
 
 	[_.BLUR]() {
-		Dom.removeClass(this[_.OUTER_ELEMENT], 'focused');
+		Dom.removeClass(this[_.OUTER_ELEMENT], 'focus');
 	}
 
 	[_.OPEN_MENU]() {

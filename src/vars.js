@@ -1,18 +1,14 @@
 const
 	COLOR = 'color',
-	ACTIVE = 'active',
-	DISABLED = 'disabled',
 	BACKGROUND = 'back',
 	FRONTGROUND = 'front';
 
 export const
-	DISABLED_BACKGROUND_COLOR = `${DISABLED}-${BACKGROUND}-${COLOR}`,
-	DISABLED_FRONTGROUND_COLOR = `${DISABLED}-${FRONTGROUND}-${COLOR}`,
-	ACTIVE_BACKGROUND_COLOR = `${ACTIVE}-${BACKGROUND}-${COLOR}`,
-	ACTIVE_FRONTGROUND_COLOR = `${ACTIVE}-${FRONTGROUND}-${COLOR}`,
+	MUTE_FRONT_COLOR = 'mute-front-color',
 	BACKGROUND_COLOR = `${BACKGROUND}-${COLOR}`,
 	FRONTGROUND_COLOR = `${FRONTGROUND}-${COLOR}`,
 	SIZE_SM = 'size-sm',
 	SIZE_MD = 'size-md',
 	SIZE_LG = 'size-lg',
-	BAR_HEIGHT = 'bar-height';
+	BAR_HEIGHT = 'bar-height',
+	ANIMATION_DURATION = 'animation-duration';

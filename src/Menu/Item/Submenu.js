@@ -30,7 +30,7 @@ const MENU_STYLE = {
 	'color': Var(VAR.FRONTGROUND_COLOR),
 	'user-select': 'none',
 	'opacity': 0,
-	'transition': 'opacity 0.3s',
+	'transition': `opacity ${Var(VAR.ANIMATION_DURATION)}`,
 };
 
 const IS_FOCUSABLE_ITEM = item => item[_B.FOCUSABLE];

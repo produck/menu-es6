@@ -7,7 +7,7 @@ import * as _BASE from '@/symbol/base';
 
 const SPEARATOR_MENU_ITEM_STYLE = {
 	display: 'block',
-	'border-bottom': `1px solid ${Var(VAR.DISABLED_FRONTGROUND_COLOR)}`,
+	'border-bottom': `1px solid ${Var(VAR.MUTE_FRONT_COLOR)}`,
 	'margin': `${Var(VAR.SIZE_SM)} ${Var(VAR.SIZE_MD)}`,
 };
 

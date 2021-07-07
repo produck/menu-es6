@@ -1,6 +1,5 @@
 import * as Dom from 'dom';
 import * as lang from 'lang';
-import { VAR, Var } from '@/utils';
 
 import {
 	FunctionMenuItem,
@@ -17,8 +16,7 @@ import { closeAllMenu } from '../scope';
 const CHECKING_POSITION_STYLE = { top: 0, left: 0 };
 
 const MENU_ITEM_ROW_STYLE_ON_DISABLED = {
-	color: Var(VAR.DISABLED_FRONTGROUND_COLOR),
-	background: 'transparent',
+	opacity: 0.4,
 	cursor: 'default'
 };
 

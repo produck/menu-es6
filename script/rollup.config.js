@@ -47,7 +47,7 @@ export default moduleList.map(config => {
 				{ find: 'lang', replacement: path.join(__dirname, '../src/lang.js') },
 				{ find: '@', replacement: path.join(__dirname, '../src') }
 			]
-		}),
+		})
 	];
 
 	if (config.isUglify) {
@@ -62,7 +62,7 @@ export default moduleList.map(config => {
 	}));
 
 	return defineConfig({
-		input: path.resolve('index.js'),
+		input: path.resolve('src/index.js'),
 		output: {
 			file: config.output,
 			format: config.format,
