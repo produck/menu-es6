@@ -6,7 +6,6 @@ import { throwError } from '@/utils';
 
 const MENU_ITEM_ROW_STYLE = {
 	display: 'block',
-	position: 'static',
 	'border': '1px solid transparent'
 };
 

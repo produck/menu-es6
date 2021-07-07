@@ -1,0 +1,49 @@
+$unit-size: 6px;
+
+$size-map: (
+	sm: $unit-size,
+	md: $unit-size * 2,
+	lg: $unit-size * 4
+);
+
+:root {
+	@each $name, $size in $size-map {
+		--menu-size-#{$name}: #{$size};
+	}
+
+	--menu-bar-height: #{map-get($size-map, lg) * 1.25};
+
+	--menu-back-color: rgb(60, 60, 60);
+	--menu-front-color: rgb(204, 204, 204);
+	--menu-active-back-color: #66F;
+	--menu-active-front-color: #fff;
+	--menu-disabled-back-color: 'transparent';
+	--menu-disabled-front-color: #999;
+}
+
+div.menu-bar {
+	div.menu-bar-button.focused {
+		background-color: rgba(255, 255, 255, 0.1);
+	}
+}
+
+div.menu-scope {
+	ul.menu {
+		box-shadow: 0 1px 1px 0 #000;
+	}
+
+	span.menu-item-expanding::before {
+		content: '>';
+	}
+
+	span.menu-item-checkbox,
+	span.menu-item-expanding {
+		text-align: center;
+	}
+
+	li.menu-item.checked {
+		span.menu-item-checkbox::before {
+			content: '√';
+		}
+	}
+}

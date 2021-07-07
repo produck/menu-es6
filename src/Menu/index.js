@@ -75,6 +75,5 @@ export const popup = (menuOptions, modifierOptions) => {
 
 	setCurrentMenu(menu, blocking);
 	appendMenu(menu);
-	menu[_M.SET_OFFSET](position);
 	relayoutMenu(menu[_M.MENU_ELEMENT], MockRectFromPosition(position));
 };

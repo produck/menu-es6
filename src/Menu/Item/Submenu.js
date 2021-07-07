@@ -9,14 +9,14 @@ import { appendMenu } from '../scope';
 
 import {
 	normalize as normalizeFunctionMenuItemOptions,
-	MENU_ITEM_ICON_BOX_STYLE
+	MENU_ITEM_ICON_BOX_STYLE,
+	FunctionMenuItem
 } from './Function';
 
 import * as _S from '@/symbol/submenu';
 import * as _B from '@/symbol/base';
 import * as _F from '@/symbol/function';
 import * as _M from '@/symbol/menu';
-import { Expandable } from './Expandable';
 
 const MENU_STYLE = {
 	display: 'block',
@@ -148,17 +148,6 @@ export class Menu extends AbstractMenu {
 		return false;
 	}
 
-	/**
-	 * Adjustment for avoiding a popuped menu overflow.
-	 *
-	 * @param {{x: number, y:number}} position
-	 */
-	[_M.SET_OFFSET](position) {
-		Dom.setStyle(this[_M.MENU_ELEMENT], {
-			top: `${position.y}px`, left: `${position.x}px`
-		});
-	}
-
 	static [_M.S_CREATE](options, hasMnemonic) {
 		const finalOptions = normalizeMenuOptions(options);
 		const menu = new this();
@@ -189,25 +178,32 @@ const ICON_POSITION_STYLE = { right: 0, top: 0 };
  * @param {HTMLElement} menuElement
  * @param {DOMRect} rect
  */
-export const relayoutMenu = (menuElement, rect) => {
+export const relayoutMenu = (menuElement, rect, offsetX = 0, offsetY = 0) => {
+	const bottom = rect.bottom;
+	const top = rect.top - offsetY;
+	const right = rect.right + offsetX;
+	const left = rect.left;
+
+	Dom.setStyle(menuElement, { top: `${top}px`, left: `${right}px` });
+
 	const menuRect = Dom.getRect(menuElement);
 
 	if (menuRect.bottom > Dom.WINDOW.innerHeight) {
 		Dom.setStyle(menuElement, {
-			top: `${rect.bottom - menuElement.offsetHeight}px`
+			top: `${bottom - menuElement.offsetHeight}px`
 		});
 	}
 
 	if (menuRect.right > Dom.WINDOW.innerWidth) {
 		Dom.setStyle(menuElement, {
-			left: `${rect.left - menuElement.offsetWidth}px`
+			left: `${left - menuElement.offsetWidth}px`
 		});
 	}
 
 	//TODO resize
 };
 
-export class SubmenuMenuItem extends Expandable {
+export class SubmenuMenuItem extends FunctionMenuItem {
 	constructor(menu, options) {
 		super(menu, options);
 
@@ -230,8 +226,7 @@ export class SubmenuMenuItem extends Expandable {
 			menu[_M.OPENER] = this;
 			this[_S.EXPANDED_MENU] = menu;
 			appendMenu(menu);
-			menu[_M.SET_OFFSET]({ x: rect.right, y: rect.top });
-			relayoutMenu(menu[_M.MENU_ELEMENT], rect);
+			relayoutMenu(menu[_M.MENU_ELEMENT], rect, 1, 7);
 		}
 	}
 
@@ -247,6 +242,10 @@ export class SubmenuMenuItem extends Expandable {
 	[_B.ACTIVE]() {
 		this[_S.EXPAND]();
 		this[_S.EXPANDED_MENU][_M.NEXT]();
+	}
+
+	[_F.EXPANDABLE]() {
+		return true;
 	}
 }
 

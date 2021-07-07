@@ -79,6 +79,10 @@ export class FunctionMenuItem extends BaseMenuItem {
 	get [_BASE.FOCUSABLE]() {
 		return true;
 	}
+
+	get [_.EXPANDABLE]() {
+		return false;
+	}
 }
 
 export const normalize = (_options) => {

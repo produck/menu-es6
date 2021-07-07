@@ -3,4 +3,5 @@ export const
 	BLUR = 'r',
 	LABEL_SPAN = 'l',
 	FOCUSING = 'f',
-	MNEMONIC = 'g';
+	MNEMONIC = 'g',
+	EXPANDABLE = '_';

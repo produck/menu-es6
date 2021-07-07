@@ -46,7 +46,7 @@ export const throwError = message => { throw new Error(message); };
 let x = 0, y = 0;
 export const getCurrentPosition = () => ({ x, y });
 
-Dom.addEventListener(Dom.WINDOW, 'mousemove', event => {
+Dom.addEventListener(Dom.WINDOW, 'mousedown', event => {
 	x = event.clientX;
 	y = event.clientY;
 });

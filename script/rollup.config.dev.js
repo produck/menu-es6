@@ -1,12 +1,13 @@
-const path = require('path');
-const { defineConfig } = require('rollup');
-const alias = require('@rollup/plugin-alias');
-const postcss = require('rollup-plugin-postcss');
-const { eslint } = require('rollup-plugin-eslint');
-const { terser } = require('rollup-plugin-terser');
-const livereload = require('rollup-plugin-livereload');
-const serve = require('rollup-plugin-serve');
-const html = require('@rollup/plugin-html');
+import path from'path';
+import { defineConfig } from'rollup';
+import alias from'@rollup/plugin-alias';
+import postcss from'rollup-plugin-postcss';
+import { eslint } from'rollup-plugin-eslint';
+import { terser } from'rollup-plugin-terser';
+import livereload from'rollup-plugin-livereload';
+import serve from'rollup-plugin-serve';
+import html from'@rollup/plugin-html';
+import scss from'rollup-plugin-scss';
 
 const DIST_DIR = path.join(__dirname, '../.dev');
 
@@ -30,9 +31,15 @@ export default defineConfig({
 		eslint(),
 		serve({ host: '0.0.0.0', port: 3000, contentBase: DIST_DIR }),
 		livereload({ watch: DIST_DIR }),
+		// scss({
+		// 	// output: false
+		// 	output: path.join(DIST_DIR, 'defalut.css')
+		// }),
 		postcss({
 			extensions: ['.css']
 		}),
-		html(),
+		html({
+			attributes: {}
+		}),
 	]
 });

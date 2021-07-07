@@ -1,10 +1,12 @@
 import * as Dom from 'dom';
-import * as _MENU from '@/symbol/menu';
-import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/submenu';
-import { ACTIVE } from '@/symbol/base';
-import { MNEMONIC_REG } from '@/utils';
 import * as lang from 'lang';
-import { Expandable } from './Item/Expandable';
+
+import { MNEMONIC_REG, Var, VAR } from '@/utils';
+
+import * as _MENU from '@/symbol/menu';
+import { ACTIVE } from '@/symbol/base';
+import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/submenu';
+import { EXPANDABLE } from '@/symbol/function';
 
 const container = Dom.createElement('div');
 const CONTAINER_STYLE = {
@@ -12,8 +14,7 @@ const CONTAINER_STYLE = {
 	height: '100%',
 	display: 'block',
 	position: 'fixed',
-	top: 0,
-	left: 0
+	'font-size': Var(VAR.SIZE_MD)
 };
 
 Dom.setStyle(container, CONTAINER_STYLE);
@@ -130,7 +131,7 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 		const topMenu = getTopMenu();
 
 		expanding = !lang.isNull(currentMenu[_MENU.EXPANDING_ITEM]);
-		expandable = lang.instanceOf(topMenu[_MENU.FOCUSING_ITEM], Expandable);
+		expandable = topMenu[_MENU.FOCUSING_ITEM][EXPANDABLE];
 
 		if (key in KEY_MAP_OPERATION) {
 			KEY_MAP_OPERATION[key](event);

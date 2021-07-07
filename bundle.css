@@ -1,0 +1,39 @@
+@charset "UTF-8";
+:root {
+  --menu-back-color: #666;
+  --menu-front-color: #DDD;
+  --menu-active-back-color: #66F;
+  --menu-active-front-color: #fff;
+  --menu-disabled-back-color: "transparent";
+  --menu-disabled-front-color: #999;
+  --menu-size-sm: 6px;
+  --menu-size-md: 12px;
+  --menu-size-lg: 24px;
+  --menu-bar-height: 30px;
+}
+
+span.menu-item-expanding::before {
+  content: ">";
+}
+
+span.menu-item-checkbox,
+span.menu-item-expanding {
+  text-align: center;
+}
+
+.menu-item.checked span.menu-item-checkbox::before {
+  content: "√";
+}
+
+.menu-scope, .menu-bar {
+  font-size: 12px;
+  color: var(--menu-front-color);
+}
+
+.menu-bar {
+  box-shadow: 0 0 0 1px inset #000;
+}
+
+.menu-bar .menu-bar-button.focused {
+  background-color: #666;
+}

@@ -1,4 +1,4 @@
-import '../theme/default.css';
+import '../src/style.scss';
 import './debug.css';
 import { popup, MenuItem, Bar as MenuBar } from '../index';
 

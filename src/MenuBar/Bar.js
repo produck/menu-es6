@@ -14,7 +14,10 @@ export const MENU_BAR_STYLE = {
 	flex: 1,
 	'user-select': 'none',
 	height: `${Var(VAR.BAR_HEIGHT)}`,
-	'line-height': `${Var(VAR.BAR_HEIGHT)}`
+	'line-height': `${Var(VAR.BAR_HEIGHT)}`,
+	'font-size': Var(VAR.SIZE_MD),
+	background: Var(VAR.BACKGROUND_COLOR),
+	color: Var(VAR.FRONTGROUND_COLOR)
 };
 
 export class MenuBar {
