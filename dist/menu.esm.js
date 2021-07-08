@@ -414,6 +414,8 @@ const SUB_MENU_OPITONS = 'sm',
 
 const container = createElement('div');
 const CONTAINER_STYLE = {
+	top: 0,
+	left: 0,
 	width: 0,
 	height: '100%',
 	display: 'block',
@@ -943,8 +945,6 @@ const normalize$1 = (_options) => {
 
 var index$1 = /*#__PURE__*/Object.freeze({
 	__proto__: null,
-	Base: BaseMenuItem,
-	Function: FunctionMenuItem,
 	Clickable: ClickableMenuItem,
 	Spearator: SpearatorMenuItem,
 	Submenu: SubmenuMenuItem
@@ -1038,7 +1038,7 @@ const normalize = _options => {
 			throwError$1('A menu bar button title MUST be a string.');
 		}
 
-		options.menu = normalizeMenuOptions(_menu);
+		options.menu = isFunction(_menu) ? _menu : () => _menu;
 		options.title = _title;
 
 		return options;
@@ -1372,8 +1372,9 @@ class MenuBarButton {
 
 	[OPEN_MENU]() {
 		const { left, bottom } = getRect(this[OUTER_ELEMENT]);
+		const menuOptions = normalizeMenuOptions(this[MENU_OPTIONS]());
 
-		popup(this[MENU_OPTIONS], {
+		popup(menuOptions, {
 			position: { x: left, y: bottom },
 			mnemonic: this[MENU_BAR][HAS_MNEMONIC]
 		});
