@@ -1,5 +1,5 @@
 /*!
- * @produck/menu v0.1.0
+ * @produck/menu v0.1.1
  * (c) 2020-2021 ChaosLee
  * Released under the MIT License.
  */
@@ -798,7 +798,7 @@
 		/**
 		 * Use to add item to this menu.
 		 *
-		 * @param {import('./Base').BaseMenuItem} item A menu item being appended
+		 * ../..param {import('./Base').BaseMenuItem} item A menu item being appended
 		 */
 		[APPEND](item) {
 			this[ITEM_LIST].push(item);
@@ -807,9 +807,9 @@
 		/**
 		 * Try to find a `next` item then focusing.
 		 *
-		 * @param {string|null} mnemonic Filtering item by a-z
-		 * @param {boolean} reversed Searching direction
-		 * @returns The target item found or not.
+		 * ../..param {string|null} mnemonic Filtering item by a-z
+		 * ../..param {boolean} reversed Searching direction
+		 * ../..returns The target item found or not.
 		 */
 		[NEXT$1](mnemonic = null, reversed = false) {
 			const sequence = this[ITEM_LIST].filter(IS_FOCUSABLE_ITEM);
@@ -861,8 +861,8 @@
 	const ICON_POSITION_STYLE = { right: 0, top: 0 };
 
 	/**
-	 * @param {HTMLElement} menuElement
-	 * @param {DOMRect} rect
+	 * ../..param {HTMLElement} menuElement
+	 * ../..param {DOMRect} rect
 	 */
 	const relayoutMenu = (menuElement, rect, offsetX = 0, offsetY = 0) => {
 		const bottom = rect.bottom;
@@ -1306,9 +1306,9 @@
 		/**
 		 * Try to find a `next` item then focusing.
 		 *
-		 * @param {string|null} mnemonic Filtering item by a-z
-		 * @param {boolean} reversed Searching direction
-		 * @returns The target item found or not.
+		 * ..param {string|null} mnemonic Filtering item by a-z
+		 * ..param {boolean} reversed Searching direction
+		 * ..returns The target item found or not.
 		 */
 		[NEXT](mnemonic = null, reversed = false) {
 			const sequence = this[BUTTON_LIST].slice(0);
