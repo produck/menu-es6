@@ -1,12 +1,12 @@
-import * as Dom from 'dom';
-import * as lang from 'lang';
+import * as Dom from '../dom';
+import * as lang from '../lang';
 
-import { MNEMONIC_REG } from '@/utils';
-import { current } from '@/Menu/index';
+import { MNEMONIC_REG } from '../utils';
+import { current } from '../Menu/index';
 
-import * as _BAR from '@/symbol/bar';
-import * as _ from '@/symbol/menubar-scope';
-import { closeAllMenu } from '@/Menu/index';
+import * as _BAR from '../symbol/bar';
+import * as _ from '../symbol/menubar-scope';
+import { closeAllMenu } from '../Menu/index';
 
 export const state = {
 	[_.CONTAINER]: null,

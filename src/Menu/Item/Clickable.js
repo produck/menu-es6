@@ -1,5 +1,5 @@
-import * as Dom from 'dom';
-import * as lang from 'lang';
+import * as Dom from '../../dom';
+import * as lang from '../../lang';
 
 import {
 	FunctionMenuItem,
@@ -8,9 +8,9 @@ import {
 	MENU_ITEM_ICON_BOX_STYLE
 } from './Function';
 
-import * as _BASE from '@/symbol/base';
-import * as _ from '@/symbol/clickable';
-import * as _FUNCTION from '@/symbol/function';
+import * as _BASE from '../../symbol/base';
+import * as _ from '../../symbol/clickable';
+import * as _FUNCTION from '../../symbol/function';
 import { closeAllMenu } from '../scope';
 
 const CHECKING_POSITION_STYLE = { top: 0, left: 0 };

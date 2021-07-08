@@ -1,15 +1,15 @@
-import * as Dom from 'dom';
+import * as Dom from '../dom';
 
-import { popup } from '@/Menu/index';
-import { normalizeMenuOptions } from '@/Menu/normalize';
-import { FRAGEMENT, MNEMONIC, resolveLabelText, VAR, Var } from '@/utils';
+import { popup } from '../Menu/index';
+import { normalizeMenuOptions } from '../Menu/normalize';
+import { FRAGEMENT, MNEMONIC, resolveLabelText, VAR, Var } from '../utils';
 
 export const MENU_BUTTON_OUTER_STYLE = {
 	padding: `0 ${Var(VAR.SIZE_SM)}`,
 };
 
-import * as _ from '@/symbol/button';
-import * as _B from '@/symbol/bar';
+import * as _ from '../symbol/button';
+import * as _B from '../symbol/bar';
 
 export class MenuBarButton {
 	constructor(menuBar, options) {

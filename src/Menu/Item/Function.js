@@ -1,11 +1,12 @@
-import * as Dom from 'dom';
-import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
-import { Var, VAR, resolveLabelText, FRAGEMENT, MNEMONIC } from '@/utils';
-import * as lang from 'lang';
+import * as Dom from '../../dom';
+import * as lang from '../../lang';
 
-import * as _ from '@/symbol/function';
-import * as _MENU from '@/symbol/menu';
-import * as _BASE from '@/symbol/base';
+import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
+import { Var, VAR, resolveLabelText, FRAGEMENT, MNEMONIC } from '../../utils';
+
+import * as _ from '../../symbol/function';
+import * as _MENU from '../../symbol/menu';
+import * as _BASE from '../../symbol/base';
 
 const ICON_SPAN_STYLE = {
 	'margin-right': '0.5em'

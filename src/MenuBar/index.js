@@ -1,13 +1,13 @@
-import * as Dom from 'dom';
+import * as Dom from '../dom';
 
 import { normalize } from './normalize';
 import { MenuBar } from './Bar';
 import { MenuBarButton } from './Button';
 import { install, state } from './scope';
 
-import * as _BAR from '@/symbol/bar';
-import * as _BUTTON from '@/symbol/button';
-import * as _SCOPE from '@/symbol/menubar-scope';
+import * as _BAR from '../symbol/bar';
+import * as _BUTTON from '../symbol/button';
+import * as _SCOPE from '../symbol/menubar-scope';
 
 export const mount = element => {
 	state[_SCOPE.CONTAINER] = element;

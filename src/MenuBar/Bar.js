@@ -1,13 +1,13 @@
-import * as Dom from 'dom';
-import * as lang from 'lang';
+import * as Dom from '../dom';
+import * as lang from '../lang';
 
-import { VAR, Var } from '@/utils';
-import { closeAllMenu } from '@/Menu/index';
+import { VAR, Var } from '../utils';
+import { closeAllMenu } from '../Menu/index';
 import { state } from './scope';
 
-import * as _ from '@/symbol/bar';
-import * as _BUTTON from '@/symbol/button';
-import * as _SCOPE from '@/symbol/menubar-scope';
+import * as _ from '../symbol/bar';
+import * as _BUTTON from '../symbol/button';
+import * as _SCOPE from '../symbol/menubar-scope';
 
 export const MENU_BAR_STYLE = {
 	display: 'flex',
@@ -109,9 +109,9 @@ export class MenuBar {
 	/**
 	 * Try to find a `next` item then focusing.
 	 *
-	 * @param {string|null} mnemonic Filtering item by a-z
-	 * @param {boolean} reversed Searching direction
-	 * @returns The target item found or not.
+	 * ..param {string|null} mnemonic Filtering item by a-z
+	 * ..param {boolean} reversed Searching direction
+	 * ..returns The target item found or not.
 	 */
 	[_.NEXT](mnemonic = null, reversed = false) {
 		const sequence = this[_.BUTTON_LIST].slice(0);

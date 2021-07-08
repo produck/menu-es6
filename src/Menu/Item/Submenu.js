@@ -1,6 +1,6 @@
-import * as Dom from 'dom';
-import * as lang from 'lang';
-import { Var, VAR } from '@/utils';
+import * as Dom from '../../dom';
+import * as lang from '../../lang';
+import { Var, VAR } from '../../utils';
 
 import { AbstractMenu } from './Base';
 import { SpearatorMenuItem } from './Spearator';
@@ -13,10 +13,10 @@ import {
 	FunctionMenuItem
 } from './Function';
 
-import * as _S from '@/symbol/submenu';
-import * as _B from '@/symbol/base';
-import * as _F from '@/symbol/function';
-import * as _M from '@/symbol/menu';
+import * as _S from '../../symbol/submenu';
+import * as _B from '../../symbol/base';
+import * as _F from '../../symbol/function';
+import * as _M from '../../symbol/menu';
 
 const MENU_STYLE = {
 	display: 'block',
@@ -112,7 +112,7 @@ export class Menu extends AbstractMenu {
 	/**
 	 * Use to add item to this menu.
 	 *
-	 * @param {import('./Base').BaseMenuItem} item A menu item being appended
+	 * ../..param {import('./Base').BaseMenuItem} item A menu item being appended
 	 */
 	[_M.APPEND](item) {
 		this[_M.ITEM_LIST].push(item);
@@ -121,9 +121,9 @@ export class Menu extends AbstractMenu {
 	/**
 	 * Try to find a `next` item then focusing.
 	 *
-	 * @param {string|null} mnemonic Filtering item by a-z
-	 * @param {boolean} reversed Searching direction
-	 * @returns The target item found or not.
+	 * ../..param {string|null} mnemonic Filtering item by a-z
+	 * ../..param {boolean} reversed Searching direction
+	 * ../..returns The target item found or not.
 	 */
 	[_M.NEXT](mnemonic = null, reversed = false) {
 		const sequence = this[_M.ITEM_LIST].filter(IS_FOCUSABLE_ITEM);
@@ -175,8 +175,8 @@ export class Menu extends AbstractMenu {
 const ICON_POSITION_STYLE = { right: 0, top: 0 };
 
 /**
- * @param {HTMLElement} menuElement
- * @param {DOMRect} rect
+ * ../..param {HTMLElement} menuElement
+ * ../..param {DOMRect} rect
  */
 export const relayoutMenu = (menuElement, rect, offsetX = 0, offsetY = 0) => {
 	const bottom = rect.bottom;

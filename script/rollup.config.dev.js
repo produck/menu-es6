@@ -1,6 +1,5 @@
 import path from'path';
 import { defineConfig } from'rollup';
-import alias from'@rollup/plugin-alias';
 import postcss from'rollup-plugin-postcss';
 import { eslint } from'rollup-plugin-eslint';
 import { terser } from'rollup-plugin-terser';
@@ -19,13 +18,6 @@ export default defineConfig({
 		name: 'example'
 	},
 	plugins: [
-		alias({
-			entries: [
-				{ find: 'dom', replacement: path.join(__dirname, '../src/dom.js') },
-				{ find: 'lang', replacement: path.join(__dirname, '../src/lang.js') },
-				{ find: '@', replacement: path.join(__dirname, '../src') }
-			]
-		}),
 		terser(),
 		eslint(),
 		serve({ host: '0.0.0.0', port: 3000, contentBase: DIST_DIR }),

@@ -1,12 +1,12 @@
-import * as Dom from 'dom';
-import * as lang from 'lang';
+import * as Dom from '../dom';
+import * as lang from '../lang';
 
-import { MNEMONIC_REG, Var, VAR } from '@/utils';
+import { MNEMONIC_REG, Var, VAR } from '../utils';
 
-import * as _MENU from '@/symbol/menu';
-import { ACTIVE } from '@/symbol/base';
-import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '@/symbol/submenu';
-import { EXPANDABLE } from '@/symbol/function';
+import * as _MENU from '../symbol/menu';
+import { ACTIVE } from '../symbol/base';
+import { COLLAPSE, EXPANDED_MENU, SUB_MENU_OPITONS } from '../symbol/submenu';
+import { EXPANDABLE } from '../symbol/function';
 
 const container = Dom.createElement('div');
 const CONTAINER_STYLE = {

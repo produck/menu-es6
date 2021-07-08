@@ -1,8 +1,8 @@
-import * as Dom from 'dom';
-import * as lang from 'lang';
+import * as Dom from '../../dom';
+import * as lang from '../../lang';
 
-import * as _ from '@/symbol/base';
-import { throwError } from '@/utils';
+import * as _ from '../../symbol/base';
+import { throwError } from '../../utils';
 
 const MENU_ITEM_ROW_STYLE = {
 	display: 'block',

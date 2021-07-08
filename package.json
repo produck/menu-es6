@@ -21,8 +21,7 @@
   "types": "src/index.d.ts",
   "files": [
     "dist",
-    "src",
-    "jsconfig.json"
+    "src"
   ],
   "author": "ChaosLee",
   "license": "MIT",
@@ -31,7 +30,6 @@
   },
   "homepage": "https://github.com/produck/menu-es6#readme",
   "devDependencies": {
-    "@rollup/plugin-alias": "^3.1.2",
     "@rollup/plugin-html": "^0.2.3",
     "eslint": "^7.30.0",
     "rollup": "^2.52.8",

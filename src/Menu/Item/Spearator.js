@@ -1,9 +1,10 @@
-import * as Dom from 'dom';
-import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
-import { Var, VAR } from '@/utils';
+import * as Dom from '../../dom';
+import { Var, VAR } from '../../utils';
 
-import * as _MENU from '@/symbol/menu';
-import * as _BASE from '@/symbol/base';
+import { BaseMenuItem, normalize as normalizeBaseMenuItemOptions } from './Base';
+
+import * as _MENU from '../../symbol/menu';
+import * as _BASE from '../../symbol/base';
 
 const SPEARATOR_MENU_ITEM_STYLE = {
 	display: 'block',

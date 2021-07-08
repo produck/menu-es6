@@ -1,4 +1,4 @@
-import * as lang from 'lang';
+import * as lang from '../lang';
 
 
 const NORMALIZER = 'n', TYPE = 't';

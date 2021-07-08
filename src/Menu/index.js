@@ -5,9 +5,9 @@ import { SpearatorMenuItem, normalize as normalizeSpearatorMenuItemOptions } fro
 import * as MenuItem from './Item/index';
 import { closeAllMenu, setCurrentMenu, appendMenu, current } from './scope';
 
-import * as _M from '@/symbol/menu';
-import { getCurrentPosition } from '@/utils';
-import * as lang from 'lang';
+import * as _M from '../symbol/menu';
+import { getCurrentPosition } from '../utils';
+import * as lang from '../lang';
 
 registerMenuItem(ClickableMenuItem, normalizeClickableMenuItemOptions);
 registerMenuItem(SubmenuMenuItem, normalizeSubmenuMenuItemOptions);
