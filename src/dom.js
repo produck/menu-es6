@@ -1,6 +1,5 @@
 export const DOCUMENT = document, WINDOW = window;
 export const BODY = DOCUMENT.body;
-export const REQUEST_ANIMATION_FRAME = requestAnimationFrame;
 export const DOCUMENT_FRAGEMENT = DocumentFragment;
 
 /**

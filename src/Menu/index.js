@@ -17,7 +17,7 @@ export { MenuItem, normalizeMenuOptions as normalize, closeAllMenu, current };
 
 export const getPositionFromEvent = event => ({ x: event.clientX, y: event.clientY });
 
-const normalizeModifier = (_options) => {
+const normalizeModifier = (_options = {}) => {
 	const options = {
 		position: getCurrentPosition(),
 		mnemonic: false,

@@ -101,7 +101,7 @@ export class Menu extends AbstractMenu {
 	}
 
 	[_M.OPEN]() {
-		Dom.REQUEST_ANIMATION_FRAME(() => Dom.setStyle(this[_M.MENU_ELEMENT], { opacity: 1 }));
+		requestAnimationFrame(() => Dom.setStyle(this[_M.MENU_ELEMENT], { opacity: 1 }));
 	}
 
 	[_M.CLOSE]() {
@@ -112,7 +112,7 @@ export class Menu extends AbstractMenu {
 	/**
 	 * Use to add item to this menu.
 	 *
-	 * ../..param {import('./Base').BaseMenuItem} item A menu item being appended
+	 * @param {import('./Base').BaseMenuItem} item A menu item being appended
 	 */
 	[_M.APPEND](item) {
 		this[_M.ITEM_LIST].push(item);
@@ -121,8 +121,8 @@ export class Menu extends AbstractMenu {
 	/**
 	 * Try to find a `next` item then focusing.
 	 *
-	 * ../..param {string|null} mnemonic Filtering item by a-z
-	 * ../..param {boolean} reversed Searching direction
+	 * @param {string|null} mnemonic Filtering item by a-z
+	 * @param {boolean} reversed Searching direction
 	 * ../..returns The target item found or not.
 	 */
 	[_M.NEXT](mnemonic = null, reversed = false) {
@@ -175,8 +175,8 @@ export class Menu extends AbstractMenu {
 const ICON_POSITION_STYLE = { right: 0, top: 0 };
 
 /**
- * ../..param {HTMLElement} menuElement
- * ../..param {DOMRect} rect
+ * @param {HTMLElement} menuElement
+ * @param {DOMRect} rect
  */
 export const relayoutMenu = (menuElement, rect, offsetX = 0, offsetY = 0) => {
 	const bottom = rect.bottom;
