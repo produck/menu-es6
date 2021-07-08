@@ -1,4 +1,3 @@
-import { normalizeMenuOptions } from '@/Menu/normalize';
 import * as lang from 'lang';
 
 /**
@@ -24,7 +23,7 @@ export const normalize = _options => {
 			lang.throwError('A menu bar button title MUST be a string.');
 		}
 
-		options.menu = normalizeMenuOptions(_menu);
+		options.menu = lang.isFunction(_menu) ? _menu : () => _menu;
 		options.title = _title;
 
 		return options;

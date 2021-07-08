@@ -10,6 +10,8 @@ import { EXPANDABLE } from '@/symbol/function';
 
 const container = Dom.createElement('div');
 const CONTAINER_STYLE = {
+	top: 0,
+	left: 0,
 	width: 0,
 	height: '100%',
 	display: 'block',

@@ -1,6 +1,7 @@
 import * as Dom from 'dom';
 
 import { popup } from '@/Menu/index';
+import { normalizeMenuOptions } from '@/Menu/normalize';
 import { FRAGEMENT, MNEMONIC, resolveLabelText, VAR, Var } from '@/utils';
 
 export const MENU_BUTTON_OUTER_STYLE = {
@@ -50,8 +51,9 @@ export class MenuBarButton {
 
 	[_.OPEN_MENU]() {
 		const { left, bottom } = Dom.getRect(this[_.OUTER_ELEMENT]);
+		const menuOptions = normalizeMenuOptions(this[_.MENU_OPTIONS]());
 
-		popup(this[_.MENU_OPTIONS], {
+		popup(menuOptions, {
 			position: { x: left, y: bottom },
 			mnemonic: this[_.MENU_BAR][_B.HAS_MNEMONIC]
 		});

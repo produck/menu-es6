@@ -15,12 +15,10 @@
     "type": "git",
     "url": "git+https://github.com/produck/menu-es6.git"
   },
-  "types": "index.d.ts",
+  "types": "src/index.d.ts",
   "files": [
     "dist",
-    "src",
-    "index.js",
-    "index.d.ts"
+    "src"
   ],
   "author": "ChaosLee",
   "license": "MIT",
