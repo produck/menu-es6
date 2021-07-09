@@ -1,10 +1,12 @@
 import * as lang from '../lang';
-
+import { ClickableMenuItem } from './Item/Clickable';
 
 const NORMALIZER = 'n', TYPE = 't';
 const TYPE_NORMALIZER_MAP = [];
 
 const normalize = (options) => {
+	options.type = 'type' in options ? options.type : ClickableMenuItem;
+
 	const pair = TYPE_NORMALIZER_MAP.find(pair => pair[TYPE] === options.type);
 
 	if (pair === undefined) {

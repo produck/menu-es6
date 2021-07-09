@@ -1,5 +1,5 @@
 /*!
- * @produck/menu v0.1.2
+ * @produck/menu v0.1.3
  * (c) 2020-2021 ChaosLee
  * Released under the MIT License.
  */
@@ -15,50 +15,6 @@ const isFunction = any => typeOf(any, 'function'),
 	isBoolean = any => typeOf(any, 'boolean'),
 	isObject = any => typeOf(any, 'object'),
 	isNull = any => any === null;
-
-const NORMALIZER = 'n', TYPE = 't';
-const TYPE_NORMALIZER_MAP = [];
-
-const normalize$6 = (options) => {
-	const pair = TYPE_NORMALIZER_MAP.find(pair => pair[TYPE] === options.type);
-
-	if (pair === undefined) {
-		throwError$1('Invalid menu item type.');
-	}
-
-	return pair[NORMALIZER](options);
-};
-
-const normalizeMenuOptions = (_options) => {
-	if (!isArray(_options)) {
-		throwError$1('Menu options MUST be an array.');
-	}
-
-	return _options.map(_groupOptions => {
-		if (!isArray(_groupOptions)) {
-			throwError$1('Menu item group options MUST be an array.');
-		}
-
-		const NORMALIZE_ITEM_OPTIONS = options => normalize$6(options);
-
-		return _groupOptions.reduce((itemOptionsList, itemOptions) => {
-			const finalItemOptionsList = isFunction(itemOptions)
-				? itemOptions().map(NORMALIZE_ITEM_OPTIONS)
-				: [NORMALIZE_ITEM_OPTIONS(itemOptions)];
-
-			itemOptionsList.push(...finalItemOptionsList);
-
-			return itemOptionsList;
-		}, []);
-	});
-};
-
-const register = (MenuItemClass, normalize) => {
-	TYPE_NORMALIZER_MAP.push({
-		[TYPE]: MenuItemClass,
-		[NORMALIZER]: normalize
-	});
-};
 
 const DOCUMENT = document, WINDOW = window;
 const BODY = DOCUMENT.body;
@@ -270,7 +226,7 @@ class BaseMenuItem {
 	}
 }
 
-const normalize$5 = (_options) => {
+const normalize$6 = (_options) => {
 	const options = {
 		id: null
 	};
@@ -367,11 +323,11 @@ class FunctionMenuItem extends BaseMenuItem {
 	}
 }
 
-const normalize$4 = (_options) => {
+const normalize$5 = (_options) => {
 	const options = assign({
 		label: '<NO_LABEL>',
 		icon: null
-	}, normalize$5(_options));
+	}, normalize$6(_options));
 
 	const {
 		label: _label = options.label,
@@ -632,13 +588,13 @@ class ClickableMenuItem extends FunctionMenuItem {
 
 const DEFAULT_CLICK_FN = () => console.warn(undefined);
 
-const  normalize$3 = (_options) => {
+const  normalize$4 = (_options) => {
 	const options = assign({
 		click: DEFAULT_CLICK_FN,
 		isChecked: false,
 		isDisabled: false,
 		accelerator: []
-	}, normalize$4(_options));
+	}, normalize$5(_options));
 
 	const {
 		click: _click = options.click,
@@ -678,6 +634,52 @@ const  normalize$3 = (_options) => {
 	return options;
 };
 
+const NORMALIZER = 'n', TYPE = 't';
+const TYPE_NORMALIZER_MAP = [];
+
+const normalize$3 = (options) => {
+	options.type = 'type' in options ? options.type : ClickableMenuItem;
+
+	const pair = TYPE_NORMALIZER_MAP.find(pair => pair[TYPE] === options.type);
+
+	if (pair === undefined) {
+		throwError$1('Invalid menu item type.');
+	}
+
+	return pair[NORMALIZER](options);
+};
+
+const normalizeMenuOptions = (_options) => {
+	if (!isArray(_options)) {
+		throwError$1('Menu options MUST be an array.');
+	}
+
+	return _options.map(_groupOptions => {
+		if (!isArray(_groupOptions)) {
+			throwError$1('Menu item group options MUST be an array.');
+		}
+
+		const NORMALIZE_ITEM_OPTIONS = options => normalize$3(options);
+
+		return _groupOptions.reduce((itemOptionsList, itemOptions) => {
+			const finalItemOptionsList = isFunction(itemOptions)
+				? itemOptions().map(NORMALIZE_ITEM_OPTIONS)
+				: [NORMALIZE_ITEM_OPTIONS(itemOptions)];
+
+			itemOptionsList.push(...finalItemOptionsList);
+
+			return itemOptionsList;
+		}, []);
+	});
+};
+
+const register = (MenuItemClass, normalize) => {
+	TYPE_NORMALIZER_MAP.push({
+		[TYPE]: MenuItemClass,
+		[NORMALIZER]: normalize
+	});
+};
+
 const SPEARATOR_MENU_ITEM_STYLE = {
 	display: 'block',
 	'border-bottom': `1px solid ${Var(MUTE_FRONT_COLOR)}`,
@@ -694,7 +696,7 @@ class SpearatorMenuItem extends BaseMenuItem {
 }
 
 const normalize$2 = (_options) => {
-	return normalize$5(_options);
+	return normalize$6(_options);
 };
 
 const MENU_STYLE = {
@@ -842,7 +844,12 @@ class Menu extends AbstractMenu {
 				appendChild(fragement, item[ROW_ELEMENT]);
 			});
 
-			index !== options.length - 1 && menu[APPEND](new SpearatorMenuItem(menu));
+			if (index !== options.length - 1) {
+				const spearatorItem = new SpearatorMenuItem(menu);
+
+				menu[APPEND](spearatorItem);
+				appendChild(fragement, spearatorItem[ROW_ELEMENT]);
+			}
 		});
 
 		appendChild(menu[MENU_ELEMENT], fragement);
@@ -931,7 +938,7 @@ class SubmenuMenuItem extends FunctionMenuItem {
 const normalize$1 = (_options) => {
 	const options = assign({
 		submenu: []
-	}, normalize$4(_options));
+	}, normalize$5(_options));
 
 	const {
 		submenu: _submenu = options.submenu
@@ -949,7 +956,7 @@ var index$1 = /*#__PURE__*/Object.freeze({
 	Submenu: SubmenuMenuItem
 });
 
-register(ClickableMenuItem, normalize$3);
+register(ClickableMenuItem, normalize$4);
 register(SubmenuMenuItem, normalize$1);
 register(SpearatorMenuItem, normalize$2);
 

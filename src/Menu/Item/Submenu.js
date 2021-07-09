@@ -163,7 +163,12 @@ export class Menu extends AbstractMenu {
 				Dom.appendChild(fragement, item[_B.ROW_ELEMENT]);
 			});
 
-			index !== options.length - 1 && menu[_M.APPEND](new SpearatorMenuItem(menu));
+			if (index !== options.length - 1) {
+				const spearatorItem = new SpearatorMenuItem(menu);
+
+				menu[_M.APPEND](spearatorItem);
+				Dom.appendChild(fragement, spearatorItem[_B.ROW_ELEMENT]);
+			}
 		});
 
 		Dom.appendChild(menu[_M.MENU_ELEMENT], fragement);
