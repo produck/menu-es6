@@ -1,5 +1,5 @@
 /*!
- * @produck/menu v0.1.1
+ * @produck/menu v0.1.2
  * (c) 2020-2021 ChaosLee
  * Released under the MIT License.
  */
@@ -62,7 +62,6 @@ const register = (MenuItemClass, normalize) => {
 
 const DOCUMENT = document, WINDOW = window;
 const BODY = DOCUMENT.body;
-const REQUEST_ANIMATION_FRAME = requestAnimationFrame;
 const DOCUMENT_FRAGEMENT = DocumentFragment;
 
 /**
@@ -781,7 +780,7 @@ class Menu extends AbstractMenu {
 	}
 
 	[OPEN]() {
-		REQUEST_ANIMATION_FRAME(() => setStyle(this[MENU_ELEMENT], { opacity: 1 }));
+		requestAnimationFrame(() => setStyle(this[MENU_ELEMENT], { opacity: 1 }));
 	}
 
 	[CLOSE]() {
@@ -792,7 +791,7 @@ class Menu extends AbstractMenu {
 	/**
 	 * Use to add item to this menu.
 	 *
-	 * ../..param {import('./Base').BaseMenuItem} item A menu item being appended
+	 * @param {import('./Base').BaseMenuItem} item A menu item being appended
 	 */
 	[APPEND](item) {
 		this[ITEM_LIST].push(item);
@@ -801,8 +800,8 @@ class Menu extends AbstractMenu {
 	/**
 	 * Try to find a `next` item then focusing.
 	 *
-	 * ../..param {string|null} mnemonic Filtering item by a-z
-	 * ../..param {boolean} reversed Searching direction
+	 * @param {string|null} mnemonic Filtering item by a-z
+	 * @param {boolean} reversed Searching direction
 	 * ../..returns The target item found or not.
 	 */
 	[NEXT$1](mnemonic = null, reversed = false) {
@@ -855,8 +854,8 @@ class Menu extends AbstractMenu {
 const ICON_POSITION_STYLE = { right: 0, top: 0 };
 
 /**
- * ../..param {HTMLElement} menuElement
- * ../..param {DOMRect} rect
+ * @param {HTMLElement} menuElement
+ * @param {DOMRect} rect
  */
 const relayoutMenu = (menuElement, rect, offsetX = 0, offsetY = 0) => {
 	const bottom = rect.bottom;
@@ -954,7 +953,7 @@ register(ClickableMenuItem, normalize$3);
 register(SubmenuMenuItem, normalize$1);
 register(SpearatorMenuItem, normalize$2);
 
-const normalizeModifier = (_options) => {
+const normalizeModifier = (_options = {}) => {
 	const options = {
 		position: getCurrentPosition(),
 		mnemonic: false,
