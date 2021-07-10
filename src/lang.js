@@ -14,3 +14,6 @@ export const
 	isDate = any => instanceOf(any, Date),
 	isUndefined = any => any === undefined,
 	isNull = any => any === null;
+
+export const
+	toLowerCase = string => string.toLowerCase();

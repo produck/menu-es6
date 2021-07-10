@@ -1,6 +1,6 @@
 {
   "name": "@produck/menu",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A menu ui module in html",
   "main": "src/index.js",
   "scripts": {

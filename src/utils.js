@@ -1,4 +1,5 @@
 import * as Dom from './dom';
+import * as lang from './lang';
 import * as VAR from './vars';
 
 export const CSSVarGenerator = namespace => name => `var(--${namespace}-${name})`;
@@ -31,7 +32,7 @@ export const resolveLabelText = (text, noMnemonic = false) => {
 			const u = Dom.createElement('u');
 
 			u.textContent = mnemonicChar;
-			result[MNEMONIC] = mnemonicChar.toLowerCase();
+			result[MNEMONIC] = lang.toLowerCase(mnemonicChar);
 			Dom.appendChild(fragement, Dom.createTextNode(left));
 			Dom.appendChild(fragement, u);
 			Dom.appendChild(fragement, Dom.createTextNode(right));

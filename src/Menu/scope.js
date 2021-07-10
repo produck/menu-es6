@@ -142,7 +142,7 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 			KEY_MAP_OPERATION[key](event);
 		} else if (MNEMONIC_REG.test(key)) {
 
-			if (topMenu[_MENU.NEXT](key.toLowerCase())) {
+			if (topMenu[_MENU.NEXT](lang.toLowerCase(key))) {
 				topMenu[_MENU.FOCUSING_ITEM][ACTIVE]();
 			}
 		}

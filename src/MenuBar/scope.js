@@ -116,7 +116,7 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 					state[_.MENU_BAR][_BAR.ACTIVE] = true;
 				}
 
-				if (state[_.MENU_BAR][_BAR.NEXT](key.toLowerCase())) {
+				if (state[_.MENU_BAR][_BAR.NEXT](lang.toLowerCase(key))) {
 					current.next();
 				}
 			}
