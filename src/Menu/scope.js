@@ -133,7 +133,10 @@ Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
 		const topMenu = getTopMenu();
 
 		expanding = !lang.isNull(currentMenu[_MENU.EXPANDING_ITEM]);
-		expandable = topMenu[_MENU.FOCUSING_ITEM][EXPANDABLE];
+
+		expandable = topMenu[_MENU.FOCUSING_ITEM]
+			? topMenu[_MENU.FOCUSING_ITEM][EXPANDABLE]
+			: false;
 
 		if (key in KEY_MAP_OPERATION) {
 			KEY_MAP_OPERATION[key](event);

@@ -9,9 +9,9 @@ window.addEventListener('load', function () {
 
 	function MockMenu() {
 		return [
-			[
-				{ type: MenuItem.Clickable, label: 'l2' }
-			],
+			// [
+			// 	{ type: MenuItem.Clickable, label: 'l2' }
+			// ],
 		];
 	}
 
