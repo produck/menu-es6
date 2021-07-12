@@ -42,8 +42,6 @@ export const resolveLabelText = (text, noMnemonic = false) => {
 	return result;
 };
 
-export const throwError = message => { throw new Error(message); };
-
 let x = 0, y = 0;
 export const getCurrentPosition = () => ({ x, y });
 

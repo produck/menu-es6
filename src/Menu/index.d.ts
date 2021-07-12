@@ -159,3 +159,9 @@ export function closeAllMenu(): void;
  * Updating global menu state before keydown.
  */
 export const current: MenuController;
+
+/**
+ * Registering a funtion calling after a clickable item clicked.
+ * @param listener a function as a listener
+ */
+export function addListenerAfterClick(listener: () => void): void;

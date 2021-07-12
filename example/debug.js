@@ -3,15 +3,21 @@ import './debug.css';
 import { popup, MenuItem, Bar as MenuBar } from '../src/index';
 
 window.addEventListener('load', function () {
+	this.window.addEventListener('keydown', event => {
+		if (event.key === 'Alt') {
+			event.preventDefault();
+		}
+	});
+
 	const test = document.createElement('div');
 
 	this.document.body.appendChild(test);
 
 	function MockMenu() {
 		return [
-			// [
-			// 	{ type: MenuItem.Clickable, label: 'l2' }
-			// ],
+			[
+				{ type: MenuItem.Clickable, label: '&l2' }
+			],
 		];
 	}
 

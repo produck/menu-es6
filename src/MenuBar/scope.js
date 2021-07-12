@@ -2,11 +2,10 @@ import * as Dom from '../dom';
 import * as lang from '../lang';
 
 import { MNEMONIC_REG } from '../utils';
-import { current } from '../Menu/index';
+import { current, closeAllMenu, addListenerAfterClick } from '../Menu/index';
 
 import * as _BAR from '../symbol/bar';
 import * as _ from '../symbol/menubar-scope';
-import { closeAllMenu } from '../Menu/index';
 
 export const state = {
 	[_.CONTAINER]: null,
@@ -18,6 +17,7 @@ const isReady =
 	() => !lang.isNull(state[_.CONTAINER]) && !lang.isNull(state[_.MENU_BAR]);
 
 let holding = false;
+let clicked = false;
 
 Dom.addEventListener(Dom.WINDOW, 'keyup', event => {
 	if (event.key === 'Alt') {
@@ -44,7 +44,9 @@ const KEY_MAP_OPERATION = {
 		}
 	},
 	Enter: () => {
-		if (!state[_.MENU_BAR][_BAR.ACTIVE]) {
+		if (clicked) {
+			clicked = false;
+		} else if (!state[_.MENU_BAR][_BAR.ACTIVE]) {
 			state[_.MENU_BAR][_BAR.ACTIVE] = true;
 			current.next();
 		}
@@ -99,6 +101,11 @@ const resetMenuBar = () => {
 			false;
 	}
 };
+
+addListenerAfterClick(() => {
+	clicked = true;
+	resetMenuBar();
+});
 
 Dom.addEventListener(Dom.WINDOW, 'mousedown', resetMenuBar);
 Dom.addEventListener(Dom.WINDOW, 'mouseup', resetMenuBar);

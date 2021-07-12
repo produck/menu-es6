@@ -1,5 +1,5 @@
 import { register as registerMenuItem, normalizeMenuOptions } from './normalize';
-import { ClickableMenuItem, normalize as normalizeClickableMenuItemOptions } from './Item/Clickable';
+import { ClickableMenuItem, addListenerAfterClick, normalize as normalizeClickableMenuItemOptions } from './Item/Clickable';
 import { SubmenuMenuItem, Menu, normalize as normalizeSubmenuMenuItemOptions, relayoutMenu } from './Item/Submenu';
 import { SpearatorMenuItem, normalize as normalizeSpearatorMenuItemOptions } from './Item/Spearator';
 import * as MenuItem from './Item/index';
@@ -9,11 +9,13 @@ import * as _M from '../symbol/menu';
 import { getCurrentPosition } from '../utils';
 import * as lang from '../lang';
 
+addListenerAfterClick(closeAllMenu);
+
 registerMenuItem(ClickableMenuItem, normalizeClickableMenuItemOptions);
 registerMenuItem(SubmenuMenuItem, normalizeSubmenuMenuItemOptions);
 registerMenuItem(SpearatorMenuItem, normalizeSpearatorMenuItemOptions);
 
-export { MenuItem, normalizeMenuOptions as normalize, closeAllMenu, current };
+export { MenuItem, normalizeMenuOptions as normalize, closeAllMenu, current, addListenerAfterClick };
 
 export const getPositionFromEvent = event => ({ x: event.clientX, y: event.clientY });
 

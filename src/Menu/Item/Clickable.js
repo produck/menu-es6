@@ -11,7 +11,6 @@ import {
 import * as _BASE from '../../symbol/base';
 import * as _ from '../../symbol/clickable';
 import * as _FUNCTION from '../../symbol/function';
-import { closeAllMenu } from '../scope';
 
 const CHECKING_POSITION_STYLE = { top: 0, left: 0 };
 
@@ -30,6 +29,16 @@ const joinAcceleratorElement = acceleratorBarList => {
 	});
 
 	return fragement;
+};
+
+const afterClickListenerList = [];
+
+export const addListenerAfterClick = listener => {
+	if (!lang.isFunction(listener)) {
+		lang.throwError('A listener after click MUST be a function.');
+	}
+
+	afterClickListenerList.push(listener);
 };
 
 export class ClickableMenuItem extends FunctionMenuItem {
@@ -86,7 +95,7 @@ export class ClickableMenuItem extends FunctionMenuItem {
 
 	[_.CLICK]() {
 		this[_.CLICK_LISTENER]();
-		closeAllMenu();
+		afterClickListenerList.forEach(listener => listener());
 	}
 
 	[_BASE.ACTIVE]() {
