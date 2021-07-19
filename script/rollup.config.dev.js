@@ -25,8 +25,6 @@ export default defineConfig({
 		postcss({
 			extensions: ['.css']
 		}),
-		html({
-			attributes: {}
-		}),
+		html(),
 	]
 });

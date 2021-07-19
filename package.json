@@ -9,6 +9,7 @@
 		"build:js": "rollup --config script/rollup.config.js",
     "build": "npm run clean && npm run build:js && npm run build:style",
     "dev": "rollup --config script/rollup.config.dev.js --watch",
+    "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
 	"publishConfig": {
@@ -31,8 +32,8 @@
   "homepage": "https://github.com/produck/menu-es6#readme",
   "devDependencies": {
     "@rollup/plugin-html": "^0.2.3",
-    "eslint": "^7.30.0",
-    "rollup": "^2.53.0",
+    "eslint": "^7.31.0",
+    "rollup": "^2.53.2",
     "rollup-plugin-eslint": "^7.0.0",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-postcss": "^4.0.0",
