@@ -103,7 +103,6 @@ let bootstraped = false;
 export const bootstrap = () => {
 	if (!bootstraped) {
 		Dom.addEventListener(Dom.WINDOW, 'mousedown', resetMenuBar);
-		Dom.addEventListener(Dom.WINDOW, 'mouseup', resetMenuBar);
 		Dom.addEventListener(Dom.WINDOW, 'blur', resetMenuBar);
 
 		Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
