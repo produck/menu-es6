@@ -21,7 +21,6 @@ const CONTAINER_STYLE = {
 
 Dom.setStyle(container, CONTAINER_STYLE);
 Dom.addClass(container, 'menu-scope');
-Dom.appendChild(Dom.BODY, container);
 
 let currentMenu = null;
 
@@ -43,7 +42,6 @@ export const closeAllMenu = () => {
 	if (!lang.isNull(currentMenu)) {
 		currentMenu[_MENU.CLOSE]();
 		currentMenu = null;
-		expandable = expanding = null;
 		Dom.setStyle(container, { width: 0 });
 	}
 };
@@ -92,7 +90,9 @@ const tryActive = () => {
 	const topMenu = getTopMenu();
 	const focusingItem = topMenu[_MENU.FOCUSING_ITEM];
 
-	focusingItem && focusingItem[ACTIVE]();
+	if (focusingItem) {
+		focusingItem[ACTIVE]();
+	}
 };
 
 const KEY_MAP_OPERATION = {
@@ -104,17 +104,16 @@ const KEY_MAP_OPERATION = {
 	Enter: tryActive
 };
 
-Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
-Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
-
-let expanding = null, expandable = null;
-
 export const current = Object.freeze({
 	get expanding() {
-		return expanding;
+		return !lang.isNull(currentMenu[_MENU.EXPANDING_ITEM]);
 	},
 	get expandable() {
-		return expandable;
+		const topMenu = getTopMenu();
+
+		return topMenu[_MENU.FOCUSING_ITEM]
+			? topMenu[_MENU.FOCUSING_ITEM][EXPANDABLE]
+			: false;
 	},
 	get closed() {
 		return lang.isNull(currentMenu);
@@ -126,25 +125,30 @@ export const current = Object.freeze({
 	}
 });
 
-Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
-	const { key } = event;
+let bootstraped = false;
 
-	if (currentMenu) {
-		const topMenu = getTopMenu();
+export const bootstrap = () => {
+	if (!bootstraped) {
+		Dom.appendChild(Dom.BODY, container);
+		Dom.addEventListener(Dom.WINDOW, 'mousedown', closeAllMenu);
+		Dom.addEventListener(Dom.WINDOW, 'blur', closeAllMenu);
+		Dom.addEventListener(Dom.WINDOW, 'keydown', event => {
+			const { key } = event;
 
-		expanding = !lang.isNull(currentMenu[_MENU.EXPANDING_ITEM]);
+			if (currentMenu) {
+				const topMenu = getTopMenu();
 
-		expandable = topMenu[_MENU.FOCUSING_ITEM]
-			? topMenu[_MENU.FOCUSING_ITEM][EXPANDABLE]
-			: false;
+				if (key in KEY_MAP_OPERATION) {
+					KEY_MAP_OPERATION[key](event);
+				} else if (MNEMONIC_REG.test(key)) {
 
-		if (key in KEY_MAP_OPERATION) {
-			KEY_MAP_OPERATION[key](event);
-		} else if (MNEMONIC_REG.test(key)) {
-
-			if (topMenu[_MENU.NEXT](lang.toLowerCase(key))) {
-				topMenu[_MENU.FOCUSING_ITEM][ACTIVE]();
+					if (topMenu[_MENU.NEXT](lang.toLowerCase(key))) {
+						topMenu[_MENU.FOCUSING_ITEM][ACTIVE]();
+					}
+				}
 			}
-		}
+		});
+
+		bootstraped = true;
 	}
-});
+};

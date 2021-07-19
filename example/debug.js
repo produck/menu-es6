@@ -2,6 +2,8 @@ import '../src/style.scss';
 import './debug.css';
 import { popup, MenuItem, Bar as MenuBar } from '../src/index';
 
+MenuBar.bootstrap();
+
 window.addEventListener('load', function () {
 	this.window.addEventListener('keydown', event => {
 		if (event.key === 'Alt') {

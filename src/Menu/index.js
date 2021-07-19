@@ -3,7 +3,7 @@ import { ClickableMenuItem, addListenerAfterClick, normalize as normalizeClickab
 import { SubmenuMenuItem, Menu, normalize as normalizeSubmenuMenuItemOptions, relayoutMenu } from './Item/Submenu';
 import { SpearatorMenuItem, normalize as normalizeSpearatorMenuItemOptions } from './Item/Spearator';
 import * as MenuItem from './Item/index';
-import { closeAllMenu, setCurrentMenu, appendMenu, current } from './scope';
+import { closeAllMenu, setCurrentMenu, appendMenu, current, bootstrap } from './scope';
 
 import * as _M from '../symbol/menu';
 import { getCurrentPosition } from '../utils';
@@ -14,10 +14,6 @@ addListenerAfterClick(closeAllMenu);
 registerMenuItem(ClickableMenuItem, normalizeClickableMenuItemOptions);
 registerMenuItem(SubmenuMenuItem, normalizeSubmenuMenuItemOptions);
 registerMenuItem(SpearatorMenuItem, normalizeSpearatorMenuItemOptions);
-
-export { MenuItem, normalizeMenuOptions as normalize, closeAllMenu, current, addListenerAfterClick };
-
-export const getPositionFromEvent = event => ({ x: event.clientX, y: event.clientY });
 
 const normalizeModifier = (_options = {}) => {
 	const options = {
@@ -71,11 +67,21 @@ const MockRectFromPosition = position => {
 	};
 };
 
-export const popup = (menuOptions, modifierOptions) => {
+const popup = (menuOptions, modifierOptions) => {
 	const { position, mnemonic, blocking } = normalizeModifier(modifierOptions);
 	const menu = Menu[_M.S_CREATE](menuOptions, mnemonic);
 
 	setCurrentMenu(menu, blocking);
 	appendMenu(menu);
 	relayoutMenu(menu[_M.MENU_ELEMENT], MockRectFromPosition(position));
+};
+
+export {
+	current,
+	MenuItem,
+	normalizeMenuOptions as normalize,
+	addListenerAfterClick,
+	bootstrap,
+	closeAllMenu,
+	popup
 };

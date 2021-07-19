@@ -3,7 +3,7 @@ import * as Dom from '../dom';
 import { normalize } from './normalize';
 import { MenuBar } from './Bar';
 import { MenuBarButton } from './Button';
-import { install, state } from './scope';
+import { install, state, bootstrap } from './scope';
 
 import * as _BAR from '../symbol/bar';
 import * as _BUTTON from '../symbol/button';
@@ -29,3 +29,5 @@ export const setMenuBar = options => {
 	Dom.appendChild(menuBar[_BAR.BAR_ELEMENT], fragement);
 	install();
 };
+
+export { bootstrap };

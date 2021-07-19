@@ -36,3 +36,8 @@ export function mount(element: HTMLElement): void;
  * @param options A new menu bar options
  */
 export function setMenuBar(options: Options.MenuBar): void;
+
+/**
+ * Bootstraping menu bar scope & registering event listeners.
+ */
+export function bootstrap(): void;

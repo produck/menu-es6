@@ -64,6 +64,7 @@ export class MenuBar {
 
 			if (value) {
 				Dom.addClass(barElement, 'active');
+				console.log(1111);
 				state[_SCOPE.SELECTING] = true;
 
 				if (this[_._FOCUSING_BUTTON]) {

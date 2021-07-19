@@ -144,16 +144,15 @@ interface MenuController {
 export function popup(menuOptions: Options.Menu, modifierOptions?: Modifier): void;
 
 /**
- * A helper for creating a position from a mouse event.
- *
- * @param event a mouse event with .clientX & .clientY
- */
-export function getPositionFromEvent(event: MouseEvent): Position;
-
-/**
  * Trying to close all active menu & submenu.
  */
 export function closeAllMenu(): void;
+
+/**
+ * Normalizing an provided menu options.
+ * @param options A correct menu options.
+ */
+export function normalize(options: Options.Menu): Options.Menu;
 
 /**
  * Updating global menu state before keydown.
@@ -165,3 +164,8 @@ export const current: MenuController;
  * @param listener a function as a listener
  */
 export function addListenerAfterClick(listener: () => void): void;
+
+/**
+ * Bootstraping menu scope & registering event listeners.
+ */
+export function bootstrap(): void;
